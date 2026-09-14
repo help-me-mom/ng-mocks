@@ -25,12 +25,13 @@ class TargetComponent {
 class TargetModule {}
 
 describe('MockForms:update-on', () => {
+  // Keep real form bindings so Angular applies the configured update policy.
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).keep(FormsModule),
   );
 
   it('commits the value during the blur included in ngMocks.change', async () => {
-    // Render the component.
+    // Wait for ngModel to register the control before exercising its update policy.
     const fixture = MockRender(TargetComponent);
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
@@ -55,8 +56,9 @@ describe('MockForms:update-on', () => {
     expect(control.dirty).toBe(false);
     expect(control.touched).toBe(false);
 
-    // Change the value, including its blur event.
-    ngMocks.change(input, 'Grace');
+    // The included blur commits this edit before ngMocks.change returns.
+    ngMocks.change('[name="inputName"]', 'Grace');
+    // or ngMocks.change(input, 'Grace');
 
     // Assert the result before another render or async turn.
     expect(component.inputValue).toBe('Grace');

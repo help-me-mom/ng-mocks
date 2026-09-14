@@ -2,7 +2,7 @@ import { ChangeDetectorRef, DebugElement } from '@angular/core';
 
 import coreForm from '../../common/core.form';
 import coreReflectDirectiveResolve from '../../common/core.reflect.directive-resolve';
-import { DebugNodeSelector } from '../../common/core.types';
+import { DebugNodeSelector, Type } from '../../common/core.types';
 import funcDirectiveIoParse from '../../common/func.directive-io-parse';
 import { isMockControlValueAccessor } from '../../common/func.is-mock-control-value-accessor';
 import helperExtractMethodsFromPrototype from '../../mock-service/helper.extract-methods-from-prototype';
@@ -117,7 +117,7 @@ const keys = [
   '_cvaOnChangeFn',
 ];
 
-export default (selector: DebugNodeSelector, value: any, methodName?: string): void => {
+export default (selector: Type<any> | DebugNodeSelector, value: any, methodName?: string): void => {
   const el = mockHelperFind(funcGetLastFixture(), selector, undefined);
   if (!el) {
     throw new Error(`Cannot find an element via ngMocks.change(${funcParseFindArgsName(selector)})`);

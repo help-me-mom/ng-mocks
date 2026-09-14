@@ -56,9 +56,9 @@ class TargetModule {}
 
 describe('MockReactiveForms:native', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule).keep(
-      ReactiveFormsModule,
-    ),
+    MockBuilder(TargetComponent, TargetModule)
+      // Keep input events connected to the real FormControls.
+      .keep(ReactiveFormsModule),
   );
 
   it('finds, reads, and changes a text control', () => {
@@ -78,6 +78,7 @@ describe('MockReactiveForms:native', () => {
 
     // Change the value.
     ngMocks.change(input, 'Grace');
+    // Render any bindings that depend on the updated control value.
     fixture.detectChanges();
 
     // Assert the result.
@@ -197,7 +198,8 @@ describe('MockReactiveForms:native', () => {
     expect(second.nativeElement.checked).toBe(false);
 
     // Select the second option.
-    ngMocks.change(second, true);
+    ngMocks.change('[name="radioName"][value="second"]', true);
+    // or ngMocks.change(second, true);
     fixture.detectChanges();
 
     // Assert the result.
@@ -208,7 +210,8 @@ describe('MockReactiveForms:native', () => {
     expect(second.nativeElement.value).toBe('second');
 
     // Uncheck the second option.
-    ngMocks.change(second, false);
+    ngMocks.change('[name="radioName"][value="second"]', false);
+    // or ngMocks.change(second, false);
     fixture.detectChanges();
 
     // Assert the result.
@@ -321,8 +324,10 @@ describe('MockReactiveForms:native', () => {
     expect(select.nativeNode.options[1].selected).toBe(false);
     expect(select.nativeNode.options[2].selected).toBe(false);
 
+    // Keep the argument so the assertions also check that it is not mutated.
     const values = ['second', 'third'];
-    // Change the value.
+
+    // Change the selection.
     ngMocks.change(select, values);
     fixture.detectChanges();
 

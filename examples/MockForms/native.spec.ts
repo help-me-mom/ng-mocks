@@ -67,6 +67,7 @@ class TargetComponent {
 class TargetModule {}
 
 describe('MockForms:native', () => {
+  // Keep real form bindings so input edits update the component.
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).keep(FormsModule),
   );
@@ -74,6 +75,7 @@ describe('MockForms:native', () => {
   it('reads and changes a text input', async () => {
     // Render the component.
     const fixture = MockRender(TargetComponent);
+    // Let ngModel register the control and apply its initial value.
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
 
@@ -88,8 +90,10 @@ describe('MockForms:native', () => {
     expect(control.touched).toBe(false);
 
     // Change the value.
-    ngMocks.change(input, 'Grace');
+    ngMocks.change('[name="inputName"]', 'Grace');
+    // or ngMocks.change(input, 'Grace');
     fixture.detectChanges();
+    // Let binding updates finish before reading the result.
     await fixture.whenStable();
 
     // Assert the result.
@@ -101,7 +105,7 @@ describe('MockForms:native', () => {
   });
 
   it('touches a native input without changing its value or dirty state', async () => {
-    // Render the component.
+    // Wait for ngModel registration before inspecting or touching the control.
     const fixture = MockRender(TargetComponent);
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
@@ -116,7 +120,7 @@ describe('MockForms:native', () => {
     expect(control.dirty).toBe(false);
     expect(control.touched).toBe(false);
 
-    // Touch the input.
+    // Touch without editing so the control stays pristine.
     ngMocks.touch(input);
 
     // Assert the result.
@@ -129,7 +133,7 @@ describe('MockForms:native', () => {
   });
 
   it('reads and changes a textarea', async () => {
-    // Render the component.
+    // Wait for ngModel to write the initial text before inspecting the DOM.
     const fixture = MockRender(TargetComponent);
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
@@ -142,7 +146,8 @@ describe('MockForms:native', () => {
     expect(textarea.nativeElement.value).toBe('Notes');
 
     // Change the value.
-    ngMocks.change(textarea, 'Updated notes');
+    ngMocks.change('[name="textareaName"]', 'Updated notes');
+    // or ngMocks.change(textarea, 'Updated notes');
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -153,7 +158,7 @@ describe('MockForms:native', () => {
   });
 
   it('reads and changes a checkbox', async () => {
-    // Render the component.
+    // Wait for ngModel to apply the initial checked state.
     const fixture = MockRender(TargetComponent);
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
@@ -165,8 +170,9 @@ describe('MockForms:native', () => {
     expect(component.checkboxValue).toBe(false);
     expect(checkbox.nativeElement.checked).toBe(false);
 
-    // Check the checkbox.
-    ngMocks.change(checkbox, true);
+    // Check the host so Angular writes true to the bound property.
+    ngMocks.change('[name="checkboxName"]', true);
+    // or ngMocks.change(checkbox, true);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -176,7 +182,8 @@ describe('MockForms:native', () => {
     expect(checkbox.nativeElement.value).toBe('yes');
 
     // Uncheck the checkbox.
-    ngMocks.change(checkbox, false);
+    ngMocks.change('[name="checkboxName"]', false);
+    // or ngMocks.change(checkbox, false);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -188,12 +195,12 @@ describe('MockForms:native', () => {
   });
 
   it('reads a radio group, selects, and unchecks an option', async () => {
-    // Render the component.
+    // Wait for ngModel to select the option matching the initial model.
     const fixture = MockRender(TargetComponent);
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
 
-    // Find the radio options.
+    // Use option values to distinguish radios that share a name and model.
     const first = ngMocks.find('[name="radioName"][value="first"]');
     const second = ngMocks.find('[name="radioName"][value="second"]');
 
@@ -203,7 +210,8 @@ describe('MockForms:native', () => {
     expect(second.nativeElement.checked).toBe(false);
 
     // Select the second option.
-    ngMocks.change(second, true);
+    ngMocks.change('[name="radioName"][value="second"]', true);
+    // or ngMocks.change(second, true);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -214,8 +222,9 @@ describe('MockForms:native', () => {
     expect(first.nativeElement.value).toBe('first');
     expect(second.nativeElement.value).toBe('second');
 
-    // Uncheck the second option.
-    ngMocks.change(second, false);
+    // Uncheck the host without selecting a replacement or clearing the model.
+    ngMocks.change('[name="radioName"][value="second"]', false);
+    // or ngMocks.change(second, false);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -229,7 +238,7 @@ describe('MockForms:native', () => {
   });
 
   it('reads, changes, and clears a number input', async () => {
-    // Render the component.
+    // Wait for ngModel to write the initial number into the input.
     const fixture = MockRender(TargetComponent);
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
@@ -241,8 +250,9 @@ describe('MockForms:native', () => {
     expect(component.numberValue).toBe(1);
     expect(input.nativeElement.value).toBe('1');
 
-    // Change the value.
-    ngMocks.change(input, 23.5);
+    // Pass a number; the DOM exposes text while the model stores a number.
+    ngMocks.change('[name="numberName"]', 23.5);
+    // or ngMocks.change(input, 23.5);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -250,8 +260,9 @@ describe('MockForms:native', () => {
     expect(component.numberValue).toBe(23.5);
     expect(input.nativeElement.value).toBe('23.5');
 
-    // Clear the value.
-    ngMocks.change(input, null);
+    // Clear the input so Angular stores null in the numeric model.
+    ngMocks.change('[name="numberName"]', null);
+    // or ngMocks.change(input, null);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -262,7 +273,7 @@ describe('MockForms:native', () => {
   });
 
   it('clears a number input with undefined and stores null in the model', async () => {
-    // Render the component.
+    // Wait for ngModel to write the initial number into the input.
     const fixture = MockRender(TargetComponent);
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
@@ -274,8 +285,9 @@ describe('MockForms:native', () => {
     expect(component.numberValue).toBe(1);
     expect(input.nativeElement.value).toBe('1');
 
-    // Clear the value.
-    ngMocks.change(input, undefined);
+    // Clear with undefined; Angular normalizes an empty numeric input to null.
+    ngMocks.change('[name="numberName"]', undefined);
+    // or ngMocks.change(input, undefined);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -286,7 +298,7 @@ describe('MockForms:native', () => {
   });
 
   it('reads and changes a single select', async () => {
-    // Render the component.
+    // Wait for ngModel to select the option matching the initial model.
     const fixture = MockRender(TargetComponent);
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
@@ -300,7 +312,8 @@ describe('MockForms:native', () => {
     expect(select.nativeElement.options[0].selected).toBe(true);
 
     // Change the value.
-    ngMocks.change(select, 'second');
+    ngMocks.change('[name="selectName"]', 'second');
+    // or ngMocks.change(select, 'second');
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -313,7 +326,7 @@ describe('MockForms:native', () => {
   });
 
   it('reads, changes, and clears a multiple select', async () => {
-    // Render the component.
+    // Wait for ngModel to apply the initial array to the option states.
     const fixture = MockRender(TargetComponent);
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
@@ -327,9 +340,11 @@ describe('MockForms:native', () => {
     expect(select.nativeElement.options[1].selected).toBe(false);
     expect(select.nativeElement.options[2].selected).toBe(false);
 
+    // Keep the array so the test can also verify that changing the selection leaves it intact.
     const values = ['second', 'third'];
-    // Change the value.
-    ngMocks.change(select, values);
+    // Pass an array because a multiple select can choose several options.
+    ngMocks.change('[name="multiSelectName"]', values);
+    // or ngMocks.change(select, values);
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -340,8 +355,9 @@ describe('MockForms:native', () => {
     expect(select.nativeElement.options[2].selected).toBe(true);
     expect(values).toEqual(['second', 'third']);
 
-    // Clear the selection.
-    ngMocks.change(select, []);
+    // Clear the selection by supplying no option values.
+    ngMocks.change('[name="multiSelectName"]', []);
+    // or ngMocks.change(select, []);
     fixture.detectChanges();
     await fixture.whenStable();
 

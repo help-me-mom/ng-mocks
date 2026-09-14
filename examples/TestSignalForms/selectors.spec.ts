@@ -29,6 +29,7 @@ describe('TestSignalForms:selectors', () => {
   describe('real form binding', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent)
+        // Keep the binding and native event services so edits reach the model.
         .keep(FormField)
         .keep(NG_MOCKS_ROOT_PROVIDERS),
     );
@@ -65,6 +66,7 @@ describe('TestSignalForms:selectors', () => {
       expect(first.nativeNode.value).toBe('Ada');
       expect(last.nativeNode.value).toBe('Lovelace');
 
+      // Reuse the matched host to change only its bound field.
       ngMocks.change(first, 'Grace');
       fixture.detectChanges();
 
@@ -82,6 +84,7 @@ describe('TestSignalForms:selectors', () => {
   });
 
   describe('mocked form binding', () => {
+    // Mock the directive to inspect bindings without its native form behavior.
     beforeEach(() => MockBuilder(TargetComponent).mock(FormField));
 
     it('selects bound field trees without providing form behavior', () => {

@@ -55,38 +55,39 @@ describe('MockForms', () => {
   // automatic resetting in test.ts.
   MockInstance.scope();
 
+  // Keep ngModel real so it connects the parent to the mocked CVA child.
   beforeEach(() =>
     MockBuilder(TargetComponent, ItsModule).keep(FormsModule),
   );
 
   it('sends the correct value to the mock form component', async () => {
-    // Prepare the writeValue spy before rendering.
+    // Observe values written to the child. With auto spy, a manual spy is unnecessary.
     const writeValue =
       typeof jest === 'undefined'
         ? jasmine.createSpy('writeValue')
         : jest.fn();
+    // Install the spy before rendering to capture Angular's initial write.
     MockInstance(CvaComponent, 'writeValue', writeValue);
 
-    // Render the component.
+    // Render the parent.
     const fixture = MockRender(TargetComponent);
+    // Wait for ngModel to register the control and write its initial value.
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
-
-    // Find the mocked control.
-    const mockControlEl = ngMocks.find(CvaComponent);
 
     // Read the initial value and the write received by the mock.
     expect(component.value).toBeNull();
     expect(writeValue).toHaveBeenCalledWith(null);
 
-    // Change the value through the mocked control.
-    ngMocks.change(mockControlEl, 'foo');
+    // Find the child by its class and simulate an edit.
+    ngMocks.change(CvaComponent, 'foo');
 
-    // Assert the result.
+    // Assert that ngModel updated the parent property.
     expect(component.value).toBe('foo');
 
-    // Change the parent value.
+    // Change the parent value to exercise the opposite direction.
     component.value = 'bar';
+    // Run the binding and wait for ngModel to write the value to the child.
     fixture.detectChanges();
     await fixture.whenStable();
 

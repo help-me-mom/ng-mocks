@@ -38,6 +38,7 @@ class TargetModule {}
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/756
 describe('TestNgSubmit:template-driven', () => {
+  // Keep Angular's form bindings real so native submit commits pending edits.
   beforeEach(() =>
     MockBuilder(TargetComponent, TargetModule).keep(FormsModule),
   );
@@ -45,16 +46,19 @@ describe('TestNgSubmit:template-driven', () => {
   it('calls save with the submitted value and event', async () => {
     // Render the component.
     const fixture = MockRender(TargetComponent);
+
+    // Wait for ngModel to register the input with the form.
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
+
+    // Replace the application handler to check its submitted arguments.
     const save =
       typeof jest === 'undefined'
         ? jasmine.createSpy('save')
         : jest.fn();
     component.save = save;
 
-    // Find the input and form.
-    const input = ngMocks.find('input');
+    // Find the form to read its value and submitted state.
     const form = ngMocks.findInstance(NgForm);
 
     // Read the initial value.
@@ -62,13 +66,14 @@ describe('TestNgSubmit:template-driven', () => {
     expect(form.value).toEqual({ name: 'initial' });
 
     // Change the input. Its value stays pending until submission.
-    ngMocks.change(input, 'updated');
+    ngMocks.change('input', 'updated');
 
+    // Assert the pending value.
     expect(component.value).toBe('initial');
     expect(form.value).toEqual({ name: 'initial' });
     expect(save).not.toHaveBeenCalled();
 
-    // Submit the form.
+    // Dispatch native submit so Angular commits the edit and emits ngSubmit.
     const event = ngMocks.event('submit');
     ngMocks.trigger('form', event);
 
@@ -83,9 +88,13 @@ describe('TestNgSubmit:template-driven', () => {
 
   it('calls save through the native submit button', async () => {
     const fixture = MockRender(TargetComponent);
+
+    // Wait for ngModel to register the input with the form.
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
     const form = ngMocks.findInstance(NgForm);
+
+    // Replace the application handler to check its submitted arguments.
     const save =
       typeof jest === 'undefined'
         ? jasmine.createSpy('save')
@@ -97,6 +106,8 @@ describe('TestNgSubmit:template-driven', () => {
     // eslint-disable-next-line es-x/no-array-prototype-find -- ngMocks.find is not Array.find.
     const button = ngMocks.find('button')
       .nativeElement as HTMLButtonElement;
+
+    // A native click submits the form and commits the pending edit.
     button.click();
 
     const assertion: any =
@@ -115,14 +126,20 @@ describe('TestNgSubmit:template-driven', () => {
 
   it('does not call save through a disabled button', async () => {
     const fixture = MockRender(TargetComponent);
+
+    // Wait for ngModel to register the input with the form.
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
     const form = ngMocks.findInstance(NgForm);
+
+    // Replace the application handler to detect an unexpected submission.
     const save =
       typeof jest === 'undefined'
         ? jasmine.createSpy('save')
         : jest.fn();
     component.save = save;
+
+    // Check the view so the native button receives its disabled state.
     component.disabled = true;
     fixture.point.injector.get(ChangeDetectorRef).markForCheck();
     fixture.detectChanges();

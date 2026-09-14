@@ -91,6 +91,7 @@ describe('TestSignalForms:multi-select', () => {
     describe(`${mode} control`, () => {
       beforeEach(() => {
         const builder = MockBuilder(TargetComponent)
+          // Keep array values connected to the real or mocked child.
           .keep(FormField)
           .keep(NG_MOCKS_ROOT_PROVIDERS);
 
@@ -136,6 +137,7 @@ describe('TestSignalForms:multi-select', () => {
 
         // Change the value.
         ngMocks.change(host, ['first', 'third']);
+        // Propagate the field value to the child's model input and template.
         fixture.detectChanges();
 
         // Assert the result.
@@ -168,6 +170,7 @@ describe('TestSignalForms:multi-select', () => {
           multiSelectValue: ['second'],
           inputValue: 'Ada',
         });
+        // Deliver the parent value without emitting another child change.
         fixture.detectChanges();
 
         // Assert the result.
@@ -257,7 +260,11 @@ describe('TestSignalForms:multi-select', () => {
           );
 
           // Change the value.
-          ngMocks.change(select, ['second', 'third']);
+          ngMocks.change('signal-multi-select-control select', [
+            'second',
+            'third',
+          ]);
+          // or ngMocks.change(select, ['second', 'third']);
           fixture.detectChanges();
 
           // Assert the result.
@@ -276,7 +283,8 @@ describe('TestSignalForms:multi-select', () => {
           expect(component.model().inputValue).toBe('Ada');
 
           // Clear the selection through the child's native template.
-          ngMocks.change(select, []);
+          ngMocks.change('signal-multi-select-control select', []);
+          // or ngMocks.change(select, []);
           fixture.detectChanges();
 
           // Assert the result.

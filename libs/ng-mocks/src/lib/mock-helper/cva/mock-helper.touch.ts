@@ -1,7 +1,7 @@
 import { DebugElement } from '@angular/core';
 
 import coreForm from '../../common/core.form';
-import { DebugNodeSelector } from '../../common/core.types';
+import { DebugNodeSelector, Type } from '../../common/core.types';
 import { isMockControlValueAccessor } from '../../common/func.is-mock-control-value-accessor';
 import helperExtractMethodsFromPrototype from '../../mock-service/helper.extract-methods-from-prototype';
 import mockHelperTrigger from '../events/mock-helper.trigger';
@@ -68,7 +68,7 @@ const keys = [
   '_cvaOnTouchFn',
 ];
 
-export default (sel: DebugElement | DebugNodeSelector, methodName?: string): void => {
+export default (sel: Type<any> | DebugElement | DebugNodeSelector, methodName?: string): void => {
   const el = mockHelperFind(funcGetLastFixture(), sel, undefined);
   if (!el) {
     throw new Error(`Cannot find an element via ngMocks.touch(${funcParseFindArgsName(sel)})`);

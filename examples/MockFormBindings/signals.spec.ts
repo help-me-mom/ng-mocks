@@ -14,6 +14,7 @@ class TargetComponent {
 }
 
 describe('MockFormBindings:signals', () => {
+  // Mock FormField to inspect its input without connecting it to the DOM.
   beforeEach(() => MockBuilder(TargetComponent).mock(FormField));
 
   it('preserves a field tree without connecting the native input to it', () => {

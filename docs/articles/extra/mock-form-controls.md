@@ -66,6 +66,7 @@ Keep `TargetComponent` and `ReactiveFormsModule` real so Angular connects the pa
 to the child. The child component declared in `ItsModule` is replaced with a mock:
 
 ```ts
+// Keep the parent and real form binding; mock its CVA dependency.
 beforeEach(() =>
   MockBuilder(TargetComponent, ItsModule).keep(ReactiveFormsModule),
 );
@@ -84,10 +85,9 @@ The example below uses the default update policy, which applies edits immediatel
 
 :::
 
-Inside `it`, render the parent with [`MockRender`](/api/MockRender.md), then use
-[`ngMocks.find`](/api/ngMocks/find.md) with the original child component class.
-Pass its host to [`ngMocks.change`](/api/ngMocks/change.md) to simulate the child's
-registered change callback.
+Inside `it`, render the parent with [`MockRender`](/api/MockRender.md), then pass
+the original child component class directly to [`ngMocks.change`](/api/ngMocks/change.md).
+It finds the mocked child's host and simulates its registered change callback.
 
 Read the parent's `FormControl.value` for the current form value. A CVA defines callbacks
 for exchanging values; it does not define a stored-value property on the child or its host:
@@ -97,16 +97,13 @@ for exchanging values; it does not define a stored-value property on the child o
 const fixture = MockRender(TargetComponent);
 const component = fixture.point.componentInstance;
 
-// Find the child.
-const mockControlEl = ngMocks.find(CvaComponent);
-
 // Read the value.
 expect(component.formControl.value).toBeNull();
 
-// Change the value.
-ngMocks.change(mockControlEl, 'foo');
+// Find the child by its class and simulate an edit.
+ngMocks.change(CvaComponent, 'foo');
 
-// Assert the result.
+// Assert that Angular received the edit in the parent control.
 expect(component.formControl.value).toBe('foo');
 ```
 
@@ -127,6 +124,7 @@ For this version, `ItsModule` imports `FormsModule` from `@angular/forms`, and t
 keeps `FormsModule`:
 
 ```ts
+// Keep ngModel real so it connects the parent to the mocked child.
 beforeEach(() =>
   MockBuilder(TargetComponent, ItsModule).keep(FormsModule),
 );
@@ -139,19 +137,17 @@ described above apply when configured through `ngModelOptions`:
 ```ts
 // Render the parent.
 const fixture = MockRender(TargetComponent);
+// Wait for ngModel to register the control and write its initial value.
 await fixture.whenStable();
 const component = fixture.point.componentInstance;
-
-// Find the child.
-const mockControlEl = ngMocks.find(CvaComponent);
 
 // Read the value.
 expect(component.value).toBeNull();
 
-// Change the value.
-ngMocks.change(mockControlEl, 'foo');
+// Find the child by its class and simulate an edit.
+ngMocks.change(CvaComponent, 'foo');
 
-// Assert the result.
+// Assert that ngModel updated the parent property.
 expect(component.value).toBe('foo');
 ```
 
@@ -187,22 +183,20 @@ beforeEach(() =>
 );
 ```
 
-Find the child by its class and read the parent signal for its value. Changing the
-mock marks the field dirty; use `ngMocks.touch(child)` separately to report a touch:
+Pass the child's class directly to `ngMocks.change` and read the parent signal for its value.
+Changing the mock marks the field dirty; use `ngMocks.touch(CvaComponent)` separately
+to report a touch:
 
 ```ts
 // Render the parent.
 const fixture = MockRender(TargetComponent);
 const component = fixture.point.componentInstance;
 
-// Find the child.
-const child = ngMocks.find(CvaComponent);
-
 // Read the value.
 expect(component.model()).toEqual({ name: 'Ada' });
 
-// Change the value.
-ngMocks.change(child, 'Katherine');
+// Simulate a child edit through the callback registered by FormField.
+ngMocks.change(CvaComponent, 'Katherine');
 
 // Assert the result.
 expect(component.model()).toEqual({ name: 'Katherine' });
@@ -222,7 +216,7 @@ suite to reset customizations after each test.
 Install the spy before rendering because Angular writes the initial value during setup:
 
 ```ts
-// Prepare the writeValue spy.
+// Install the spy before rendering to capture Angular's initial write.
 const writeValue = jasmine.createSpy('writeValue');
 // For Jest: const writeValue = jest.fn();
 MockInstance(CvaComponent, 'writeValue', writeValue);
@@ -252,6 +246,7 @@ With `ngModel`, update the parent property, run change detection, and await stab
 ```ts
 // Change the parent value.
 component.value = 'bar';
+// Run the binding and wait for ngModel to write the value to the child.
 fixture.detectChanges();
 await fixture.whenStable();
 
@@ -265,8 +260,8 @@ Changing a mocked CVA does not invoke its registered touch callback.
 Use [`ngMocks.touch`](/api/ngMocks/touch.md) when the test needs a touched control:
 
 ```ts
-// Touch the child.
-ngMocks.touch(mockControlEl);
+// Report a touch through the child's registered callback.
+ngMocks.touch(CvaComponent);
 
 // Assert the touched state.
 expect(component.formControl.touched).toBe(true);
@@ -281,7 +276,7 @@ is disabled or enabled. Spy on the mock's method after rendering to observe thos
 // Observe the child's disabled-state callback.
 const setDisabledState = jasmine.createSpy('setDisabledState');
 ngMocks.stubMember(
-  ngMocks.get(mockControlEl, CvaComponent),
+  ngMocks.findInstance(CvaComponent),
   'setDisabledState',
   setDisabledState,
 );
@@ -378,14 +373,16 @@ class CvaComponent implements ControlValueAccessor {
 class ItsModule {}
 
 describe('MockReactiveForms', () => {
+  // Reset spy customizations after each test.
   MockInstance.scope();
 
+  // Keep Angular's binding real while mocking the CVA dependency.
   beforeEach(() =>
     MockBuilder(TargetComponent, ItsModule).keep(ReactiveFormsModule),
   );
 
   it('sends the correct value to the mock form component', () => {
-    // Prepare the writeValue spy.
+    // Install the spy before rendering to capture Angular's initial write.
     const writeValue = jasmine.createSpy('writeValue');
     // For Jest: const writeValue = jest.fn();
     MockInstance(CvaComponent, 'writeValue', writeValue);
@@ -394,20 +391,17 @@ describe('MockReactiveForms', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
-    // Find the child.
-    const mockControlEl = ngMocks.find(CvaComponent);
-
     // Read the value.
     expect(component.formControl.value).toBeNull();
     expect(writeValue).toHaveBeenCalledWith(null);
 
-    // Change the value.
-    ngMocks.change(mockControlEl, 'foo');
+    // Find the child by its class and simulate an edit.
+    ngMocks.change(CvaComponent, 'foo');
 
-    // Assert the result.
+    // Assert that Angular received the edit in the parent control.
     expect(component.formControl.value).toBe('foo');
 
-    // Change the parent value.
+    // Change the parent value to exercise the opposite direction.
     component.formControl.setValue('bar');
 
     // Assert the value written to the child.

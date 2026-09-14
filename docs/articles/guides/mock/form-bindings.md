@@ -51,7 +51,7 @@ Render with [`MockRender`](/api/MockRender.md), find the input with
 const fixture = MockRender(TargetComponent);
 const component = fixture.point.componentInstance;
 
-// Find the input.
+// Find the input to inspect its mocked binding and native value.
 const input = ngMocks.find('[name="inputName"]');
 
 // Read the binding.
@@ -59,8 +59,9 @@ expect(ngMocks.input(input, 'ngModel')).toBe('Ada');
 expect(component.inputValue).toBe('Ada');
 expect(input.nativeElement.value).toBe('');
 
-// Change the value through the mocked ngModelChange output.
-ngMocks.change(input, 'Grace');
+// Emit the mocked ngModelChange output to update the parent property.
+ngMocks.change('[name="inputName"]', 'Grace');
+// or ngMocks.change(input, 'Grace');
 fixture.detectChanges();
 
 // Assert the result.
@@ -254,7 +255,7 @@ describe('MockFormBindings', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
-    // Find the input.
+    // Find the input to inspect its mocked binding and native value.
     const input = ngMocks.find('[name="inputName"]');
 
     // Read the binding.
@@ -263,8 +264,9 @@ describe('MockFormBindings', () => {
     expect(component.inputValue).toBe('Ada');
     expect(input.nativeElement.value).toBe('');
 
-    // Change the value through the mocked ngModelChange output.
-    ngMocks.change(input, 'Grace');
+    // Emit the mocked ngModelChange output to update the parent property.
+    ngMocks.change('[name="inputName"]', 'Grace');
+    // or ngMocks.change(input, 'Grace');
     fixture.detectChanges();
 
     // Assert the result.

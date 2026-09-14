@@ -43,6 +43,7 @@ Keep the parent and form binding real, and mock `InputControl`:
 ```ts
 beforeEach(() =>
   MockBuilder(TargetComponent)
+    // Preserve the parent form connection while replacing the child.
     .keep(FormField)
     .keep(NG_MOCKS_ROOT_PROVIDERS)
     .mock(InputControl),
@@ -65,7 +66,8 @@ the separate [touch interaction](#touch).
 
 Inside `it`, render the parent with [`MockRender`](/api/MockRender.md), then find the
 mocked child with [`ngMocks.find`](/api/ngMocks/find.md). Read the parent's model and
-the child's `value()` signal, then pass the child's host to [`ngMocks.change`](/api/ngMocks/change.md):
+the child's `value()` signal, then pass `InputControl` directly to
+[`ngMocks.change`](/api/ngMocks/change.md):
 
 ```ts
 // Render the parent.
@@ -81,7 +83,9 @@ expect(component.model().inputValue).toBe('Ada');
 expect(control.value()).toBe('Ada');
 
 // Change the value.
-ngMocks.change(host, 'Grace');
+ngMocks.change(InputControl, 'Grace');
+// or ngMocks.change(host, 'Grace');
+// Propagate the updated field value back to the child's model input.
 fixture.detectChanges();
 
 // Assert the result.
@@ -96,6 +100,7 @@ A parent write also reaches the mocked child on the next change-detection pass:
 ```ts
 // Change the parent model.
 component.model.set({ inputValue: 'Katherine' });
+// Deliver the parent value to the mocked child.
 fixture.detectChanges();
 
 // Assert the result.
@@ -142,6 +147,7 @@ For this variant, mock `CheckboxControl` in the setup:
 ```ts
 beforeEach(() =>
   MockBuilder(TargetComponent)
+    // Preserve the parent form connection while replacing the child.
     .keep(FormField)
     .keep(NG_MOCKS_ROOT_PROVIDERS)
     .mock(CheckboxControl),
@@ -160,7 +166,8 @@ expect(component.model().checkboxValue).toBe(false);
 expect(control.checked()).toBe(false);
 
 // Check the control.
-ngMocks.change(host, true);
+ngMocks.change(CheckboxControl, true);
+// or ngMocks.change(host, true);
 fixture.detectChanges();
 
 // Assert the result.
@@ -168,7 +175,8 @@ expect(component.model().checkboxValue).toBe(true);
 expect(control.checked()).toBe(true);
 
 // Uncheck the control.
-ngMocks.change(host, false);
+ngMocks.change(CheckboxControl, false);
+// or ngMocks.change(host, false);
 fixture.detectChanges();
 
 // Assert the result.
@@ -221,6 +229,7 @@ class TargetComponent {
 describe('MockForms:signals', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent)
+      // Preserve the parent form connection while replacing the child.
       .keep(FormField)
       .keep(NG_MOCKS_ROOT_PROVIDERS)
       .mock(InputControl),
@@ -240,7 +249,9 @@ describe('MockForms:signals', () => {
     expect(control.value()).toBe('Ada');
 
     // Change the value.
-    ngMocks.change(host, 'Grace');
+    ngMocks.change(InputControl, 'Grace');
+    // or ngMocks.change(host, 'Grace');
+    // Propagate the updated field value back to the child's model input.
     fixture.detectChanges();
 
     // Assert the result.
@@ -249,6 +260,7 @@ describe('MockForms:signals', () => {
 
     // Change the parent model.
     component.model.set({ inputValue: 'Katherine' });
+    // Deliver the parent value to the mocked child.
     fixture.detectChanges();
 
     // Assert the result.

@@ -67,6 +67,7 @@ class ItsModule {}
 
 describe('MockForms:update-on-cva', () => {
   describe('blur', () => {
+    // Mock the child while keeping real ngModel timing and CVA registration.
     beforeEach(() =>
       MockBuilder(BlurComponent, ItsModule).keep(FormsModule),
     );
@@ -88,7 +89,8 @@ describe('MockForms:update-on-cva', () => {
       expect(control.pristine).toBe(true);
 
       // Changing the mock does not invoke its touch callback.
-      ngMocks.change(mockControlEl, 'updated');
+      ngMocks.change(CvaComponent, 'updated');
+      // or ngMocks.change(mockControlEl, 'updated');
 
       expect(component.inputValue).toBe('initial');
       expect(control.value).toBe('initial');
@@ -107,6 +109,7 @@ describe('MockForms:update-on-cva', () => {
   });
 
   describe('submit', () => {
+    // Keep the real form so submission can commit the mocked child's pending value.
     beforeEach(() =>
       MockBuilder(SubmitComponent, ItsModule).keep(FormsModule),
     );
@@ -130,7 +133,8 @@ describe('MockForms:update-on-cva', () => {
       expect(form.submitted).toBe(false);
 
       // Changing the mock leaves its value pending and untouched.
-      ngMocks.change(mockControlEl, 'updated');
+      ngMocks.change(CvaComponent, 'updated');
+      // or ngMocks.change(mockControlEl, 'updated');
 
       expect(component.inputValue).toBe('initial');
       expect(form.value).toEqual({ inputName: 'initial' });

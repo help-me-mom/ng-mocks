@@ -68,7 +68,9 @@ class ItsModule {}
 describe('MockReactiveForms:update-on-cva', () => {
   describe('blur', () => {
     beforeEach(() =>
-      MockBuilder(BlurComponent, ItsModule).keep(ReactiveFormsModule),
+      MockBuilder(BlurComponent, ItsModule)
+        // Keep Angular's update policy while mocking the child control.
+        .keep(ReactiveFormsModule),
     );
 
     it('commits the pending change when the mock is touched', () => {
@@ -85,7 +87,8 @@ describe('MockReactiveForms:update-on-cva', () => {
       expect(component.inputValue.pristine).toBe(true);
 
       // Changing the mock does not invoke its touch callback.
-      ngMocks.change(mockControlEl, 'updated');
+      ngMocks.change(CvaComponent, 'updated');
+      // or ngMocks.change(mockControlEl, 'updated');
 
       expect(component.inputValue.value).toBe('initial');
       expect(component.inputValue.touched).toBe(false);
@@ -103,9 +106,9 @@ describe('MockReactiveForms:update-on-cva', () => {
 
   describe('submit', () => {
     beforeEach(() =>
-      MockBuilder(SubmitComponent, ItsModule).keep(
-        ReactiveFormsModule,
-      ),
+      MockBuilder(SubmitComponent, ItsModule)
+        // Keep Angular's update policy while mocking the child control.
+        .keep(ReactiveFormsModule),
     );
 
     it('keeps the change and touch pending until native submission', () => {
@@ -125,7 +128,8 @@ describe('MockReactiveForms:update-on-cva', () => {
       expect(form.submitted).toBe(false);
 
       // Changing the mock leaves its value pending and untouched.
-      ngMocks.change(mockControlEl, 'updated');
+      ngMocks.change(CvaComponent, 'updated');
+      // or ngMocks.change(mockControlEl, 'updated');
 
       expect(component.form.value).toEqual({ inputValue: 'initial' });
       expect(control.touched).toBe(false);

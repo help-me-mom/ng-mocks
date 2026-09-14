@@ -36,6 +36,7 @@ the input and the field:
 ```ts
 beforeEach(() =>
   MockBuilder(TargetComponent)
+    // Keep the field binding and the services used by native input events.
     .keep(FormField)
     .keep(NG_MOCKS_ROOT_PROVIDERS),
 );
@@ -67,7 +68,8 @@ action to finish before asserting its completed result.
 Inside `it`, render the component with [`MockRender`](/api/MockRender.md), then use
 [`ngMocks.reveal`](/api/ngMocks/reveal.md) with the same field tree that the template binds
 to `formField`. Pass `component.f.inputValue` without calling it, so the selector matches
-the bound field tree by reference. Read `component.model().inputValue` for the component's
+the bound field tree by reference. Reuse that element in subsequent helper calls.
+Read `component.model().inputValue` for the component's
 model value and `input.nativeNode.value` for the displayed text:
 
 ```ts
@@ -84,6 +86,7 @@ expect(input.nativeNode.value).toBe('Ada');
 
 // Change the value.
 ngMocks.change(input, 'Grace');
+// Render any bindings that depend on the updated model.
 fixture.detectChanges();
 
 // Assert the result.
@@ -187,7 +190,8 @@ expect(first.nativeElement.checked).toBe(true);
 expect(second.nativeElement.checked).toBe(false);
 
 // Select the second option.
-ngMocks.change(second, true);
+ngMocks.change('input[type="radio"][value="second"]', true);
+// or ngMocks.change(second, true);
 fixture.detectChanges();
 
 // Assert the result.
@@ -196,7 +200,8 @@ expect(first.nativeElement.checked).toBe(false);
 expect(second.nativeElement.checked).toBe(true);
 
 // Uncheck the second option.
-ngMocks.change(second, false);
+ngMocks.change('input[type="radio"][value="second"]', false);
+// or ngMocks.change(second, false);
 fixture.detectChanges();
 
 // Assert the result.
@@ -306,6 +311,7 @@ class TargetComponent {
 describe('TestSignalForms:native', () => {
   beforeEach(() =>
     MockBuilder(TargetComponent)
+      // Keep the field binding and the services used by native input events.
       .keep(FormField)
       .keep(NG_MOCKS_ROOT_PROVIDERS),
   );
@@ -324,6 +330,7 @@ describe('TestSignalForms:native', () => {
 
     // Change the value.
     ngMocks.change(input, 'Grace');
+    // Render any bindings that depend on the updated model.
     fixture.detectChanges();
 
     // Assert the result.

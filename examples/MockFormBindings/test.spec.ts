@@ -23,6 +23,7 @@ class TargetComponent {
 class TargetModule {}
 
 describe('MockFormBindings', () => {
+  // Keep the parent real and mock its form directives to inspect the bindings.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('reads a mocked ngModel input and updates its parent binding', () => {
@@ -30,7 +31,7 @@ describe('MockFormBindings', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
-    // Find the input.
+    // Find the input to inspect its mocked binding and native value.
     const input = ngMocks.find('[name="inputName"]');
 
     // Read the binding.
@@ -39,8 +40,9 @@ describe('MockFormBindings', () => {
     expect(component.inputValue).toBe('Ada');
     expect(input.nativeElement.value).toBe('');
 
-    // Change the value through the mocked ngModelChange output.
-    ngMocks.change(input, 'Grace');
+    // Emit the mocked ngModelChange output to update the parent property.
+    ngMocks.change('[name="inputName"]', 'Grace');
+    // or ngMocks.change(input, 'Grace');
     fixture.detectChanges();
 
     // Assert the result.
@@ -56,6 +58,7 @@ describe('MockFormBindings', () => {
     expect(ngMocks.input(input, 'ngModel')).toBe('Ada');
     expect(input.nativeElement.value).toBe('');
 
+    // Check the parent view so its new value reaches the mocked input binding.
     component.inputValue = 'Grace';
     fixture.point.injector.get(ChangeDetectorRef).markForCheck();
     fixture.detectChanges();

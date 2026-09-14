@@ -66,6 +66,7 @@ describe('TestSignalForms:selectors-model', () => {
     describe(`${mode} controls`, () => {
       beforeEach(() => {
         const builder = MockBuilder(TargetComponent)
+          // Preserve field updates while varying only the child implementation.
           .keep(FormField)
           .keep(NG_MOCKS_ROOT_PROVIDERS);
 
@@ -110,7 +111,9 @@ describe('TestSignalForms:selectors-model', () => {
         expect(control.value()).toBe('Ada');
         expect(sibling.value()).toBe('Lovelace');
 
+        // Reuse the field-specific host because both children share a component class.
         ngMocks.change(first, 'Grace');
+        // Propagate the field value back to the selected child's model input.
         fixture.detectChanges();
 
         expect(component.model()).toEqual({

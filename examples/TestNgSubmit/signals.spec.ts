@@ -34,6 +34,7 @@ class TargetComponent {
 }
 
 describe('TestNgSubmit:signals', () => {
+  // Keep the field and submission bindings with their required services real.
   beforeEach(() =>
     MockBuilder(TargetComponent)
       .keep(FormField)
@@ -69,7 +70,7 @@ describe('TestNgSubmit:signals', () => {
     expect(input.nativeNode.value).toBe('Grace');
     expect(component.submitted).toBeUndefined();
 
-    // Submit the form.
+    // Dispatch native submit so FormRoot starts its submission action.
     const event = ngMocks.event('submit');
     ngMocks.trigger(formElement, event);
     expect(component.f().submitting()).toBe(true);

@@ -32,6 +32,7 @@ class TargetComponent {
 class TargetModule {}
 
 describe('MockFormBindings:groups', () => {
+  // Mock the directives to inspect the group and name supplied by the parent.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('preserves the group and control name without connecting the native input', () => {

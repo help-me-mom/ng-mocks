@@ -4,9 +4,10 @@ description: Find, read, change, and assert native inputs, textareas, checkboxes
 sidebar_label: Native Inputs
 ---
 
-Use [`ngMocks.find`](/api/ngMocks/find.md) to find a native control, read its DOM property,
-and use [`ngMocks.change`](/api/ngMocks/change.md) to edit it. This works with ordinary
-HTML controls, including controls without an Angular forms directive or event handler.
+Use [`ngMocks.find`](/api/ngMocks/find.md) to inspect a native control's DOM properties.
+[`ngMocks.change`](/api/ngMocks/change.md) accepts a CSS selector directly to edit the control.
+This works with ordinary HTML controls, including controls without an Angular forms
+directive or event handler.
 
 ```ts
 import { Component } from '@angular/core';
@@ -61,7 +62,8 @@ expect(input.nativeElement.value).toBe('Ada');
 expect(component.inputValue).toBe('Ada');
 
 // Change the value.
-ngMocks.change(input, 'Grace');
+ngMocks.change('[name="inputName"]', 'Grace');
+// or ngMocks.change(input, 'Grace');
 fixture.detectChanges();
 
 // Assert the result.
@@ -97,7 +99,8 @@ const input = ngMocks.find('[name="inputName"]');
 expect(input.nativeElement.value).toBe('Ada');
 
 // Change the value.
-ngMocks.change(input, 'Grace');
+ngMocks.change('[name="inputName"]', 'Grace');
+// or ngMocks.change(input, 'Grace');
 
 // Assert the result.
 expect(input.nativeElement.value).toBe('Grace');
@@ -117,7 +120,8 @@ const textarea = ngMocks.find('[name="textareaName"]');
 expect(textarea.nativeElement.value).toBe('Initial notes');
 
 // Change the value.
-ngMocks.change(textarea, 'Updated notes');
+ngMocks.change('[name="textareaName"]', 'Updated notes');
+// or ngMocks.change(textarea, 'Updated notes');
 
 // Assert the result.
 expect(textarea.nativeElement.value).toBe('Updated notes');
@@ -140,14 +144,16 @@ const checkbox = ngMocks.find('[name="checkboxName"]');
 expect(checkbox.nativeElement.checked).toBe(false);
 
 // Check the checkbox.
-ngMocks.change(checkbox, true);
+ngMocks.change('[name="checkboxName"]', true);
+// or ngMocks.change(checkbox, true);
 
 // Assert the result.
 expect(checkbox.nativeElement.checked).toBe(true);
 expect(checkbox.nativeElement.value).toBe('yes');
 
 // Uncheck the checkbox.
-ngMocks.change(checkbox, false);
+ngMocks.change('[name="checkboxName"]', false);
+// or ngMocks.change(checkbox, false);
 
 // Assert the result.
 expect(checkbox.nativeElement.checked).toBe(false);
@@ -156,7 +162,7 @@ expect(checkbox.nativeElement.value).toBe('yes');
 
 ### Radio group
 
-Both radios share a `name`. Find the intended option and pass `true` to select it.
+Both radios share a `name`. Use the intended option's selector and pass `true` to select it.
 This unchecks the other option without changing either option's `value`.
 Passing `false` unchecks only the selected host; it does not select another option.
 
@@ -175,7 +181,8 @@ expect(first.nativeElement.checked).toBe(true);
 expect(second.nativeElement.checked).toBe(false);
 
 // Select the second option.
-ngMocks.change(second, true);
+ngMocks.change('[name="radioName"][value="second"]', true);
+// or ngMocks.change(second, true);
 
 // Assert the result.
 expect(first.nativeElement.checked).toBe(false);
@@ -184,7 +191,8 @@ expect(first.nativeElement.value).toBe('first');
 expect(second.nativeElement.value).toBe('second');
 
 // Uncheck the second option.
-ngMocks.change(second, false);
+ngMocks.change('[name="radioName"][value="second"]', false);
+// or ngMocks.change(second, false);
 
 // Assert the result.
 expect(first.nativeElement.checked).toBe(false);
@@ -205,13 +213,15 @@ const input = ngMocks.find('[name="numberName"]');
 expect(input.nativeElement.value).toBe('1');
 
 // Change the value.
-ngMocks.change(input, 42);
+ngMocks.change('[name="numberName"]', 42);
+// or ngMocks.change(input, 42);
 
 // Assert the result.
 expect(input.nativeElement.value).toBe('42');
 
 // Clear the value with null or undefined.
-ngMocks.change(input, null);
+ngMocks.change('[name="numberName"]', null);
+// or ngMocks.change(input, null);
 
 // Assert the result.
 expect(input.nativeElement.value).toBe('');
@@ -234,7 +244,8 @@ const select = ngMocks.find('[name="selectName"]');
 expect(select.nativeElement.value).toBe('first');
 
 // Change the value.
-ngMocks.change(select, 'second');
+ngMocks.change('[name="selectName"]', 'second');
+// or ngMocks.change(select, 'second');
 
 // Assert the result.
 expect(select.nativeElement.value).toBe('second');
@@ -264,7 +275,8 @@ expect(options[1].selected).toBe(false);
 expect(options[2].selected).toBe(false);
 
 // Change the selection.
-ngMocks.change(select, ['second', 'third']);
+ngMocks.change('[name="multiSelectName"]', ['second', 'third']);
+// or ngMocks.change(select, ['second', 'third']);
 
 // Assert the result.
 expect(options[0].selected).toBe(false);
@@ -272,7 +284,8 @@ expect(options[1].selected).toBe(true);
 expect(options[2].selected).toBe(true);
 
 // Clear the selection.
-ngMocks.change(select, []);
+ngMocks.change('[name="multiSelectName"]', []);
+// or ngMocks.change(select, []);
 
 // Assert the result.
 expect(select.nativeElement.selectedIndex).toBe(-1);
@@ -318,7 +331,8 @@ describe('TestNativeFormControls', () => {
     expect(component.inputValue).toBe('Ada');
 
     // Change the value.
-    ngMocks.change(input, 'Grace');
+    ngMocks.change('[name="inputName"]', 'Grace');
+    // or ngMocks.change(input, 'Grace');
     fixture.detectChanges();
 
     // Assert the result.

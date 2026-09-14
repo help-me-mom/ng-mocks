@@ -61,8 +61,8 @@ browser navigation. Emitting `ngSubmit` directly skips that handling.
 :::
 
 Inside an async `it`, render the component with [`MockRender`](/api/MockRender.md) and
-await `ngModel` registration. Find the input with [`ngMocks.find`](/api/ngMocks/find.md)
-and its `NgForm` instance with [`ngMocks.findInstance`](/api/ngMocks/findInstance.md).
+await `ngModel` registration. Find its `NgForm` instance with
+[`ngMocks.findInstance`](/api/ngMocks/findInstance.md).
 Import `NgForm` from `@angular/forms` to read the form's value and submitted state.
 Use [`ngMocks.change`](/api/ngMocks/change.md) to edit the input, then create a native
 submit event with [`ngMocks.event`](/api/ngMocks/event.md) and dispatch it through
@@ -74,13 +74,16 @@ through `[(ngModel)]` is `value`; these names can differ.
 ```ts
 // Render the component.
 const fixture = MockRender(TargetComponent);
+
+// Wait for ngModel to register the input with the form.
 await fixture.whenStable();
 const component = fixture.point.componentInstance;
+
+// Replace the application handler to check its submitted arguments.
 const save = jasmine.createSpy('save');
 component.save = save;
 
-// Find the input and form.
-const input = ngMocks.find('input');
+// Find the form to read its value and submitted state.
 const form = ngMocks.findInstance(NgForm);
 
 // Read the initial value.
@@ -88,14 +91,14 @@ expect(form.submitted).toBe(false);
 expect(form.value).toEqual({ name: 'initial' });
 
 // Change the input. Its value stays pending until submission.
-ngMocks.change(input, 'updated');
+ngMocks.change('input', 'updated');
 
 // Assert the pending value.
 expect(component.value).toBe('initial');
 expect(form.value).toEqual({ name: 'initial' });
 expect(save).not.toHaveBeenCalled();
 
-// Submit the form.
+// Dispatch native submit so Angular commits the edit and emits ngSubmit.
 const event = ngMocks.event('submit');
 ngMocks.trigger('form', event);
 
@@ -178,11 +181,12 @@ value immediately:
 // Render the component.
 const fixture = MockRender(TargetComponent);
 const component = fixture.point.componentInstance;
+
+// Replace the application handler to check its submitted arguments.
 const save = jasmine.createSpy('save');
 component.save = save;
 
-// Find the input and form.
-const input = ngMocks.find('input');
+// Find the form to read its submitted state.
 const form = ngMocks.findInstance(FormGroupDirective);
 
 // Read the initial value.
@@ -190,13 +194,13 @@ expect(form.submitted).toBe(false);
 expect(component.form.value).toEqual({ name: 'initial' });
 
 // Change the input. Its value stays pending until submission.
-ngMocks.change(input, 'updated');
+ngMocks.change('input', 'updated');
 
 // Assert the pending value.
 expect(component.form.value).toEqual({ name: 'initial' });
 expect(save).not.toHaveBeenCalled();
 
-// Submit the form.
+// Dispatch native submit so Angular commits the edit and emits ngSubmit.
 const event = ngMocks.event('submit');
 ngMocks.trigger('form', event);
 
@@ -293,7 +297,7 @@ expect(component.model()).toEqual({ inputValue: 'Grace' });
 expect(input.nativeNode.value).toBe('Grace');
 expect(component.submitted).toBeUndefined();
 
-// Submit the form.
+// Dispatch native submit so FormRoot starts its submission action.
 const event = ngMocks.event('submit');
 ngMocks.trigger(formElement, event);
 expect(component.f().submitting()).toBe(true);
@@ -382,13 +386,16 @@ describe('TestNgSubmit:template-driven', () => {
   it('calls save with the submitted value and event', async () => {
     // Render the component.
     const fixture = MockRender(TargetComponent);
+
+    // Wait for ngModel to register the input with the form.
     await fixture.whenStable();
     const component = fixture.point.componentInstance;
+
+    // Replace the application handler to check its submitted arguments.
     const save = jasmine.createSpy('save');
     component.save = save;
 
-    // Find the input and form.
-    const input = ngMocks.find('input');
+    // Find the form to read its value and submitted state.
     const form = ngMocks.findInstance(NgForm);
 
     // Read the initial value.
@@ -396,14 +403,14 @@ describe('TestNgSubmit:template-driven', () => {
     expect(form.value).toEqual({ name: 'initial' });
 
     // Change the input. Its value stays pending until submission.
-    ngMocks.change(input, 'updated');
+    ngMocks.change('input', 'updated');
 
     // Assert the pending value.
     expect(component.value).toBe('initial');
     expect(form.value).toEqual({ name: 'initial' });
     expect(save).not.toHaveBeenCalled();
 
-    // Submit the form.
+    // Dispatch native submit so Angular commits the edit and emits ngSubmit.
     const event = ngMocks.event('submit');
     ngMocks.trigger('form', event);
 
@@ -469,11 +476,12 @@ describe('TestNgSubmit:reactive', () => {
     // Render the component.
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
+
+    // Replace the application handler to check its submitted arguments.
     const save = jasmine.createSpy('save');
     component.save = save;
 
-    // Find the input and form.
-    const input = ngMocks.find('input');
+    // Find the form to read its submitted state.
     const form = ngMocks.findInstance(FormGroupDirective);
 
     // Read the initial value.
@@ -481,13 +489,13 @@ describe('TestNgSubmit:reactive', () => {
     expect(component.form.value).toEqual({ name: 'initial' });
 
     // Change the input. Its value stays pending until submission.
-    ngMocks.change(input, 'updated');
+    ngMocks.change('input', 'updated');
 
     // Assert the pending value.
     expect(component.form.value).toEqual({ name: 'initial' });
     expect(save).not.toHaveBeenCalled();
 
-    // Submit the form.
+    // Dispatch native submit so Angular commits the edit and emits ngSubmit.
     const event = ngMocks.event('submit');
     ngMocks.trigger('form', event);
 
@@ -571,7 +579,7 @@ describe('TestNgSubmit:signals', () => {
     expect(input.nativeNode.value).toBe('Grace');
     expect(component.submitted).toBeUndefined();
 
-    // Submit the form.
+    // Dispatch native submit so FormRoot starts its submission action.
     const event = ngMocks.event('submit');
     ngMocks.trigger(formElement, event);
     expect(component.f().submitting()).toBe(true);

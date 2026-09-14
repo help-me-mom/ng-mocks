@@ -3,8 +3,8 @@ title: ngMocks.change
 description: Read and change native inputs, Angular form controls, and mocked custom controls with ngMocks.change
 ---
 
-`ngMocks.change(element, value)` simulates editing a control. Find its host once,
-read the current value, change it, and assert the result:
+`ngMocks.change(selector, value)` finds a control and simulates editing it.
+Pass a CSS selector directly when you only need to change its value:
 
 ```html
 <input name="inputName" [(ngModel)]="inputValue" />
@@ -14,42 +14,46 @@ read the current value, change it, and assert the result:
 // The component declares: public inputValue = 'Ada';
 // Keep FormsModule real and await fixture.whenStable() after rendering.
 
-// Find the input.
-const input = ngMocks.find('[name="inputName"]');
-
 // Read the value.
 expect(component.inputValue).toBe('Ada');
 
-// Change the value.
-ngMocks.change(input, 'Grace');
+// Find the input by name and simulate an edit.
+ngMocks.change('[name="inputName"]', 'Grace');
+// Render the update and wait for ngModel to settle.
 fixture.detectChanges();
 await fixture.whenStable();
 
 // Assert the result.
 expect(component.inputValue).toBe('Grace');
-expect(input.nativeElement.value).toBe('Grace');
 ```
 
 The first argument also accepts selectors supported by [`ngMocks.find`](find.md):
 
 ```ts
+ngMocks.change('input', 'Grace');
 ngMocks.change('[name="inputName"]', 'Grace');
 ngMocks.change(['name', 'inputName'], 'Grace');
 ngMocks.change(CvaComponent, 'Grace');
 ```
 
-To select an Angular input binding by its value, use [`ngMocks.reveal`](reveal.md):
+If you need to inspect the native element, retrieve it with `ngMocks.find`.
+For a more complex lookup, such as matching an Angular input binding, use
+[`ngMocks.reveal`](reveal.md) once and reuse its returned host:
 
 ```ts
-const control = ngMocks.reveal(['formControl', component.inputValue]);
+// Match a reactive control by the FormControl bound in the template.
+const control = ngMocks.reveal(['formControl', component.formControl]);
 ngMocks.change(control, 'Grace');
 
+// Match a signal field by its field tree and reuse the host.
 const field = ngMocks.reveal(['formField', component.f.inputValue]);
 ngMocks.change(field, 'Grace');
 ```
 
 Pass the `FormControl` or signal `FieldTree` itself to `reveal`. Several radio hosts
 can share that binding; use a CSS selector to find the intended radio option.
+Tuples passed directly to `change`, such as `['name', 'inputName']`, match HTML
+attributes. Matching a `formField` binding requires `reveal`.
 
 ## Supported controls and values
 
@@ -87,18 +91,20 @@ For a native radio or checkbox, pass `true` to check the host and `false` to
 uncheck it. The option's value stays unchanged.
 
 ```ts
-// Find the radio option.
+// Get the radio option so its checked state can be inspected.
 const radio = ngMocks.find('[name="radioName"][value="second"]');
 
 // Select the option.
-ngMocks.change(radio, true);
+ngMocks.change('[name="radioName"][value="second"]', true);
+// or ngMocks.change(radio, true);
 
 // Assert the result.
 expect(radio.nativeElement.checked).toBe(true);
 expect(radio.nativeElement.value).toBe('second');
 
 // Uncheck the option.
-ngMocks.change(radio, false);
+ngMocks.change('[name="radioName"][value="second"]', false);
+// or ngMocks.change(radio, false);
 
 // Assert the result.
 expect(radio.nativeElement.checked).toBe(false);
@@ -150,7 +156,7 @@ registered callback names such as `onChange`. If a third-party control stores it
 under another name, supply that name as the third argument:
 
 ```ts
-ngMocks.change(control, 'Grace', 'customChangeCallback');
+ngMocks.change(CvaComponent, 'Grace', 'customChangeCallback');
 ```
 
 The callback must be the one registered by Angular through `registerOnChange`.

@@ -36,7 +36,9 @@ Keep `TargetComponent` and `ReactiveFormsModule` real so Angular connects the in
 
 ```ts
 beforeEach(() =>
-  MockBuilder(TargetComponent, TargetModule).keep(ReactiveFormsModule),
+  MockBuilder(TargetComponent, TargetModule)
+    // Keep input events connected to the real FormControls.
+    .keep(ReactiveFormsModule),
 );
 ```
 
@@ -60,6 +62,7 @@ to mark it touched without editing its value.
 Inside `it`, render the component with [`MockRender`](/api/MockRender.md), find the bound input with
 [`ngMocks.reveal`](/api/ngMocks/reveal.md), and edit it with [`ngMocks.change`](/api/ngMocks/change.md).
 Pass `component.inputValue` itself to `reveal` so it matches the control bound to `[formControl]`.
+Reuse that element in subsequent helper calls for the same binding.
 
 Read `component.inputValue.value` for the form value and `input.nativeNode.value` for the displayed text.
 The simulated native change also marks the control dirty and touched:
@@ -78,6 +81,7 @@ expect(input.nativeNode.value).toBe('Ada');
 
 // Change the value.
 ngMocks.change(input, 'Grace');
+// Render any bindings that depend on the updated control value.
 fixture.detectChanges();
 
 // Assert the result.
@@ -195,7 +199,8 @@ expect(first.nativeElement.checked).toBe(true);
 expect(second.nativeElement.checked).toBe(false);
 
 // Select the second option.
-ngMocks.change(second, true);
+ngMocks.change('[name="radioName"][value="second"]', true);
+// or ngMocks.change(second, true);
 fixture.detectChanges();
 
 // Assert the result.
@@ -206,7 +211,8 @@ expect(first.nativeElement.value).toBe('first');
 expect(second.nativeElement.value).toBe('second');
 
 // Uncheck the second option.
-ngMocks.change(second, false);
+ngMocks.change('[name="radioName"][value="second"]', false);
+// or ngMocks.change(second, false);
 fixture.detectChanges();
 
 // Assert the result.
@@ -368,7 +374,9 @@ class TargetModule {}
 
 describe('MockReactiveForms:native', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule).keep(ReactiveFormsModule),
+    MockBuilder(TargetComponent, TargetModule)
+      // Keep input events connected to the real FormControls.
+      .keep(ReactiveFormsModule),
   );
 
   it('finds, reads, and changes a text control', () => {
@@ -385,6 +393,7 @@ describe('MockReactiveForms:native', () => {
 
     // Change the value.
     ngMocks.change(input, 'Grace');
+    // Render any bindings that depend on the updated control value.
     fixture.detectChanges();
 
     // Assert the result.

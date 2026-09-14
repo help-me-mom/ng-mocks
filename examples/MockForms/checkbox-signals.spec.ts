@@ -59,6 +59,7 @@ describe('MockForms:checkbox-signals', () => {
 
   beforeEach(() =>
     MockBuilder(TargetComponent)
+      // Preserve the parent form connection while replacing the child.
       .keep(FormField)
       .keep(NG_MOCKS_ROOT_PROVIDERS)
       .mock(CheckboxControl),
@@ -83,7 +84,8 @@ describe('MockForms:checkbox-signals', () => {
     expect(control.checked()).toBe(false);
 
     // Check the control.
-    ngMocks.change(host, true);
+    ngMocks.change(CheckboxControl, true);
+    // or ngMocks.change(host, true);
     fixture.detectChanges();
 
     // Assert the result.
@@ -95,7 +97,8 @@ describe('MockForms:checkbox-signals', () => {
     expect(component.f.checkboxValue().touched()).toBe(false);
 
     // Uncheck the control.
-    ngMocks.change(host, false);
+    ngMocks.change(CheckboxControl, false);
+    // or ngMocks.change(host, false);
     fixture.detectChanges();
 
     // Assert the result.
@@ -105,6 +108,7 @@ describe('MockForms:checkbox-signals', () => {
 
     // Change the parent model.
     component.model.set({ checkboxValue: true });
+    // Deliver the parent value without emitting another child change.
     fixture.detectChanges();
 
     // Assert the result.

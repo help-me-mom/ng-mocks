@@ -27,6 +27,7 @@ class TargetComponent {
 class TargetModule {}
 
 describe('MockFormBindings:reactive', () => {
+  // Mock the directives while keeping the parent's FormControl instance real.
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
   it('updates the real control supplied to a mocked formControl binding', () => {
@@ -34,7 +35,7 @@ describe('MockFormBindings:reactive', () => {
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
 
-    // Find the input.
+    // Find the input by the real control passed to its mocked directive.
     const input = ngMocks.reveal([
       'formControl',
       component.inputValue,
@@ -53,6 +54,7 @@ describe('MockFormBindings:reactive', () => {
     expect(component.inputValue.value).toBe('Ada');
     expect(input.nativeNode.value).toBe('');
 
+    // Observe the real control to verify that its subscribers receive the edit.
     const values: Array<string | null> = [];
     const subscription = component.inputValue.valueChanges.subscribe(
       value => values.push(value),
@@ -83,6 +85,7 @@ describe('MockFormBindings:reactive', () => {
     );
     expect(input.nativeNode.value).toBe('');
 
+    // Update the real control without restoring the mocked DOM connection.
     component.inputValue.setValue('Grace');
     fixture.point.injector.get(ChangeDetectorRef).markForCheck();
     fixture.detectChanges();

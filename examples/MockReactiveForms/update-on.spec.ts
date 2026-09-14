@@ -22,9 +22,9 @@ class TargetModule {}
 
 describe('MockReactiveForms:update-on', () => {
   beforeEach(() =>
-    MockBuilder(TargetComponent, TargetModule).keep(
-      ReactiveFormsModule,
-    ),
+    MockBuilder(TargetComponent, TargetModule)
+      // Keep the real binding so Angular applies its updateOn policy.
+      .keep(ReactiveFormsModule),
   );
 
   it('commits the value during the blur included in ngMocks.change', () => {

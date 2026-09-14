@@ -54,6 +54,7 @@ describe('TestSignalForms:native', () => {
   describe('text input', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent)
+        // Keep the field binding and the services used by native input events.
         .keep(FormField)
         .keep(NG_MOCKS_ROOT_PROVIDERS),
     );
@@ -76,6 +77,7 @@ describe('TestSignalForms:native', () => {
 
       // Change the value.
       ngMocks.change(input, 'Grace');
+      // Render any bindings that depend on the updated model.
       fixture.detectChanges();
 
       // Assert the result.
@@ -90,6 +92,7 @@ describe('TestSignalForms:native', () => {
   describe('other native controls', () => {
     beforeEach(() =>
       MockBuilder(NativeControlsComponent)
+        // Keep the field binding and the services used by native input events.
         .keep(FormField)
         .keep(NG_MOCKS_ROOT_PROVIDERS),
     );
@@ -167,6 +170,7 @@ describe('TestSignalForms:native', () => {
       // Render the component.
       const fixture = MockRender(NativeControlsComponent);
       const component = fixture.point.componentInstance;
+
       // Both options bind the same field tree; select the intended option.
       const first = ngMocks.find<HTMLInputElement>(
         'input[type="radio"][value="first"]',
@@ -185,7 +189,8 @@ describe('TestSignalForms:native', () => {
       expect(second.nativeElement.checked).toBe(false);
 
       // Select the second option.
-      ngMocks.change(second, true);
+      ngMocks.change('input[type="radio"][value="second"]', true);
+      // or ngMocks.change(second, true);
       fixture.detectChanges();
 
       // Assert the result.
@@ -199,7 +204,8 @@ describe('TestSignalForms:native', () => {
       expect(component.model().inputValue).toBe('Ada');
 
       // Uncheck the second option.
-      ngMocks.change(second, false);
+      ngMocks.change('input[type="radio"][value="second"]', false);
+      // or ngMocks.change(second, false);
       fixture.detectChanges();
 
       // Assert the result.
@@ -211,7 +217,8 @@ describe('TestSignalForms:native', () => {
       expect(second.nativeElement.value).toBe('second');
 
       // Select the first option.
-      ngMocks.change(first, true);
+      ngMocks.change('input[type="radio"][value="first"]', true);
+      // or ngMocks.change(first, true);
       fixture.detectChanges();
 
       // Assert the result.

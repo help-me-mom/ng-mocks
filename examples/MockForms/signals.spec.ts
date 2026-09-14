@@ -57,7 +57,7 @@ describe('MockForms:signals', () => {
 
   beforeEach(() =>
     MockBuilder(TargetComponent)
-      // Keep the form binding real while replacing the child control.
+      // Preserve the parent form connection while replacing the child.
       .keep(FormField)
       .keep(NG_MOCKS_ROOT_PROVIDERS)
       .mock(InputControl),
@@ -85,7 +85,9 @@ describe('MockForms:signals', () => {
     expect(control.value()).toBe('Ada');
 
     // Change the value.
-    ngMocks.change(host, 'Grace');
+    ngMocks.change(InputControl, 'Grace');
+    // or ngMocks.change(host, 'Grace');
+    // Propagate the updated field value back to the child's model input.
     fixture.detectChanges();
 
     // Assert the result.
@@ -96,6 +98,7 @@ describe('MockForms:signals', () => {
 
     // Change the parent model.
     component.model.set({ inputValue: 'Katherine' });
+    // Deliver the parent value to the mocked child.
     fixture.detectChanges();
 
     // Assert the result.
