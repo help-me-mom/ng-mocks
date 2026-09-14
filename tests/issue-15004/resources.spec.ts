@@ -2,7 +2,7 @@ import { ResourceLoader } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 let constructions = 0;
 
@@ -45,106 +45,140 @@ class RecoveryComponent {}
 // @see https://github.com/help-me-mom/ng-mocks/issues/15004
 // Angular 9-16 Ivy TestBed has a separate resource queue; test.spec.ts covers those versions.
 describe('issue-15004:resources', () => {
+  ngMocks.throwOnConsole();
+
   beforeEach(() => {
     constructions = 0;
   });
 
-  it('preserves the native asynchronous compilation rejection', async () => {
-    const failure = new Error('issue-15004 native stylesheet');
-    // Runtime URLs prevent Angular 5's resource transform from requiring a stylesheet file.
-    const styleUrls = ['native-issue-15004.css'];
-    const requests: string[] = [];
-    TestBed.configureTestingModule({
-      declarations: [NativeComponent],
-    });
-    // Queue resource metadata after configuration, before Angular starts compilation.
-    Component({
-      selector: 'native-issue-15004',
-      ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
-      template: 'native',
-      styleUrls,
-    })(NativeComponent);
-    TestBed.overrideComponent(NativeComponent, {
-      set: { styleUrls },
-    });
-    TestBed.configureCompiler({
-      providers: [
-        {
-          provide: ResourceLoader,
-          useValue: {
-            get: (url: string): Promise<string> => {
-              requests.push(url);
-              return Promise.reject(failure);
-            },
-          },
-        },
-      ],
-    });
+  describe('rejected compilation', () => {
+    ngMocks.ignoreOnConsole('error');
 
-    let rejected = false;
-    try {
-      await TestBed.compileComponents();
-    } catch (error) {
-      rejected = true;
-      expect(error === failure).toBe(true);
-    }
-
-    expect(rejected).toBe(true);
-    expect(requests.length).toBe(1);
-    expect(requests[0]).toContain('native-issue-15004.css');
-    expect(constructions).toBe(0);
-  });
-
-  it('rejects the builder and allows a fresh compilation after resetting TestBed', async () => {
-    const failure = new Error('issue-15004 builder stylesheet');
-    const styleUrls = ['builder-issue-15004.css'];
-    const requests: string[] = [];
-    const builder = MockBuilder()
-      .keep(TargetComponent)
-      .beforeCompileComponents(testBed => {
-        testBed.configureCompiler({
-          providers: [
-            {
-              provide: ResourceLoader,
-              useValue: {
-                get: (url: string): Promise<string> => {
-                  requests.push(url);
-                  return Promise.reject(failure);
-                },
+    it('preserves the native asynchronous compilation rejection', async () => {
+      const failure = new Error('issue-15004 native stylesheet');
+      // Runtime URLs prevent Angular 5's resource transform from requiring a stylesheet file.
+      const styleUrls = ['native-issue-15004.css'];
+      const requests: string[] = [];
+      TestBed.configureTestingModule({
+        declarations: [NativeComponent],
+      });
+      // Queue resource metadata after configuration, before Angular starts compilation.
+      Component({
+        selector: 'native-issue-15004',
+        ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+        template: 'native',
+        styleUrls,
+      })(NativeComponent);
+      TestBed.overrideComponent(NativeComponent, {
+        set: { styleUrls },
+      });
+      TestBed.configureCompiler({
+        providers: [
+          {
+            provide: ResourceLoader,
+            useValue: {
+              get: (url: string): Promise<string> => {
+                requests.push(url);
+                return Promise.reject(failure);
               },
             },
-          ],
-        });
-        // Applying the decorator queues the resource; the override updates TestBed metadata.
-        Component({
-          selector: 'target-issue-15004',
-          ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
-          template: 'target',
-          styleUrls,
-        })(TargetComponent);
-        testBed.overrideComponent(TargetComponent, {
-          set: { styleUrls },
-        });
+          },
+        ],
       });
 
-    let rejected = false;
-    try {
-      // Angular's rejected compilation must settle the builder's outer promise too.
-      await builder;
-    } catch (error) {
-      rejected = true;
-      expect(error === failure).toBe(true);
-    }
+      let rejected = false;
+      try {
+        await TestBed.compileComponents();
+      } catch (error) {
+        rejected = true;
+        expect(error === failure).toBe(true);
+      }
 
-    expect(rejected).toBe(true);
-    expect(requests.length).toBe(1);
-    expect(requests[0]).toContain('builder-issue-15004.css');
-    expect(constructions).toBe(0);
+      expect(rejected).toBe(true);
+      expect(requests.length).toBe(1);
+      expect(requests[0]).toContain('native-issue-15004.css');
+      expect(constructions).toBe(0);
+      const consoleError = ngMocks.stub<
+        {
+          calls?: { allArgs(): Error[][] };
+          mock?: { calls: Error[][] };
+        },
+        typeof console
+      >(console, 'error');
+      const loggedErrors = consoleError.calls
+        ? consoleError.calls.allArgs()
+        : consoleError.mock!.calls;
+      for (const args of loggedErrors) {
+        expect(args).toEqual([failure]);
+      }
+    });
 
-    TestBed.resetTestingModule();
-    await MockBuilder().keep(RecoveryComponent);
-    const fixture = MockRender(RecoveryComponent);
-    expect(fixture.nativeElement.innerHTML).toContain('recovered');
+    it('rejects the builder and allows a fresh compilation after resetting TestBed', async () => {
+      const failure = new Error('issue-15004 builder stylesheet');
+      const styleUrls = ['builder-issue-15004.css'];
+      const requests: string[] = [];
+      const builder = MockBuilder()
+        .keep(TargetComponent)
+        .beforeCompileComponents(testBed => {
+          testBed.configureCompiler({
+            providers: [
+              {
+                provide: ResourceLoader,
+                useValue: {
+                  get: (url: string): Promise<string> => {
+                    requests.push(url);
+                    return Promise.reject(failure);
+                  },
+                },
+              },
+            ],
+          });
+          // Applying the decorator queues the resource; the override updates TestBed metadata.
+          Component({
+            selector: 'target-issue-15004',
+            ['standalone' as never /* TODO: remove after upgrade to a14 */]: false,
+            template: 'target',
+            styleUrls,
+          })(TargetComponent);
+          testBed.overrideComponent(TargetComponent, {
+            set: { styleUrls },
+          });
+        });
+
+      let rejected = false;
+      try {
+        // Angular's rejected compilation must settle the builder's outer promise too.
+        await builder;
+      } catch (error) {
+        rejected = true;
+        expect(error === failure).toBe(true);
+      }
+
+      expect(rejected).toBe(true);
+      expect(requests.length).toBe(1);
+      expect(requests[0]).toContain('builder-issue-15004.css');
+      expect(constructions).toBe(0);
+      const consoleError = ngMocks.stub<
+        {
+          calls?: { allArgs(): Error[][] };
+          mock?: { calls: Error[][] };
+        },
+        typeof console
+      >(console, 'error');
+      const loggedErrors = consoleError.calls
+        ? consoleError.calls.allArgs()
+        : consoleError.mock!.calls;
+      for (const args of loggedErrors) {
+        expect(args).toEqual([failure]);
+      }
+
+      const errorCount = loggedErrors.length;
+      TestBed.resetTestingModule();
+      await MockBuilder().keep(RecoveryComponent);
+      const fixture = MockRender(RecoveryComponent);
+      expect(fixture.nativeElement.innerHTML).toContain('recovered');
+      expect(console.error).toHaveBeenCalledTimes(errorCount);
+    });
   });
 
   it('configures synchronously and resolves after loading a resource', async () => {

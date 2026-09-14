@@ -59,6 +59,8 @@ class ChildService extends ParentService {
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/14949
 describe('issue-14949:policies', () => {
+  ngMocks.throwOnConsole();
+
   beforeEach(() => {
     rootCalls = 0;
     parentConstructions = 0;
@@ -121,64 +123,123 @@ describe('issue-14949:policies', () => {
     expect(rootCalls).toBe(1);
   });
 
-  it('constructs the child when Angular provides it directly', () => {
-    TestBed.configureTestingModule({ providers: [ChildService] });
+  describe('inherited injectable definitions', () => {
+    // Angular warns about the undecorated inheritance exercised by these regressions.
+    ngMocks.ignoreOnConsole('warn');
 
-    const service = ngMocks.get(ChildService);
+    it('constructs the child when Angular provides it directly', () => {
+      TestBed.configureTestingModule({ providers: [ChildService] });
 
-    expect(service instanceof ChildService).toBe(true);
-    expect(service.name).toBe('child constructor');
-    expect(ngMocks.get(ChildService)).toBe(service);
-    expect(parentConstructions).toBe(0);
-  });
+      const service = ngMocks.get(ChildService);
 
-  it('preserves native child construction when static definitions are copied', async () => {
-    class CopiedChildService extends ParentService {
-      public readonly name = 'copied child constructor';
-    }
-    // Legacy static inheritance can copy the parent's enumerable ngInjectableDef.
-    Object.assign(CopiedChildService, ParentService);
-    TestBed.configureTestingModule({
-      providers: [CopiedChildService],
+      expect(service instanceof ChildService).toBe(true);
+      expect(service.name).toBe('child constructor');
+      expect(ngMocks.get(ChildService)).toBe(service);
+      expect(parentConstructions).toBe(0);
+      const warn = ngMocks.stub<
+        | { calls: { allArgs(): string[][] } }
+        | { mock: { calls: string[][] } },
+        typeof console
+      >(console, 'warn');
+      const warnings =
+        'calls' in warn ? warn.calls.allArgs() : warn.mock.calls;
+      for (const args of warnings) {
+        expect(args.length).toBe(1);
+        expect(args[0]).toMatch(
+          /^DEPRECATED: DI is instantiating a token "ChildService" that inherits its @Injectable decorator but does not provide one itself\.\nThis will become an error in (v10|a future version of Angular)\. Please add @Injectable\(\) to the "ChildService" class\.$/,
+        );
+      }
     });
 
-    const native = ngMocks.get(CopiedChildService);
+    it('preserves native child construction when static definitions are copied', async () => {
+      class CopiedChildService extends ParentService {
+        public readonly name = 'copied child constructor';
+      }
+      // Legacy static inheritance can copy the parent's enumerable ngInjectableDef.
+      Object.assign(CopiedChildService, ParentService);
+      TestBed.configureTestingModule({
+        providers: [CopiedChildService],
+      });
 
-    expect(native instanceof CopiedChildService).toBe(true);
-    expect(native.name).toBe('copied child constructor');
-    expect(ngMocks.get(CopiedChildService)).toBe(native);
-    expect(parentConstructions).toBe(0);
+      const native = ngMocks.get(CopiedChildService);
 
-    TestBed.resetTestingModule();
-    await MockBuilder().keep(CopiedChildService);
+      expect(native instanceof CopiedChildService).toBe(true);
+      expect(native.name).toBe('copied child constructor');
+      expect(ngMocks.get(CopiedChildService)).toBe(native);
+      expect(parentConstructions).toBe(0);
 
-    const service = MockRender(CopiedChildService).point
-      .componentInstance;
+      TestBed.resetTestingModule();
+      await MockBuilder().keep(CopiedChildService);
 
-    expect(service instanceof CopiedChildService).toBe(true);
-    expect(service.name).toBe(native.name);
-    expect(ngMocks.get(CopiedChildService)).toBe(service);
-    expect(service).not.toBe(native);
-    expect(parentConstructions).toBe(0);
-  });
+      const service = MockRender(CopiedChildService).point
+        .componentInstance;
 
-  it('constructs a kept child instead of executing its inherited root recipe', async () => {
-    await MockBuilder().keep(ChildService);
+      expect(service instanceof CopiedChildService).toBe(true);
+      expect(service.name).toBe(native.name);
+      expect(ngMocks.get(CopiedChildService)).toBe(service);
+      expect(service).not.toBe(native);
+      expect(parentConstructions).toBe(0);
+      const warn = ngMocks.stub<
+        | { calls: { allArgs(): string[][] } }
+        | { mock: { calls: string[][] } },
+        typeof console
+      >(console, 'warn');
+      const warnings =
+        'calls' in warn ? warn.calls.allArgs() : warn.mock.calls;
+      for (const args of warnings) {
+        expect(args.length).toBe(1);
+        expect(args[0]).toMatch(
+          /^DEPRECATED: DI is instantiating a token "CopiedChildService" that inherits its @Injectable decorator but does not provide one itself\.\nThis will become an error in (v10|a future version of Angular)\. Please add @Injectable\(\) to the "CopiedChildService" class\.$/,
+        );
+      }
+    });
 
-    const service = MockRender(ChildService).point.componentInstance;
+    it('constructs a kept child instead of executing its inherited root recipe', async () => {
+      await MockBuilder().keep(ChildService);
 
-    expect(service instanceof ChildService).toBe(true);
-    expect(service.name).toBe('child constructor');
-    expect(parentConstructions).toBe(0);
-  });
+      const service =
+        MockRender(ChildService).point.componentInstance;
 
-  it('constructs a target child instead of executing its inherited root recipe', async () => {
-    await MockBuilder(ChildService);
+      expect(service instanceof ChildService).toBe(true);
+      expect(service.name).toBe('child constructor');
+      expect(parentConstructions).toBe(0);
+      const warn = ngMocks.stub<
+        | { calls: { allArgs(): string[][] } }
+        | { mock: { calls: string[][] } },
+        typeof console
+      >(console, 'warn');
+      const warnings =
+        'calls' in warn ? warn.calls.allArgs() : warn.mock.calls;
+      for (const args of warnings) {
+        expect(args.length).toBe(1);
+        expect(args[0]).toMatch(
+          /^DEPRECATED: DI is instantiating a token "ChildService" that inherits its @Injectable decorator but does not provide one itself\.\nThis will become an error in (v10|a future version of Angular)\. Please add @Injectable\(\) to the "ChildService" class\.$/,
+        );
+      }
+    });
 
-    const service = MockRender(ChildService).point.componentInstance;
+    it('constructs a target child instead of executing its inherited root recipe', async () => {
+      await MockBuilder(ChildService);
 
-    expect(service instanceof ChildService).toBe(true);
-    expect(service.name).toBe('child constructor');
-    expect(parentConstructions).toBe(0);
+      const service =
+        MockRender(ChildService).point.componentInstance;
+
+      expect(service instanceof ChildService).toBe(true);
+      expect(service.name).toBe('child constructor');
+      expect(parentConstructions).toBe(0);
+      const warn = ngMocks.stub<
+        | { calls: { allArgs(): string[][] } }
+        | { mock: { calls: string[][] } },
+        typeof console
+      >(console, 'warn');
+      const warnings =
+        'calls' in warn ? warn.calls.allArgs() : warn.mock.calls;
+      for (const args of warnings) {
+        expect(args.length).toBe(1);
+        expect(args[0]).toMatch(
+          /^DEPRECATED: DI is instantiating a token "ChildService" that inherits its @Injectable decorator but does not provide one itself\.\nThis will become an error in (v10|a future version of Angular)\. Please add @Injectable\(\) to the "ChildService" class\.$/,
+        );
+      }
+    });
   });
 });
