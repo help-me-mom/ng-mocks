@@ -1,5 +1,6 @@
 import { AsyncValidator, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 
+import coreDefineProperty from './core.define-property';
 import { AnyType } from './core.types';
 import { MockControlValueAccessor, MockValidator } from './mock-control-value-accessor';
 
@@ -20,7 +21,15 @@ export class MockControlValueAccessorProxy implements ControlValueAccessor {
     { instance: Partial<MockControlValueAccessor & ControlValueAccessor> | undefined; callback: unknown }
   >();
 
-  public constructor(public readonly target?: AnyType<any>) {}
+  public constructor(
+    public readonly target?: AnyType<any>,
+    sourceType?: AnyType<unknown>,
+  ) {
+    if (sourceType) {
+      // Angular classifies value accessors by constructor identity, not the CVA methods.
+      coreDefineProperty(this, 'constructor', sourceType);
+    }
+  }
 
   public isRegistered(operation: keyof MockControlValueAccessor): boolean {
     const registration = this.registrations.get(operation);
