@@ -56,7 +56,7 @@
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh <target>`
   - `COMPOSE_PROJECT_NAME=ngmocks_<unique> sh test.sh <target>`
 - Services with configurable browser caches use one external volume shared across compose namespaces. Follow `CONTRIBUTING.md` for
-  first-time volume creation, legacy revision mappings, and empty-directory recovery. Serialize `compose.sh`
+  first-time volume creation and legacy revision mappings. Serialize `compose.sh`
   installation runs across worktrees and wait for other downloads into the shared Docker browser volume;
   populated browser caches may serve concurrent test containers. Keep build caches and dependencies isolated.
 

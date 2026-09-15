@@ -58,7 +58,7 @@ Serialize both wrapper passes across targets and worktrees, even when they insta
 `compose.sh` removes empty build directories in the shared Docker cache after each project's setup step and
 before its explicit browser installation. Populated test containers may still run concurrently. Cleanup
 retains the external browser volume; do not remove it
-while another worktree may be using it. See [Shared browser downloads](../../../CONTRIBUTING.md#shared-browser-downloads).
+while another worktree may be using it. See [Shared browser downloads](../../../CONTRIBUTING.md#shared-browser-downloads) for cache revision mappings.
 
 If a wrapper target fails, including Docker address-pool or Puppeteer cache errors, report the command, error, and remaining work to the user and discuss the solution before cleanup, retries, or other recovery steps. Do not switch to local runtimes or create a workaround.
 

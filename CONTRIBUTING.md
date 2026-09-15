@@ -110,14 +110,9 @@ When updating a legacy Puppeteer dependency with a configured download path, kee
 `compose.yml` aligned with its default Chromium revision. Do not force a different revision to keep an old
 cache path working.
 
-After each shared-cache project's `docker compose up --build` step, `compose.sh` deletes empty build
-directories in the Docker browser volume before running the explicit browser installer. Cache roots and
-populated directories are preserved; nonempty incomplete installations still need targeted manual recovery.
-
-Run these installation commands one at a time across worktrees, and wait for other downloads into the shared
-Docker browser volume to finish first. Cleanup scans cached builds, so installations of different browser
-versions must not overlap. Populated caches can still serve concurrent test containers. The external browser
-volume survives `docker compose down --volumes`; remove it explicitly only when no worktree is using it.
+Finish the first installation of each browser build before starting another installation of that build in a
+parallel worktree. Once populated, the cache can serve concurrent test containers. The external browser volume
+survives `docker compose down --volumes`; remove it explicitly only when no worktree is using it.
 Existing project-scoped caches are left in place; the shared volume populates on its first use.
 
 The host installation in `compose.sh` remains separate: macOS and Linux need different browser binaries.
