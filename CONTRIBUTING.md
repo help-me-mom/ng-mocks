@@ -7,6 +7,7 @@ The best way would be to discuss an issue or an improvement first:
 - [chat on gitter](https://gitter.im/ng-mocks/community)
 
 * [update docs](#update-docs)
+* [Commit messages and PR titles](#commit-messages-and-pr-titles)
 * [Requirements on Mac](#requirements-on-mac)
 * [Requirements on Linux](#requirements-on-linux)
 * [Requirements on Windows](#requirements-on-windows)
@@ -40,6 +41,68 @@ and click on the "Edit this page" link at the bottom of the page.
 ## Development
 
 To develop `ng-mocks` you need to use `bash` and `WSL` in case if you are on Windows.
+
+### Commit messages and PR titles
+
+Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) for each commit and
+the PR title. The type describes the effect of the change and controls automated releases:
+
+```text
+type(optional-scope): imperative summary
+
+Optional body explaining the problem and change.
+
+Optional footers.
+```
+
+Use a lowercase type, preserve established scope casing such as `MockBuilder` or `README`, and omit the
+final period from the subject. Keep the complete subject and each footer line within 100 characters; wrap
+body prose at 100 characters as well. Leave room in PR titles for GitHub's added ` (#12345)` suffix.
+
+Choose the type from the resulting behavior, not just the files edited:
+
+| Type                                       | Purpose                                                                           | Release effect       |
+| ------------------------------------------ | --------------------------------------------------------------------------------- | -------------------- |
+| `feat`                                     | A new capability in the published package                                         | Minor                |
+| `fix`, `perf`                              | Correct published behavior or improve runtime performance                         | Patch                |
+| `docs(README)`                             | Update the packaged root README                                                   | Patch                |
+| `build`                                    | Build/release tooling, internal agent/developer instructions, skills or knowledge | No release by itself |
+| `docs`                                     | Public website documentation                                                      | No release by itself |
+| `chore`, `ci`, `refactor`, `style`, `test` | Maintenance without a published behavior change                                   | No release by itself |
+| `revert`                                   | A conventional revert of an already released commit                               | Patch                |
+
+For example:
+
+```text
+fix(MockBuilder): preserve the registered value accessor
+feat(forms): support mocked signal form bindings
+build(agents): preserve form investigation guidance
+build(docs): explain contributor commit conventions
+docs(forms): clarify how to select a signal field
+docs(README): correct the compatibility table
+```
+
+For a breaking published change, add a blank line before the canonical footer and explain how consumers
+must adapt. For example:
+
+```text
+feat(ExampleApi): require explicit configuration
+
+BREAKING CHANGE: ExampleApi requires a configuration argument; pass an empty object for defaults.
+```
+
+Although the general specification also accepts `!` and `BREAKING-CHANGE:`, this repository's Angular release
+parser requires `BREAKING CHANGE:` to trigger a major release. Reserve `docs(README)` for README-only changes:
+its custom rule always selects a patch, even with a breaking footer. A release-silent change still ships when
+another commit triggers a release; do not relabel a feature or fix merely to suppress its release.
+
+Keep each commit accurate for its own changes. Make the PR title summarize the complete PR and its highest
+release effect; for squash merges, use that title as the final commit subject. If commits are retained by a
+merge or rebase, their individual messages also participate in release analysis.
+
+Commit hooks enforce [.commitlintrc.yml](.commitlintrc.yml); release behavior is configured in
+[.releaserc.yml](.releaserc.yml). See the full [commit and release rules](AGENTS.md#commit-and-release-semantics)
+for revert pairs and exceptional release-skip markers.
 
 ### Signed commits for pull requests
 
