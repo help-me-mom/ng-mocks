@@ -11,6 +11,7 @@ import mockHelperFind from '../find/mock-helper.find';
 import funcGetLastFixture from '../func.get-last-fixture';
 import funcParseFindArgsName from '../func.parse-find-args-name';
 
+import funcGetMockFormField from './func.get-mock-form-field';
 import funcGetModelControl from './func.get-model-control';
 import funcGetVca from './func.get-vca';
 import funcHasMockNativeAccessor from './func.has-mock-native-accessor';
@@ -127,6 +128,13 @@ export default (selector: Type<any> | DebugNodeSelector, value: any, methodName?
   }
 
   let valueAccessor = funcGetVca(el, true, '__simulateChange');
+  const mockField = funcGetMockFormField(el, valueAccessor, methodName);
+  if (mockField) {
+    mockField.change(value);
+    markForNextCheck(el);
+
+    return;
+  }
   let nativeControl = false;
   if (!valueAccessor) {
     const modelControl = funcGetModelControl(el);
