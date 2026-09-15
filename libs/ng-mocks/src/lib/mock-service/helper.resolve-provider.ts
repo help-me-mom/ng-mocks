@@ -1,9 +1,10 @@
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
 import CoreDefStack from '../common/core.def-stack';
 import { extractDependency } from '../common/core.helpers';
 import { NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
 import funcExtractForwardRef from '../common/func.extract-forward-ref';
 import funcGetType from '../common/func.get-type';
-import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
 import helperMockService from './helper.mock-service';
@@ -41,8 +42,7 @@ const createFromResolution = (provide: any, resolution: any) => {
 const isSuitableProvider = (provider: any, provide: any): boolean =>
   ngMocksUniverse.builtProviders.has(NG_MOCKS_INTERCEPTORS) &&
   ngMocksUniverse.builtProviders.get(NG_MOCKS_INTERCEPTORS) === null &&
-  isNgInjectionToken(provide) &&
-  provide.toString() === 'InjectionToken HTTP_INTERCEPTORS' &&
+  provide === HTTP_INTERCEPTORS &&
   provide !== provider;
 
 const excludeInterceptors = (provider: any, provide: any): boolean => {

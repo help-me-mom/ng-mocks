@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 
 import coreConfig from '../../common/core.config';
 import coreReflectProvidedIn from '../../common/core.reflect.provided-in';
+import isNeverMockProvidedFunction from '../../common/func.is-never-mock-provided-function';
 import { isNgInjectionToken } from '../../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 
@@ -26,11 +27,11 @@ const skipSystem = (provide: any): boolean => {
     return skipByResolution;
   }
 
-  if (typeof provide === 'function' && coreConfig.neverMockProvidedFunction.indexOf(provide.name) !== -1) {
+  if (isNeverMockProvidedFunction(provide)) {
     return true;
   }
   // istanbul ignore if because we mock BrowserModule
-  if (isNgInjectionToken(provide) && coreConfig.neverMockToken.indexOf(provide.toString()) !== -1) {
+  if (isNgInjectionToken(provide) && coreConfig.neverMockToken.indexOf(provide) !== -1) {
     return true;
   }
 
