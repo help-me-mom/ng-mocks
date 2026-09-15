@@ -87,7 +87,7 @@ describe('TestSignalForms:selectors', () => {
     // Mock the directive to inspect bindings without its native form behavior.
     beforeEach(() => MockBuilder(TargetComponent).mock(FormField));
 
-    it('selects bound field trees without providing form behavior', () => {
+    it('selects and changes bound field trees without synchronizing native inputs', () => {
       const fixture = MockRender(TargetComponent);
       const component = fixture.point.componentInstance;
       const first = ngMocks.reveal([
@@ -114,22 +114,17 @@ describe('TestSignalForms:selectors', () => {
       expect(first.nativeNode.value).toBe('');
       expect(last.nativeNode.value).toBe('');
 
-      try {
-        ngMocks.change(first, 'Grace');
-        fail('an error expected');
-      } catch (error) {
-        expect((error as Error).message).toContain(
-          'Cannot find ControlValueAccessor on the element',
-        );
-      }
+      // Reuse the matched host to update its field without restoring the native connection.
+      ngMocks.change(first, 'Grace');
 
+      // The field becomes dirty, while native values and the other field stay unchanged.
       expect(first.nativeNode.value).toBe('');
       expect(last.nativeNode.value).toBe('');
       expect(component.model()).toEqual({
-        firstName: 'Ada',
+        firstName: 'Grace',
         lastName: 'Lovelace',
       });
-      expect(component.f.firstName().dirty()).toBe(false);
+      expect(component.f.firstName().dirty()).toBe(true);
       expect(component.f.firstName().touched()).toBe(false);
       expect(component.f.lastName().dirty()).toBe(false);
       expect(component.f.lastName().touched()).toBe(false);

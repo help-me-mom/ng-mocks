@@ -11,8 +11,10 @@ import mockHelperFind from '../find/mock-helper.find';
 import funcGetLastFixture from '../func.get-last-fixture';
 import funcParseFindArgsName from '../func.parse-find-args-name';
 
+import funcGetMockFormField from './func.get-mock-form-field';
 import funcGetModelControl from './func.get-model-control';
 import funcGetVca from './func.get-vca';
+import funcHasMockNativeAccessor from './func.has-mock-native-accessor';
 import triggerInput from './func.trigger-input';
 
 const handleKnown = (valueAccessor: any, value: any): boolean => {
@@ -115,6 +117,8 @@ const keys = [
   '_cvaOnChangeCb',
   '_cvaOnChangeClb',
   '_cvaOnChangeFn',
+
+  '_controlValueAccessorChangeFn',
 ];
 
 export default (selector: Type<any> | DebugNodeSelector, value: any, methodName?: string): void => {
@@ -123,7 +127,14 @@ export default (selector: Type<any> | DebugNodeSelector, value: any, methodName?
     throw new Error(`Cannot find an element via ngMocks.change(${funcParseFindArgsName(selector)})`);
   }
 
-  let valueAccessor = funcGetVca(el, true);
+  let valueAccessor = funcGetVca(el, true, '__simulateChange');
+  const mockField = funcGetMockFormField(el, valueAccessor, methodName);
+  if (mockField) {
+    mockField.change(value);
+    markForNextCheck(el);
+
+    return;
+  }
   let nativeControl = false;
   if (!valueAccessor) {
     const modelControl = funcGetModelControl(el);
@@ -133,8 +144,8 @@ export default (selector: Type<any> | DebugNodeSelector, value: any, methodName?
 
       return;
     }
-    nativeControl = !hasListener(el) && isUnboundNativeControl(el);
-    valueAccessor = funcGetVca(el, hasListener(el) || nativeControl) || {};
+    nativeControl = !hasListener(el) && (isUnboundNativeControl(el) || funcHasMockNativeAccessor(el));
+    valueAccessor = funcGetVca(el, hasListener(el) || nativeControl, '__simulateChange') || {};
   }
   if (handleKnown(valueAccessor, value) || hasListener(el) || nativeControl) {
     triggerInput(el, value, valueAccessor);

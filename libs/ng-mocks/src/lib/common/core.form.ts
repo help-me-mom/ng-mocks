@@ -4,6 +4,7 @@ const AbstractControl = module.AbstractControl;
 const DefaultValueAccessor = module.DefaultValueAccessor;
 const FormControl = module.FormControl;
 const FormControlDirective = module.FormControlDirective;
+const FormControlName = module.FormControlName;
 const NG_ASYNC_VALIDATORS = module.NG_ASYNC_VALIDATORS;
 const NG_VALIDATORS = module.NG_VALIDATORS;
 const NG_VALUE_ACCESSOR = module.NG_VALUE_ACCESSOR;
@@ -18,6 +19,7 @@ export default {
   DefaultValueAccessor,
   FormControl,
   FormControlDirective,
+  FormControlName,
   NG_ASYNC_VALIDATORS,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
