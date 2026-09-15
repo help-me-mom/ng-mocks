@@ -97,6 +97,10 @@ describe('ng-mocks-change:signal-model-controls', () => {
         const control = ngMocks.get(child, ValueControl);
         const value = control.value;
         const values: string[] = [];
+        const blurs: string[] = [];
+        child.nativeElement.addEventListener('blur', () =>
+          blurs.push('blur'),
+        );
         ngMocks
           .output(child, 'valueChange')
           .subscribe(next => values.push(next));
@@ -116,6 +120,7 @@ describe('ng-mocks-change:signal-model-controls', () => {
         expect(control.value).toBe(value);
         expect(value()).toBe('Grace');
         expect(values).toEqual(['Grace']);
+        expect(blurs).toEqual([]);
         expect(component.f.name().value()).toBe('Grace');
         expect(component.f.name().dirty()).toBe(true);
         expect(component.f.name().touched()).toBe(false);
@@ -141,6 +146,10 @@ describe('ng-mocks-change:signal-model-controls', () => {
         const control = ngMocks.get(child, CheckboxControl);
         const checked = control.checked;
         const values: boolean[] = [];
+        const blurs: string[] = [];
+        child.nativeElement.addEventListener('blur', () =>
+          blurs.push('blur'),
+        );
         ngMocks
           .output(child, 'checkedChange')
           .subscribe(next => values.push(next));
@@ -179,6 +188,7 @@ describe('ng-mocks-change:signal-model-controls', () => {
         expect(control.checked).toBe(checked);
         expect(checked()).toBe(false);
         expect(values).toEqual([true, false]);
+        expect(blurs).toEqual([]);
         expect(component.f.enabled().dirty()).toBe(true);
         expect(component.f.enabled().touched()).toBe(false);
         expect(component.f.name().dirty()).toBe(false);
