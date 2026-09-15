@@ -126,6 +126,9 @@
 
 ## Fix Scope Review
 
+- Reread the original report and later comments separately. Distinguish observed failures from the reporter's
+  proposed explanation, and compare the reported revision with prior fixes and current `upstream/main`.
+  A related fix or a passing adjacent case does not prove that an unreproduced report is resolved.
 - Before implementing a fix, check whether the reported failure is one instance of a wider defect. Trace the
   root cause through shared helpers, assumptions, and callers, and inspect similar code paths and prior fixes.
 - Compare related use cases where they share that mechanism. For metadata, consider inputs, outputs, view and
@@ -161,6 +164,9 @@
   inline assertions, and comments. Follow the articles' teaching order, tool links, and annotated examples.
 - Use simple comments to explain what an example does and why its setup, timing, or assertions matter.
   Preserve useful existing explanations when refactoring; step labels alone are not a replacement.
+- Preserve existing example names and structure when extending them. Use clear names for new form examples,
+  such as `inputValue` for component state and `inputName` for an independent HTML name. Keep matching names
+  where the binding requires them, such as a `formControlName` and its group key; avoid unrelated renaming.
 - If those references do not settle a pattern, inspect analogous local history or merged non-bot PRs. Explain
   necessary departures, and compare the finished changes with the references before reporting completion.
 
@@ -181,6 +187,10 @@
 - Distinguish testing a real declaration from mocking it as a dependency. Give independent API use cases separate
   articles and clearly identify decorator and signal examples. For content queries, keep separate testing and
   mocking articles for both `ContentChild` and `ContentChildren`, with both approaches in each article.
+- For form guides, follow the simple declaration, setup, and find → read → change → assert structure in the
+  [docs-example skill](.agents/skills/clean-doc-examples/SKILL.md#form-guide-structure). Keep validation and
+  advanced scenarios in their relevant articles. Check that simplifying a guide does not remove the only
+  explanation of an outstanding source request; preserve it in the appropriate article or API reference.
 - Write each published example as ordinary code for one appropriate Angular version. Keep APIs, syntax, and
   defaults consistent, and state the version briefly when readers need it to use the example.
 - Preserve the tested setup, behavior, and meaningful assertions. Remove compatibility-only flags, casts, guards,
@@ -213,6 +223,11 @@
   keep a cohesive regression at the first common boundary when it necessarily combines them.
 - For framework-internal or multi-branch fixes, pair a focused source-unit spec with a real-Angular spread regression.
   Assert the reported outcome as well as preserved behavior and the absence of the relevant side effects.
+- When an integration exposes a core defect, reproduce its relevant providers, bindings and registration with
+  repository-owned declarations. Use existing integration dependencies as reference evidence; do not add the
+  external library to core or versioned regression targets. For form controls, follow the
+  [forms investigation checklist](.agents/skills/triage-issue/references/forms.md) to check injector identity,
+  callback registration and real, kept and mocked behavior independently.
 - When a spread test depends on Zone.js, gate it with `environments=zoned` in `test-spread.conf` so the zoned and
   zoneless corpora remain isolated without project-specific exclusions.
 - Keep CI-facing root test scripts named `test:<project>[:<es>]:<profile>`. Keep project-level profile script and
