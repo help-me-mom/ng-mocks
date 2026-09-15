@@ -1,8 +1,11 @@
 import {
   Component,
+  EventEmitter,
   input,
+  Input,
   model,
   output,
+  Output,
   reflectComponentType,
   signal,
 } from '@angular/core';
@@ -53,10 +56,44 @@ class TargetComponent {
   public readonly f = form(this.model);
 }
 
+@Component({
+  selector: 'classic-model-touch-v22',
+  template: '{{ value }}:{{ touched }}',
+})
+class ClassicControl {
+  @Input() public value = '';
+  @Input() public touched = false;
+  @Output() public readonly valueChange = new EventEmitter<string>();
+  @Output() public readonly touch = new EventEmitter<void>();
+}
+
+@Component({
+  selector: 'target-classic-model-touch-v22',
+  imports: [FormField, ClassicControl],
+  template: `
+    <classic-model-touch-v22
+      class="value"
+      [formField]="f.inputValue"
+    />
+    <classic-model-touch-v22
+      class="sibling"
+      [formField]="f.siblingValue"
+    />
+  `,
+})
+class ClassicTargetComponent {
+  public readonly model = signal({
+    inputValue: 'initial',
+    siblingValue: 'sibling',
+  });
+  public readonly f = form(this.model);
+}
+
 // @see https://github.com/help-me-mom/ng-mocks/issues/14909
 describe('ng-mocks-change:signal-model-controls-touch-v22', () => {
   // The root TypeScript-only runner does not transform authoring functions.
-  // Angular 22 spread targets exercise the dedicated touch output.
+  // Keep this versioned integration suite in Angular 22 compiled spread targets.
+  // Root unit specs cover dispatch; this suite verifies Angular's dedicated touch connection.
   if (
     !reflectComponentType(ValueControl)?.outputs.some(
       metadata => metadata.propName === 'touch',
@@ -172,4 +209,63 @@ describe('ng-mocks-change:signal-model-controls-touch-v22', () => {
       });
     });
   }
+
+  describe('classic model controls', () => {
+    for (const mode of ['real', 'mock']) {
+      describe(`${mode} control`, () => {
+        beforeEach(() => {
+          const builder = MockBuilder(ClassicTargetComponent)
+            .keep(FormField)
+            .keep(NG_MOCKS_ROOT_PROVIDERS);
+
+          return mode === 'real'
+            ? builder.keep(ClassicControl)
+            : builder.mock(ClassicControl);
+        });
+
+        it('touches a classic pair without editing its value or touching its sibling', () => {
+          const fixture = MockRender(ClassicTargetComponent);
+          const component = fixture.point.componentInstance;
+          const child = ngMocks.find('.value');
+          const control = ngMocks.get(child, ClassicControl);
+          const values: string[] = [];
+          const touches: unknown[] = [];
+          ngMocks
+            .output(child, 'valueChange')
+            .subscribe(value => values.push(value));
+          ngMocks
+            .output(child, 'touch')
+            .subscribe(value => touches.push(value));
+
+          expect(control.value).toBe('initial');
+          expect(control.touched).toBe(false);
+          expect(component.f.inputValue().dirty()).toBe(false);
+          expect(component.f.inputValue().touched()).toBe(false);
+
+          // Angular 22 receives the classic touch output separately from its touched input.
+          ngMocks.touch(child);
+          fixture.detectChanges();
+
+          expect(component.model()).toEqual({
+            inputValue: 'initial',
+            siblingValue: 'sibling',
+          });
+          expect(control.value).toBe('initial');
+          expect(control.touched).toBe(true);
+          expect(values).toEqual([]);
+          expect(touches).toEqual([undefined]);
+          expect(component.f.inputValue().dirty()).toBe(false);
+          expect(component.f.inputValue().touched()).toBe(true);
+          expect(component.f.siblingValue().dirty()).toBe(false);
+          expect(component.f.siblingValue().touched()).toBe(false);
+          expect(ngMocks.get('.sibling', ClassicControl).value).toBe(
+            'sibling',
+          );
+          expect(
+            ngMocks.get('.sibling', ClassicControl).touched,
+          ).toBe(false);
+        });
+      });
+    }
+  });
 });
