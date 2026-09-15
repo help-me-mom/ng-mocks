@@ -17,7 +17,7 @@ describe('MockFormBindings:signals', () => {
   // Mock FormField to inspect its input without connecting it to the DOM.
   beforeEach(() => MockBuilder(TargetComponent).mock(FormField));
 
-  it('preserves a field tree without connecting the native input to it', () => {
+  it('changes and touches the real field supplied to a mocked FormField', () => {
     // Render the component.
     const fixture = MockRender(TargetComponent);
     const component = fixture.point.componentInstance;
@@ -37,24 +37,51 @@ describe('MockFormBindings:signals', () => {
     );
     expect(component.model()).toEqual({ inputValue: 'Ada' });
     expect(input.nativeNode.value).toBe('');
+    expect(component.f.inputValue().dirty()).toBe(false);
+    expect(component.f.inputValue().touched()).toBe(false);
 
-    // A mocked FormField does not connect this input to the field tree.
-    try {
-      ngMocks.change(input, 'Grace');
-      fail('an error expected');
-    } catch (error) {
-      expect((error as Error).message).toContain(
-        'Cannot find ControlValueAccessor on the element',
-      );
-    }
+    // Change the supplied field without restoring the mocked DOM connection.
+    ngMocks.change(input, 'Grace');
 
-    // Assert that the failed change left the model and binding intact.
-    expect(component.model()).toEqual({ inputValue: 'Ada' });
+    // Assert the model update and dirty state; changing the binding does not touch it.
+    expect(component.model()).toEqual({ inputValue: 'Grace' });
     expect(ngMocks.input(input, 'formField')).toBe(
       component.f.inputValue,
     );
     expect(input.nativeNode.value).toBe('');
+    expect(component.f.inputValue().dirty()).toBe(true);
+    expect(component.f.inputValue().touched()).toBe(false);
+
+    // Touch the supplied field explicitly without dispatching a native blur event.
+    ngMocks.touch(input);
+
+    expect(component.f.inputValue().touched()).toBe(true);
+    expect(component.f.inputValue().dirty()).toBe(true);
+    expect(component.model()).toEqual({ inputValue: 'Grace' });
+    expect(ngMocks.input(input, 'formField')).toBe(
+      component.f.inputValue,
+    );
+    expect(input.nativeNode.value).toBe('');
+  });
+
+  it('keeps parent writes in the field without synchronizing the native input', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const input = ngMocks.reveal([
+      'formField',
+      component.f.inputValue,
+    ]);
+
+    // A parent write updates the real field but does not restore the mocked binding.
+    component.model.set({ inputValue: 'Grace' });
+    fixture.detectChanges();
+
+    expect(component.f.inputValue().value()).toBe('Grace');
     expect(component.f.inputValue().dirty()).toBe(false);
     expect(component.f.inputValue().touched()).toBe(false);
+    expect(ngMocks.input(input, 'formField')).toBe(
+      component.f.inputValue,
+    );
+    expect(input.nativeNode.value).toBe('');
   });
 });

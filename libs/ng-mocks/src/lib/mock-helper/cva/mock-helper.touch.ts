@@ -9,6 +9,7 @@ import mockHelperFind from '../find/mock-helper.find';
 import funcGetLastFixture from '../func.get-last-fixture';
 import funcParseFindArgsName from '../func.parse-find-args-name';
 
+import funcGetMockFormField from './func.get-mock-form-field';
 import funcGetModelControl from './func.get-model-control';
 import funcGetVca from './func.get-vca';
 import funcHasMockNativeAccessor from './func.has-mock-native-accessor';
@@ -76,6 +77,12 @@ export default (sel: Type<any> | DebugElement | DebugNodeSelector, methodName?: 
   }
 
   let valueAccessor = funcGetVca(el, true, '__simulateTouch');
+  const mockField = funcGetMockFormField(el, valueAccessor, methodName);
+  if (mockField) {
+    mockField.touch();
+
+    return;
+  }
   let nativeControl = false;
   if (!valueAccessor) {
     const modelControl = funcGetModelControl(el);

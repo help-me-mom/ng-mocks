@@ -23,7 +23,7 @@ Then solution may look like that:
 const el = ngMocks.find(['data-testid', 'inputControl']);
 
 // simulating touch
-ngMocks.touch(valueAccessorEl);
+ngMocks.touch(el);
 
 // asserting
 expect(component.myControl.touched).toEqual(true);
@@ -37,4 +37,35 @@ ngMocks.touch('input');
 ngMocks.touch('[data-testid="inputControl"]');
 ```
 
-Profit!
+## Mocked signal form bindings
+
+When `FormField` is mocked, `ngMocks.touch` marks its supplied real field touched.
+Use [`ngMocks.reveal`](reveal.md) once to find the host by its field tree:
+
+```ts
+// Find the host by its supplied field tree.
+const field = ngMocks.reveal(['formField', component.f.inputValue]);
+
+// Read the initial state.
+expect(component.f.inputValue().touched()).toBe(false);
+expect(component.f.inputValue().dirty()).toBe(false);
+
+// Touch the supplied field without changing its value.
+ngMocks.touch(field);
+
+// Assert that the field becomes touched and stays pristine.
+expect(component.f.inputValue().touched()).toBe(true);
+expect(component.f.inputValue().dirty()).toBe(false);
+```
+
+This path calls the field's `markAsTouched` without dispatching DOM events or invoking
+an unregistered custom-control callback. A mocked CVA with a registered touch callback
+continues to use that callback.
+Touching a pristine field does not introduce an edit, but touching after a pending
+`ngMocks.change` can flush it according to Angular's debounce policy, including
+`debounce(path, 'blur')`.
+
+The mocked binding does not synchronize native values or connect custom-control
+inputs and outputs. Keep `FormField` real to test that full connection. See
+[mocking form bindings](/guides/mock/form-bindings.md#signal-fields) for the complete
+component and test example.

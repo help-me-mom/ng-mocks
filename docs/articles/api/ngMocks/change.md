@@ -85,6 +85,38 @@ application value. Native DOM values may have a different representation: numeri
 inputs expose strings through `value`, and multiple selects expose only the first
 selected option through `value`.
 
+## Mocked signal form bindings
+
+When `FormField` is mocked, the helper can update the real `FieldTree` supplied to its
+`formField` input. Find the host with `ngMocks.reveal` once and reuse it:
+
+```ts
+// Find the host by its supplied field tree.
+const field = ngMocks.reveal(['formField', component.f.inputValue]);
+
+// Read the initial value.
+expect(component.f.inputValue().value()).toBe('Ada');
+
+// Change the supplied field.
+ngMocks.change(field, 'Grace');
+
+// Assert the model update and dirty state.
+expect(component.f.inputValue().value()).toBe('Grace');
+expect(component.f.inputValue().dirty()).toBe(true);
+```
+
+The binding path calls the field's `controlValue.set`, which marks it dirty and follows
+Angular's debounce policy. Pass the field's model value; custom-control payloads retain
+object and array identity. Native checkbox arguments become booleans; for native radios,
+`true` writes the option's DOM value and `false` leaves the field unchanged.
+
+This path does not dispatch DOM events, synchronize native or child values, or mark
+the field touched. Use [`ngMocks.touch`](touch.md) explicitly; it can also flush an edit
+pending under `debounce(path, 'blur')`. A mocked CVA with a registered change callback
+continues to use that callback. Keep `FormField` real when testing the full Angular connection.
+See [mocking form bindings](/guides/mock/form-bindings.md#signal-fields) for the
+component, setup, and complete example.
+
 ## Radio and checkbox values
 
 For a native radio or checkbox, pass `true` to check the host and `false` to
@@ -129,7 +161,8 @@ control's model value directly. A custom checkbox control can accept `true` and
 
 ## Blur and touched state
 
-Whether a change also triggers blur or marks the field touched depends on the host:
+A mocked `FormField` uses the separate binding path described above. For other hosts,
+whether a change also triggers blur or marks the field touched depends on the control:
 
 | Selected control | Blur and touched behavior |
 | --- | --- |
