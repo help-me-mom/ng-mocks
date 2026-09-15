@@ -45,6 +45,13 @@ Create and maintain a plain Markdown checklist:
      closest functional specs and their articles, record the reference paths, and use their structure and style.
      Consult analogous human-authored history when the pattern remains unclear.
    - Inspect prior fixes with similar symptoms: `git log --no-merges --oneline --all -- 'tests/issue-*' 'tests-e2e/src/issue-*' 'e2e/*/src/tests/issue-*'`.
+   - Separate the initial report from later follow-ups and distinguish measurements from proposed causes.
+     Check whether the reported revision already contains an earlier fix before treating it as the solution.
+     When reviewing a group of issues, map each remaining request to current source, specs and docs, and
+     reconcile dependent PRs with merged changes. An absent published guide can already exist on `main` for
+     the next release; an open investigation may still require a reproduction rather than an implementation.
+     Apply later maintainer scope decisions when an issue's original file target or proposed solution is stale;
+     preserve the underlying requirement rather than restoring an abandoned article structure.
 3. Create a dedicated worktree before changing files:
    - default branch name: `issues/<issue-number>`
    - default worktree path: `../ng-mocks-issue-<issue-number>`
@@ -78,6 +85,8 @@ Create and maintain a plain Markdown checklist:
    - Record the inspected areas, evidence, and scope decisions in work notes. Include confirmed instances of the
      same defect within the task's scope; record distinct causes or out-of-scope work as follow-ups. State any
      unverified areas and avoid claiming exhaustive coverage from a single reproducer.
+   - For form-control, accessor or binding reports, read the [forms investigation checklist](references/forms.md).
+     It covers real and mocked registration contracts without requiring an external UI library in regressions.
 5. Reproduce before fixing:
    - Add the smallest local test that fails on the current implementation and passes only after the real fix.
    - Keep the test focused on the reported behavior, not the eventual implementation detail.

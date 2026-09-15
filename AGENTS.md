@@ -126,6 +126,9 @@
 
 ## Fix Scope Review
 
+- Reread the original report and later comments separately. Distinguish observed failures from the reporter's
+  proposed explanation, and compare the reported revision with prior fixes and current `upstream/main`.
+  A related fix or a passing adjacent case does not prove that an unreproduced report is resolved.
 - Before implementing a fix, check whether the reported failure is one instance of a wider defect. Trace the
   root cause through shared helpers, assumptions, and callers, and inspect similar code paths and prior fixes.
 - Compare related use cases where they share that mechanism. For metadata, consider inputs, outputs, view and
@@ -161,6 +164,10 @@
   inline assertions, and comments. Follow the articles' teaching order, tool links, and annotated examples.
 - Use simple comments to explain what an example does and why its setup, timing, or assertions matter.
   Preserve useful existing explanations when refactoring; step labels alone are not a replacement.
+- Preserve existing example names and structure when extending them; a similar new variant can reuse them.
+  Use clear names for new form examples, such as `inputValue` for component state and `inputName` for an
+  independent HTML name. Keep matching names where the binding requires them, such as a `formControlName`
+  and its group key; avoid unrelated renaming.
 - If those references do not settle a pattern, inspect analogous local history or merged non-bot PRs. Explain
   necessary departures, and compare the finished changes with the references before reporting completion.
 
@@ -181,6 +188,10 @@
 - Distinguish testing a real declaration from mocking it as a dependency. Give independent API use cases separate
   articles and clearly identify decorator and signal examples. For content queries, keep separate testing and
   mocking articles for both `ContentChild` and `ContentChildren`, with both approaches in each article.
+- For form guides, follow the simple declaration, setup, and find → read → change → assert structure in the
+  [form guide reference](.agents/skills/clean-doc-examples/references/forms.md). Keep validation and
+  advanced scenarios in their relevant articles. Check that simplifying a guide does not remove the only
+  explanation of an outstanding source request; preserve it in the appropriate article or API reference.
 - Write each published example as ordinary code for one appropriate Angular version. Keep APIs, syntax, and
   defaults consistent, and state the version briefly when readers need it to use the example.
 - Preserve the tested setup, behavior, and meaningful assertions. Remove compatibility-only flags, casts, guards,
@@ -213,6 +224,11 @@
   keep a cohesive regression at the first common boundary when it necessarily combines them.
 - For framework-internal or multi-branch fixes, pair a focused source-unit spec with a real-Angular spread regression.
   Assert the reported outcome as well as preserved behavior and the absence of the relevant side effects.
+- When an integration exposes a core defect, reproduce its relevant providers, bindings and registration with
+  repository-owned declarations. Use existing integration dependencies as reference evidence; do not add the
+  external library to core or versioned regression targets. For form controls, follow the
+  [forms investigation checklist](.agents/skills/triage-issue/references/forms.md) to check injector identity,
+  callback registration and real, kept and mocked behavior independently.
 - When a spread test depends on Zone.js, gate it with `environments=zoned` in `test-spread.conf` so the zoned and
   zoneless corpora remain isolated without project-specific exclusions.
 - Keep CI-facing root test scripts named `test:<project>[:<es>]:<profile>`. Keep project-level profile script and
@@ -291,6 +307,9 @@
   CI, tests, internal
   refactors, dependencies, agent guidance, or release tooling that does not change the published package. For
   example, a semantic-release configuration repair should use `build(release): ...`, not `fix(release): ...`.
+- Use `build` for internal agent/developer instructions, skills and knowledge documents, for example
+  `build(agents): preserve form investigation guidance`. Public website articles use `docs`; changes to the
+  packaged root README retain `docs(README)` and its documented patch-release effect.
 - A conventional revert of an already released commit produces a patch. An original commit and its matching revert in
   the same unreleased range cancel each other; a plain `revert: ...` without `This reverts commit <hash>` is silent.
 - `[skip release]` and `[release skip]` remove a commit from release analysis regardless of its type or footer. Use
@@ -326,8 +345,8 @@
   upgrade path. Fixes that restore expected behavior do not by themselves require public docs.
   For a shipped behavior change likely to require user code or test updates, add migration
   guidance with affected versions, before/after examples, the safe update path, and explicitly unaffected cases.
-- Update `AGENTS.md` and the relevant repo skill only when current guidance is wrong or missing and the lesson is
-  repository-wide, repeated, or exposed by an actual workflow failure.
+- Capture reusable discoveries and resolved guidance gaps through
+  [Maintaining internal knowledge](#maintaining-internal-knowledge). Keep temporary task status in work notes.
 - For build, packaging, and release-tooling bugs, validate the final generated artifact or loaded configuration with
   existing repo commands in Docker when available. If the required check is missing, discuss it with the user before
   adding tooling; do not invent an ad-hoc assertion or probe.
@@ -365,3 +384,19 @@
   3. Exact repo commands
   4. Required validation
   5. Safety guardrails
+
+### Maintaining internal knowledge
+
+- Capture confirmed reusable discoveries and maintainer decisions in internal agent/developer guidance during
+  the task. Public website documentation follows the separate documentation-value rule above.
+- KISS: keep instructions short. Link existing standards and authoritative docs instead of copying their
+  explanations; add only the repository-specific context needed to apply them.
+- Choose the smallest useful home:
+  - `AGENTS.md` for shared rules; `CONTRIBUTING.md` for developer workflows.
+  - An existing `SKILL.md` when its trigger and workflow fit the task.
+  - A linked `references/*.md` for detailed knowledge needed only within that skill.
+  - A new `.agents/skills/<task-name>/SKILL.md` for a distinct, repeatable task not covered by existing skills.
+- Keep each lesson in one place, link its supporting source/specs, and replace stale guidance. Do not create a
+  skill per issue. Leave unconfirmed diagnoses and temporary CI or branch state in work notes.
+- Check discovery, relative links and consistency with current repo commands. Use existing validation rules;
+  do not add tests or tooling for prose-only edits. Mention maintained guidance paths in the completion summary.

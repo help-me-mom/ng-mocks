@@ -41,6 +41,8 @@ and click on the "Edit this page" link at the bottom of the page.
 
 To develop `ng-mocks` you need to use `bash` and `WSL` in case if you are on Windows.
 
+Commit messages should follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
 ### Signed commits for pull requests
 
 Pull requests need signed commits. Unsigned commits can be blocked by the repository settings,

@@ -43,6 +43,12 @@ Create and maintain a plain Markdown checklist:
    version must not block links to new examples. Do not add backlinks to existing articles unless requested
    or their content needs correction.
 
+## Form Guides
+
+When writing or updating form interaction guides, read the [form guide reference](references/forms.md).
+It covers the declaration/setup/find → read → change → assert structure, selector choices and control recipes.
+Keep that form-specific knowledge in the reference; the workflow and cleanup below apply to all examples.
+
 ## Published Snippet Cleanup
 
 - Preserve simple comments explaining what happens and why setup, timing, or assertions matter. Keep these
