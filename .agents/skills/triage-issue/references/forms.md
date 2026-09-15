@@ -46,7 +46,8 @@ an observed failure with a different setup do not reproduce the reporter's exact
 A helper can update a real control or field supplied to a mocked binding without recreating Angular's full
 connection. Define the supported contract explicitly: value/state writes, deferred update handling, touch,
 native DOM synchronization and parent-to-child updates are separate outcomes. Do not infer one from another.
-Keep real form directives when the test needs Angular's actual connection or validation behavior.
+Keep real form directives when the test needs Angular's actual connection or host-provided CVA/directive
+validation. A real field supplied to a mocked binding can still apply its own schema validation.
 
 Check the current API and preservation tests before changing accepted payloads. For native checkboxes and
 radio options, boolean helper arguments control checked state even when the element has its own option value.

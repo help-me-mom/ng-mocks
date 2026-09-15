@@ -164,9 +164,10 @@
   inline assertions, and comments. Follow the articles' teaching order, tool links, and annotated examples.
 - Use simple comments to explain what an example does and why its setup, timing, or assertions matter.
   Preserve useful existing explanations when refactoring; step labels alone are not a replacement.
-- Preserve existing example names and structure when extending them. Use clear names for new form examples,
-  such as `inputValue` for component state and `inputName` for an independent HTML name. Keep matching names
-  where the binding requires them, such as a `formControlName` and its group key; avoid unrelated renaming.
+- Preserve existing example names and structure when extending them; a similar new variant can reuse them.
+  Use clear names for new form examples, such as `inputValue` for component state and `inputName` for an
+  independent HTML name. Keep matching names where the binding requires them, such as a `formControlName`
+  and its group key; avoid unrelated renaming.
 - If those references do not settle a pattern, inspect analogous local history or merged non-bot PRs. Explain
   necessary departures, and compare the finished changes with the references before reporting completion.
 
@@ -188,7 +189,7 @@
   articles and clearly identify decorator and signal examples. For content queries, keep separate testing and
   mocking articles for both `ContentChild` and `ContentChildren`, with both approaches in each article.
 - For form guides, follow the simple declaration, setup, and find → read → change → assert structure in the
-  [docs-example skill](.agents/skills/clean-doc-examples/SKILL.md#form-guide-structure). Keep validation and
+  [form guide reference](.agents/skills/clean-doc-examples/references/forms.md). Keep validation and
   advanced scenarios in their relevant articles. Check that simplifying a guide does not remove the only
   explanation of an outstanding source request; preserve it in the appropriate article or API reference.
 - Write each published example as ordinary code for one appropriate Angular version. Keep APIs, syntax, and
@@ -306,6 +307,9 @@
   CI, tests, internal
   refactors, dependencies, agent guidance, or release tooling that does not change the published package. For
   example, a semantic-release configuration repair should use `build(release): ...`, not `fix(release): ...`.
+- Use `build` for internal agent/developer instructions, skills and knowledge documents, for example
+  `build(agents): preserve form investigation guidance`. Public website articles use `docs`; changes to the
+  packaged root README retain `docs(README)` and its documented patch-release effect.
 - A conventional revert of an already released commit produces a patch. An original commit and its matching revert in
   the same unreleased range cancel each other; a plain `revert: ...` without `This reverts commit <hash>` is silent.
 - `[skip release]` and `[release skip]` remove a commit from release analysis regardless of its type or footer. Use
@@ -341,8 +345,8 @@
   upgrade path. Fixes that restore expected behavior do not by themselves require public docs.
   For a shipped behavior change likely to require user code or test updates, add migration
   guidance with affected versions, before/after examples, the safe update path, and explicitly unaffected cases.
-- Update `AGENTS.md` and the relevant repo skill only when current guidance is wrong or missing and the lesson is
-  repository-wide, repeated, or exposed by an actual workflow failure.
+- Capture reusable discoveries and resolved guidance gaps through
+  [Maintaining internal knowledge](#maintaining-internal-knowledge). Keep temporary task status in work notes.
 - For build, packaging, and release-tooling bugs, validate the final generated artifact or loaded configuration with
   existing repo commands in Docker when available. If the required check is missing, discuss it with the user before
   adding tooling; do not invent an ad-hoc assertion or probe.
@@ -380,3 +384,28 @@
   3. Exact repo commands
   4. Required validation
   5. Safety guardrails
+
+### Maintaining internal knowledge
+
+- This policy concerns internal instructions and knowledge for agents and developers. It does not require
+  publishing website articles; public documentation follows the separate documentation-value rule above.
+- When investigation, a completed fix or maintainer feedback reveals reusable knowledge or fills a guidance gap,
+  capture it during the task. Before finishing, check whether the relevant instructions let a future agent or
+  developer apply the lesson without reconstructing the conversation. Update stale guidance instead of appending
+  exceptions.
+- Choose the smallest useful home for the knowledge:
+  - `AGENTS.md` for repository-wide rules and links to specialized guidance.
+  - `CONTRIBUTING.md` for developer-facing repository workflows, with focused internal references when needed.
+  - An existing `SKILL.md` when its trigger and workflow already cover the task.
+  - A focused `references/*.md` inside that skill for domain facts, examples or conditional procedures. Keep the
+    entrypoint concise and link the reference where agents need to decide whether to read it.
+  - A new `.agents/skills/<task-name>/SKILL.md` for a distinct, repeatable task that existing skills do not cover.
+    Give it a clear name and trigger and include the task list, commands, validation and guardrails required above.
+- Do not create a skill per issue or duplicate the same lesson across entrypoints and references. Separate
+  actionable workflow from supporting knowledge so unrelated tasks do not need to load the details.
+- Base maintained guidance on confirmed behavior or explicit maintainer decisions. Link relevant source, specs,
+  articles or scripts and state compatibility boundaries when they matter. Keep unconfirmed diagnoses and
+  temporary CI or branch state in investigation notes rather than treating them as established rules.
+- Review new and updated skills for discoverability, working relative links, stale or conflicting instructions
+  and accurate repo commands. Follow the existing validation rules; guidance-only edits do not require new tests
+  or validation tooling. Include the maintained skill or knowledge-document paths in the completion summary.
