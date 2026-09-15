@@ -13,6 +13,7 @@ import funcParseFindArgsName from '../func.parse-find-args-name';
 
 import funcGetModelControl from './func.get-model-control';
 import funcGetVca from './func.get-vca';
+import funcHasMockNativeAccessor from './func.has-mock-native-accessor';
 import triggerInput from './func.trigger-input';
 
 const handleKnown = (valueAccessor: any, value: any): boolean => {
@@ -125,7 +126,7 @@ export default (selector: Type<any> | DebugNodeSelector, value: any, methodName?
     throw new Error(`Cannot find an element via ngMocks.change(${funcParseFindArgsName(selector)})`);
   }
 
-  let valueAccessor = funcGetVca(el, true);
+  let valueAccessor = funcGetVca(el, true, '__simulateChange');
   let nativeControl = false;
   if (!valueAccessor) {
     const modelControl = funcGetModelControl(el);
@@ -135,8 +136,8 @@ export default (selector: Type<any> | DebugNodeSelector, value: any, methodName?
 
       return;
     }
-    nativeControl = !hasListener(el) && isUnboundNativeControl(el);
-    valueAccessor = funcGetVca(el, hasListener(el) || nativeControl) || {};
+    nativeControl = !hasListener(el) && (isUnboundNativeControl(el) || funcHasMockNativeAccessor(el));
+    valueAccessor = funcGetVca(el, hasListener(el) || nativeControl, '__simulateChange') || {};
   }
   if (handleKnown(valueAccessor, value) || hasListener(el) || nativeControl) {
     triggerInput(el, value, valueAccessor);

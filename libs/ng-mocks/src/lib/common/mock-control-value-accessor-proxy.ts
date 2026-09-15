@@ -16,6 +16,11 @@ const applyProxy = (proxy: any, method: string, value: any, storage?: string) =>
 export class MockControlValueAccessorProxy implements ControlValueAccessor {
   public instance?: Partial<MockControlValueAccessor & ControlValueAccessor>;
 
+  private readonly registrations = new Map<
+    keyof MockControlValueAccessor,
+    { instance: Partial<MockControlValueAccessor & ControlValueAccessor> | undefined; callback: unknown }
+  >();
+
   public constructor(
     public readonly target?: AnyType<any>,
     sourceType?: AnyType<unknown>,
@@ -26,11 +31,26 @@ export class MockControlValueAccessorProxy implements ControlValueAccessor {
     }
   }
 
+  public isRegistered(operation: keyof MockControlValueAccessor): boolean {
+    const registration = this.registrations.get(operation);
+
+    // Mock metadata and inherited simulation methods also exist on disconnected controls.
+    return (
+      !!registration &&
+      !!this.instance &&
+      registration.instance === this.instance &&
+      typeof registration.callback === 'function' &&
+      typeof this.instance[operation] === 'function'
+    );
+  }
+
   public registerOnChange(fn: any): void {
+    this.registrations.set('__simulateChange', { instance: this.instance, callback: fn });
     applyProxy(this, 'registerOnChange', fn, '__simulateChange');
   }
 
   public registerOnTouched(fn: any): void {
+    this.registrations.set('__simulateTouch', { instance: this.instance, callback: fn });
     applyProxy(this, 'registerOnTouched', fn, '__simulateTouch');
   }
 

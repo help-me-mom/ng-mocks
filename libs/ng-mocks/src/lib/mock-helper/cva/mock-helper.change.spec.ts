@@ -1,12 +1,154 @@
 import { Directive, InjectionToken, Input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { NgControl } from '@angular/forms';
+import {
+  DefaultValueAccessor,
+  FormControl,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
+import { MockControlValueAccessor } from '../../common/mock-control-value-accessor';
+import { MockControlValueAccessorProxy } from '../../common/mock-control-value-accessor-proxy';
+import { MockBuilder } from '../../mock-builder/mock-builder';
 import { MockDirective } from '../../mock-directive/mock-directive';
+import { MockInstance } from '../../mock-instance/mock-instance';
 import { MockRender } from '../../mock-render/mock-render';
 import { ngMocks } from '../mock-helper';
 
 describe('mock-helper.change', () => {
+  describe('disconnected native mock accessors', () => {
+    MockInstance.scope();
+
+    it('changes and touches only the DOM for a mocked named control without invoking unregistered callbacks', async () => {
+      await MockBuilder().mock(ReactiveFormsModule);
+      const simulateChange = jasmine.createSpy('unregistered change');
+      const simulateTouch = jasmine.createSpy('unregistered touch');
+      MockInstance(DefaultValueAccessor, instance => {
+        (
+          instance as DefaultValueAccessor & MockControlValueAccessor
+        ).__simulateChange = simulateChange;
+        (
+          instance as DefaultValueAccessor & MockControlValueAccessor
+        ).__simulateTouch = simulateTouch;
+      });
+      const form = new FormGroup({
+        inputValue: new FormControl('initial'),
+      });
+      const fixture = MockRender(
+        '<form [formGroup]="form"><input formControlName="inputValue" /></form>',
+        { form },
+      );
+      const input = ngMocks.find('input');
+      const child = ngMocks.get(input, DefaultValueAccessor);
+      const accessor = input.injector.get(
+        NG_VALUE_ACCESSOR,
+      )[0] as MockControlValueAccessorProxy;
+      const values: object[] = [];
+      const subscription = form.valueChanges.subscribe(value =>
+        values.push(value),
+      );
+      const events: string[] = [];
+      for (const event of ['focus', 'input', 'change', 'blur']) {
+        input.nativeElement.addEventListener(event, () =>
+          events.push(event),
+        );
+      }
+
+      expect(accessor.instance).toBe(child);
+      expect(
+        (child as DefaultValueAccessor & MockControlValueAccessor)
+          .__simulateChange,
+      ).toBe(simulateChange);
+      expect(
+        (child as DefaultValueAccessor & MockControlValueAccessor)
+          .__simulateTouch,
+      ).toBe(simulateTouch);
+      expect(input.nativeElement.value).toBe('');
+
+      // A mocked name does not resolve its parent's group; preserve the native edit only.
+      ngMocks.change(input, 'updated');
+      fixture.detectChanges();
+      expect(events).toEqual(['focus', 'input', 'change', 'blur']);
+
+      // Touch still emits native events without fabricating a forms connection.
+      ngMocks.touch(input);
+      subscription.unsubscribe();
+
+      expect(input.nativeElement.value).toBe('updated');
+      expect(form.value).toEqual({ inputValue: 'initial' });
+      expect(ngMocks.input(input, 'formControlName')).toBe(
+        'inputValue',
+      );
+      expect(form.pristine).toBe(true);
+      expect(form.untouched).toBe(true);
+      expect(values).toEqual([]);
+      expect(simulateChange).not.toHaveBeenCalled();
+      expect(simulateTouch).not.toHaveBeenCalled();
+      expect(events).toEqual([
+        'focus',
+        'input',
+        'change',
+        'blur',
+        'focus',
+        'blur',
+      ]);
+    });
+
+    it('rejects a bound native input when its proxy has no attached mock accessor', () => {
+      const accessor = new MockControlValueAccessorProxy();
+      @Directive({
+        selector: '[formBinding]',
+        standalone: false,
+        providers: [
+          {
+            provide: NgControl,
+            useValue: { valueAccessor: accessor },
+          },
+        ],
+      })
+      class FormBindingDirective {
+        @Input() public formControlName = '';
+      }
+
+      TestBed.configureTestingModule({
+        declarations: [FormBindingDirective],
+      });
+      MockRender(
+        '<input formBinding formControlName="inputName" value="initial" />',
+      );
+      const input = ngMocks.find('input');
+      const nativeEvent = jasmine.createSpy('native event');
+      for (const event of ['focus', 'input', 'change', 'blur']) {
+        input.nativeElement.addEventListener(event, nativeEvent);
+      }
+
+      // An unattached proxy must not make an unsupported forms binding look editable.
+      let message = '';
+      let touchMessage = '';
+      try {
+        ngMocks.change(input, 'unsupported');
+      } catch (error) {
+        message = (error as Error).message;
+      }
+      try {
+        ngMocks.touch(input);
+      } catch (error) {
+        touchMessage = (error as Error).message;
+      }
+
+      expect(message).toContain('ControlValueAccessor');
+      expect(touchMessage).toContain('ControlValueAccessor');
+      expect(accessor.instance).toBeUndefined();
+      expect(input.nativeElement.value).toBe('initial');
+      expect(ngMocks.input(input, 'formControlName')).toBe(
+        'inputName',
+      );
+      expect(nativeEvent).not.toHaveBeenCalled();
+    });
+  });
+
   it('writes before calling the registered CVA callback exactly once', () => {
     const calls: string[] = [];
     const accessor = {
