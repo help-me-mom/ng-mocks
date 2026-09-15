@@ -110,18 +110,17 @@ When updating a legacy Puppeteer dependency with a configured download path, kee
 `compose.yml` aligned with its default Chromium revision. Do not force a different revision to keep an old
 cache path working.
 
-Run `compose.sh` installation commands one at a time across worktrees, and wait for other browser downloads
-to finish before starting them. Before npm installation and each explicit browser installation, the wrapper
-deletes empty browser build directories so Puppeteer can retry an interrupted installation. This cleanup scans
-cached builds, so even installations of different browser versions must not overlap. Populated caches can
-still serve concurrent test containers. The external browser volume survives `docker compose down --volumes`;
-remove it explicitly only when no worktree is using it.
+After each shared-cache project's `docker compose up --build` step, `compose.sh` deletes empty build
+directories in the Docker browser volume before running the explicit browser installer. Cache roots and
+populated directories are preserved; nonempty incomplete installations still need targeted manual recovery.
+
+Run these installation commands one at a time across worktrees, and wait for other downloads into the shared
+Docker browser volume to finish first. Cleanup scans cached builds, so installations of different browser
+versions must not overlap. Populated caches can still serve concurrent test containers. The external browser
+volume survives `docker compose down --volumes`; remove it explicitly only when no worktree is using it.
 Existing project-scoped caches are left in place; the shared volume populates on its first use.
 
 The host installation in `compose.sh` remains separate: macOS and Linux need different browser binaries.
-Cleanup uses the shared cache's browser/build layout and each target's host cache layout, including the
-package-local Chromium cache on older targets. It preserves cache roots and populated directories; a partial
-installation that already contains files still needs targeted manual recovery.
 The Jest-only project uses jsdom and does not download Chrome. Angular build caches and `node_modules` stay
 inside each worktree.
 

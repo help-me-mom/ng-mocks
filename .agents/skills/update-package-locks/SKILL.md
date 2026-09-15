@@ -55,8 +55,9 @@ For a repo-wide refresh, the affected command lines are all service command entr
 For repo-wide refreshes, derive targets from the current `compose.sh` and `compose.yml`; do not hardcode target names or rely on bare `sh compose.sh`. Run each target once per pass, with a unique `COMPOSE_PROJECT_NAME` for this worktree. Clean the compose project with `docker compose down -v` after each successful target.
 
 Serialize both wrapper passes across targets and worktrees, even when they install different browser builds:
-`compose.sh` removes empty build directories across the shared browser cache before installation. Populated
-test containers may still run concurrently. Cleanup retains the external browser volume; do not remove it
+`compose.sh` removes empty build directories in the shared Docker cache after each project's setup step and
+before its explicit browser installation. Populated test containers may still run concurrently. Cleanup
+retains the external browser volume; do not remove it
 while another worktree may be using it. See [Shared browser downloads](../../../CONTRIBUTING.md#shared-browser-downloads).
 
 If a wrapper target fails, including Docker address-pool or Puppeteer cache errors, report the command, error, and remaining work to the user and discuss the solution before cleanup, retries, or other recovery steps. Do not switch to local runtimes or create a workaround.
