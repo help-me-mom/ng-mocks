@@ -387,25 +387,16 @@
 
 ### Maintaining internal knowledge
 
-- This policy concerns internal instructions and knowledge for agents and developers. It does not require
-  publishing website articles; public documentation follows the separate documentation-value rule above.
-- When investigation, a completed fix or maintainer feedback reveals reusable knowledge or fills a guidance gap,
-  capture it during the task. Before finishing, check whether the relevant instructions let a future agent or
-  developer apply the lesson without reconstructing the conversation. Update stale guidance instead of appending
-  exceptions.
-- Choose the smallest useful home for the knowledge:
-  - `AGENTS.md` for repository-wide rules and links to specialized guidance.
-  - `CONTRIBUTING.md` for developer-facing repository workflows, with focused internal references when needed.
-  - An existing `SKILL.md` when its trigger and workflow already cover the task.
-  - A focused `references/*.md` inside that skill for domain facts, examples or conditional procedures. Keep the
-    entrypoint concise and link the reference where agents need to decide whether to read it.
-  - A new `.agents/skills/<task-name>/SKILL.md` for a distinct, repeatable task that existing skills do not cover.
-    Give it a clear name and trigger and include the task list, commands, validation and guardrails required above.
-- Do not create a skill per issue or duplicate the same lesson across entrypoints and references. Separate
-  actionable workflow from supporting knowledge so unrelated tasks do not need to load the details.
-- Base maintained guidance on confirmed behavior or explicit maintainer decisions. Link relevant source, specs,
-  articles or scripts and state compatibility boundaries when they matter. Keep unconfirmed diagnoses and
-  temporary CI or branch state in investigation notes rather than treating them as established rules.
-- Review new and updated skills for discoverability, working relative links, stale or conflicting instructions
-  and accurate repo commands. Follow the existing validation rules; guidance-only edits do not require new tests
-  or validation tooling. Include the maintained skill or knowledge-document paths in the completion summary.
+- Capture confirmed reusable discoveries and maintainer decisions in internal agent/developer guidance during
+  the task. Public website documentation follows the separate documentation-value rule above.
+- KISS: keep instructions short. Link existing standards and authoritative docs instead of copying their
+  explanations; add only the repository-specific context needed to apply them.
+- Choose the smallest useful home:
+  - `AGENTS.md` for shared rules; `CONTRIBUTING.md` for developer workflows.
+  - An existing `SKILL.md` when its trigger and workflow fit the task.
+  - A linked `references/*.md` for detailed knowledge needed only within that skill.
+  - A new `.agents/skills/<task-name>/SKILL.md` for a distinct, repeatable task not covered by existing skills.
+- Keep each lesson in one place, link its supporting source/specs, and replace stale guidance. Do not create a
+  skill per issue. Leave unconfirmed diagnoses and temporary CI or branch state in work notes.
+- Check discovery, relative links and consistency with current repo commands. Use existing validation rules;
+  do not add tests or tooling for prose-only edits. Mention maintained guidance paths in the completion summary.
