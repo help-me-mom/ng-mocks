@@ -18,9 +18,9 @@ Create a plain Markdown checklist that any AI agent can follow:
 - [ ] Create an isolated worktree from `upstream/main` or the existing PR branch
 - [ ] For a PR conflict, merge `upstream/main` and keep the dependency PR's lockfile side as the regeneration base
 - [ ] Temporarily change the relevant `compose.yml` service command line(s) from `npm install` to `npm update`
-- [ ] Run the update wrapper pass, serializing cold browser installs before batches of 2-4
+- [ ] Run the update wrapper pass one target at a time, coordinated with other worktrees
 - [ ] Restore `compose.yml` back to `npm install`
-- [ ] Run the install wrapper pass with wrapper targets in batches of 2-4
+- [ ] Run the install wrapper pass one target at a time, coordinated with other worktrees
 - [ ] Commit the refreshed lockfiles with only the dependency or merge changes already in scope
 - [ ] Push a fresh branch and create a PR, or push the existing PR branch
 - [ ] Check the remote PR mergeability after every push
@@ -35,9 +35,9 @@ Create a plain Markdown checklist that any AI agent can follow:
    - For an existing dependency PR conflict, fetch that PR branch into an isolated worktree, merge `upstream/main` without rewriting history, and keep the dependency PR's lockfile side as the regeneration base.
 2. In that new worktree, inspect `compose.yml`.
 3. Temporarily change only the affected `compose.yml` service command line(s) from `npm install` to `npm update`.
-4. For a repo-wide refresh, derive the current wrapper targets from `compose.sh` and `compose.yml`, then run them in batches of 2-4 concurrent commands. Serialize targets that may download the same uncached browser build, as described below. If the user explicitly named one target, run only that target.
+4. For a repo-wide refresh, derive the current wrapper targets from `compose.sh` and `compose.yml`, then run them sequentially, coordinated with other worktrees as described below. If the user explicitly named one target, run only that target.
 5. Restore the same service command line(s) back to `npm install`.
-6. Run the same target set again in batches of 2-4 so the resulting lockfiles match the normal CI install flow.
+6. Run the same target set again sequentially so the resulting lockfiles match the normal CI install flow.
 7. Commit the refreshed `package-lock.json` files with only the dependency or merge changes already in scope, plus `.agents/skills/update-package-locks/SKILL.md` if this skill was intentionally edited.
 8. For a fresh refresh, push the branch to a writable remote and create a PR against `upstream/main`. For an existing dependency PR, push back to that PR branch.
 9. After creating the PR or pushing its branch, query the hosting provider for the PR's current mergeability. If the result is indeterminate, wait and query again. Do not treat pending or failed CI checks as merge conflicts.
@@ -52,17 +52,17 @@ Do not use the current active worktree. A fresh refresh needs a new branch; an e
 
 For a repo-wide refresh, the affected command lines are all service command entries in `compose.yml` that currently read `- install`. Change only those entries to `- update`, run the wrapper, then change those same entries back to `- install`. Do not edit `package.json`, shell scripts, or lockfiles by hand.
 
-For repo-wide refreshes, derive targets from the current `compose.sh` and `compose.yml`; do not hardcode target names or rely on bare `sh compose.sh`. Run each target once per pass in batches of 2-4, with a unique `COMPOSE_PROJECT_NAME` per concurrent command. Clean each batch with `docker compose down -v` before starting the next one.
+For repo-wide refreshes, derive targets from the current `compose.sh` and `compose.yml`; do not hardcode target names or rely on bare `sh compose.sh`. Run each target once per pass, with a unique `COMPOSE_PROJECT_NAME` for this worktree. Clean the compose project with `docker compose down -v` after each successful target.
 
-The browser volume is external and shared across these namespaces. Before placing targets that use the same
-browser build in a parallel batch, complete one target's wrapper run to populate that build. If cache state
-or the build selected by an update is uncertain, run those targets sequentially. Apply this rule in both
-passes and coordinate with other worktrees. Batch cleanup retains the external browser volume; do not
-remove it while another worktree may be using it. See `CONTRIBUTING.md` for cache revision mappings.
+Serialize both wrapper passes across targets and worktrees, even when they install different browser builds:
+`compose.sh` removes empty build directories in the shared Docker cache after each project's setup step and
+before its explicit browser installation. Populated test containers may still run concurrently. Cleanup
+retains the external browser volume; do not remove it
+while another worktree may be using it. See [Shared browser downloads](../../../CONTRIBUTING.md#shared-browser-downloads) for cache revision mappings.
 
 If a wrapper target fails, including Docker address-pool or Puppeteer cache errors, report the command, error, and remaining work to the user and discuss the solution before cleanup, retries, or other recovery steps. Do not switch to local runtimes or create a workaround.
 
-If several worktrees or agent sessions are active, use a unique compose namespace for every wrapper command:
+If several worktrees or agent sessions are active, use a unique compose namespace for this worktree:
 
 ```bash
 COMPOSE_PROJECT_NAME=ngmocks_<unique> sh compose.sh <target>
@@ -82,7 +82,7 @@ git merge --no-edit upstream/main
 git checkout --ours path/to/package-lock.json # PR side when merging main into the PR branch
 
 # Repo-wide lockfile refresh.
-# Edit compose.yml to npm update, run current wrapper targets in batches of 2-4, then restore npm install and repeat the same batches.
+# Edit compose.yml to npm update, run current wrapper targets sequentially, then restore npm install and repeat.
 
 # Specific target lockfile refresh, only when the user named a target.
 # First edit that target's compose.yml service command to npm update.
@@ -116,7 +116,7 @@ git push
 - The required validation for this skill is a successful wrapper-based update pass followed by a successful wrapper-based install pass.
 - For a single target, run `sh compose.sh <target>` once while the service command is temporarily `npm update`, then run `sh compose.sh <target>` again after restoring `npm install`.
 - For a repo-wide lock refresh, run every relevant wrapper target once with all relevant service commands temporarily set to `npm update`, then run every same target again after restoring all service commands to `npm install`.
-- Repo-wide target runs may be concurrent in batches of 2-4 after shared browser builds are populated; serialize uncertain or cold installs of the same build. A batch is successful only when every target command exits successfully.
+- Serialize wrapper targets in both passes across worktrees. A pass is successful only when every target command exits successfully.
 - After the final push, the hosting provider must report a definitive conflict-free PR state. A local clean merge is not sufficient, and CI status is a separate signal.
 - Do not run `sh test.sh`, `npm test`, lint, or TypeScript checks as part of this skill's default validation.
 
@@ -129,8 +129,8 @@ git push
 - Never leave `compose.yml` in an `npm update` state after finishing.
 - Use only the documented wrapper flow and repo images. Never use local runtimes or custom install, build, test, or
   check scripts, including inside Docker.
-- If multiple worktrees, agent sessions, or concurrent wrapper targets are active, set a unique `COMPOSE_PROJECT_NAME` for each wrapper command.
-- Clean up temporary compose projects with `docker compose down -v` after successful batches. Discuss failed setup
+- If multiple worktrees or agent sessions are active, set a unique `COMPOSE_PROJECT_NAME` for this worktree and serialize wrapper runs across worktrees.
+- Clean up temporary compose projects with `docker compose down -v` after successful targets. Discuss failed setup
   runs with the user before recovery steps.
 - When committing or pushing, let the repository's normal git hooks run. Do not bypass hooks unless the user explicitly asks.
 - Do not manually invoke extra validation beyond this skill. If a hook requires local runtime execution or fails,
