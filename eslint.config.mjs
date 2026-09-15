@@ -240,6 +240,8 @@ export default defineConfig([
       'tests-e2e/.angular/**',
       'tests-e2e/dist/**',
       'tests-failures/**',
+      // Declaration consumers are checked by build:types after both bundles exist.
+      'tests-types/issue-14921/*.ts',
       'tmp/**',
       '**/*.sh',
       '**/*.snap',
