@@ -1,5 +1,6 @@
 import { AsyncValidator, ControlValueAccessor, ValidationErrors, Validator } from '@angular/forms';
 
+import coreDefineProperty from './core.define-property';
 import { AnyType } from './core.types';
 import { MockControlValueAccessor, MockValidator } from './mock-control-value-accessor';
 
@@ -15,13 +16,41 @@ const applyProxy = (proxy: any, method: string, value: any, storage?: string) =>
 export class MockControlValueAccessorProxy implements ControlValueAccessor {
   public instance?: Partial<MockControlValueAccessor & ControlValueAccessor>;
 
-  public constructor(public readonly target?: AnyType<any>) {}
+  private readonly registrations = new Map<
+    keyof MockControlValueAccessor,
+    { instance: Partial<MockControlValueAccessor & ControlValueAccessor> | undefined; callback: unknown }
+  >();
+
+  public constructor(
+    public readonly target?: AnyType<any>,
+    sourceType?: AnyType<unknown>,
+  ) {
+    if (sourceType) {
+      // Angular classifies value accessors by constructor identity, not the CVA methods.
+      coreDefineProperty(this, 'constructor', sourceType);
+    }
+  }
+
+  public isRegistered(operation: keyof MockControlValueAccessor): boolean {
+    const registration = this.registrations.get(operation);
+
+    // Mock metadata and inherited simulation methods also exist on disconnected controls.
+    return (
+      !!registration &&
+      !!this.instance &&
+      registration.instance === this.instance &&
+      typeof registration.callback === 'function' &&
+      typeof this.instance[operation] === 'function'
+    );
+  }
 
   public registerOnChange(fn: any): void {
+    this.registrations.set('__simulateChange', { instance: this.instance, callback: fn });
     applyProxy(this, 'registerOnChange', fn, '__simulateChange');
   }
 
   public registerOnTouched(fn: any): void {
+    this.registrations.set('__simulateTouch', { instance: this.instance, callback: fn });
     applyProxy(this, 'registerOnTouched', fn, '__simulateTouch');
   }
 

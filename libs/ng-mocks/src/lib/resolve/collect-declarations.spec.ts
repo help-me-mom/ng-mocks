@@ -526,4 +526,26 @@ describe('collect-declarations', () => {
     expect(actual.outputs).toEqual(['value:valueChange']);
     delete global.__ngMocksReflectComponentType;
   });
+
+  it('does not permanently cache a def as parsed when a parsing step throws', () => {
+    const global = funcGetGlobal();
+    const def: any = {
+      ɵcmp: {
+        inputs: {
+          value: 'value',
+        },
+      },
+    };
+
+    global.__ngMocksReflectComponentType = () => {
+      throw new Error('boom');
+    };
+    expect(() => collectDeclarations(def)).toThrow();
+
+    global.__ngMocksReflectComponentType = false;
+    const actual = collectDeclarations(def);
+    expect(actual.inputs).toEqual(['value']);
+
+    delete global.__ngMocksReflectComponentType;
+  });
 });

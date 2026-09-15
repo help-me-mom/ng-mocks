@@ -16,7 +16,7 @@ import helperMockService from '../mock-service/helper.mock-service';
 import toExistingProvider from './to-existing-provider';
 import toFactoryProvider from './to-factory-provider';
 
-const processTokens = (mockType: AnyType<any>, provider: any) => {
+const processTokens = (sourceType: AnyType<unknown>, mockType: AnyType<any>, provider: any) => {
   const provide = funcGetType(provider);
   if (coreForm.NG_VALIDATORS && provide === coreForm.NG_VALIDATORS) {
     return toFactoryProvider(provide, () => new MockValidatorProxy(mockType));
@@ -25,7 +25,7 @@ const processTokens = (mockType: AnyType<any>, provider: any) => {
     return toFactoryProvider(provide, () => new MockAsyncValidatorProxy(mockType));
   }
   if (coreForm.NG_VALUE_ACCESSOR && provide === coreForm.NG_VALUE_ACCESSOR) {
-    return toFactoryProvider(provide, () => new MockControlValueAccessorProxy(mockType));
+    return toFactoryProvider(provide, () => new MockControlValueAccessorProxy(mockType, sourceType));
   }
 
   return undefined;
@@ -54,7 +54,7 @@ const processProvider = (
   provider: any,
   resolutions: CoreDefStack<any, any>,
 ): any => {
-  const token = processTokens(mockType, provider);
+  const token = processTokens(sourceType, mockType, provider);
   if (token) {
     return token;
   }

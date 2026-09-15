@@ -158,8 +158,8 @@ expect(input.nativeNode.value).toBe('Grace');
 
 ## Signal fields
 
-With Angular 21 or later, the same distinction applies to a mocked `FormField`.
-This component passes a field tree to the directive:
+With Angular 21 or later, a mocked `FormField` receives the real field tree created by
+the parent. This component passes `f.inputValue` to the directive:
 
 ```ts
 import { Component, signal } from '@angular/core';
@@ -182,7 +182,9 @@ Mock the directive in the setup:
 beforeEach(() => MockBuilder(TargetComponent).mock(FormField));
 ```
 
-The mock preserves the field tree input, but does not connect the native control to it:
+Find the input with [`ngMocks.reveal`](/api/ngMocks/reveal.md) and reuse the returned host.
+`ngMocks.change` updates the supplied field and marks it dirty.
+Use [`ngMocks.touch`](/api/ngMocks/touch.md) separately to mark it touched:
 
 ```ts
 // Render the component.
@@ -192,22 +194,43 @@ const component = fixture.point.componentInstance;
 // Find the input by its field tree.
 const input = ngMocks.reveal(['formField', component.f.inputValue]);
 
-// Read the binding.
+// Read the binding and the parent model.
 expect(ngMocks.input(input, 'formField')).toBe(component.f.inputValue);
-
-// Attempt to change the disconnected input.
-expect(() => ngMocks.change(input, 'Grace')).toThrowError(
-  /Cannot find ControlValueAccessor on the element/,
-);
-
-// Assert that the parent model and native input remain unchanged.
 expect(component.model()).toEqual({ inputValue: 'Ada' });
+expect(input.nativeNode.value).toBe('');
+expect(component.f.inputValue().dirty()).toBe(false);
+expect(component.f.inputValue().touched()).toBe(false);
+
+// Change the supplied field without restoring the mocked DOM connection.
+ngMocks.change(input, 'Grace');
+
+// Assert the model update and dirty state; changing the binding does not touch it.
+expect(component.model()).toEqual({ inputValue: 'Grace' });
+expect(ngMocks.input(input, 'formField')).toBe(component.f.inputValue);
+expect(input.nativeNode.value).toBe('');
+expect(component.f.inputValue().dirty()).toBe(true);
+expect(component.f.inputValue().touched()).toBe(false);
+
+// Touch the supplied field explicitly without dispatching a native blur event.
+ngMocks.touch(input);
+
+expect(component.f.inputValue().touched()).toBe(true);
+expect(component.f.inputValue().dirty()).toBe(true);
+expect(component.model()).toEqual({ inputValue: 'Grace' });
+expect(ngMocks.input(input, 'formField')).toBe(component.f.inputValue);
 expect(input.nativeNode.value).toBe('');
 ```
 
 Pass `f.inputValue` itself to `reveal`, rather than the field state returned by
-`f.inputValue()`. For a working field connection, keep `FormField` real as shown in the
-[signal forms guide](/guides/signal-forms.md).
+`f.inputValue()`. The helper calls the field's `controlValue.set`, so Angular's debounce
+policy still applies. With `debounce(path, 'blur')`, the edit stays pending until
+`ngMocks.touch` calls `markAsTouched` and flushes it. Touching a pristine field alone
+does not change its value or mark it dirty.
+
+These operations update the supplied field without synchronizing native values,
+calling a custom control's `writeValue`, or connecting its model inputs and outputs.
+Later parent writes also leave the native input unchanged. Keep `FormField` real to
+test the complete Angular connection, as shown in the [signal forms guide](/guides/signal-forms.md).
 
 ## Live examples
 

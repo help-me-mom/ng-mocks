@@ -631,7 +631,6 @@ const parse = (def: any): any => {
   const parent = Object.getPrototypeOf(def);
   const parentDeclarations = parent ? parse(parent) : {};
   const declaration = createDeclarations(parentDeclarations);
-  coreDefineProperty(def, '__ngMocksParsed', true);
   parseParameters(def, declaration);
   parseAnnotations(def, declaration);
   parseDecorators(def, declaration);
@@ -676,13 +675,22 @@ const parse = (def: any): any => {
   buildDeclaration(declaration.Component, declaration);
   buildDeclaration(declaration.Pipe, declaration);
 
-  coreDefineProperty(def, '__ngMocksDeclarations', {
+  const ngMocksDeclarations = {
     ...parentDeclarations,
     ...declaration,
     parameters: reflectionCapabilities.parameters(def),
-  });
+  };
 
-  return def.__ngMocksDeclarations;
+  // Cache both flags together, only after the declarations are fully built.
+  // Setting '__ngMocksParsed' any earlier (and leaving it set if a step above
+  // throws, e.g. reflectComponentType/parameters() on an edge-case class) would
+  // permanently poison this def for the rest of the run: every later call would
+  // hit the early-return above and receive undefined, since
+  // '__ngMocksDeclarations' was never assigned.
+  coreDefineProperty(def, '__ngMocksParsed', true);
+  coreDefineProperty(def, '__ngMocksDeclarations', ngMocksDeclarations);
+
+  return ngMocksDeclarations;
 };
 
 export default ((): ((def: any) => Declaration) => parse)();
