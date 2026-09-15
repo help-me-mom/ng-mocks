@@ -13,11 +13,11 @@ interface ModelControl {
   touch?: () => void;
 }
 
-const findOutput = (outputs: DirectiveIo[], publicName: string): DirectiveIoParsed | undefined => {
-  for (const definition of outputs) {
-    const output = funcDirectiveIoParse(definition);
-    if ((output.alias || output.name) === publicName) {
-      return output;
+const findBinding = (definitions: DirectiveIo[], publicName: string): DirectiveIoParsed | undefined => {
+  for (const definition of definitions) {
+    const binding = funcDirectiveIoParse(definition);
+    if ((binding.alias || binding.name) === publicName) {
+      return binding;
     }
   }
 
@@ -29,14 +29,14 @@ const resolveOutput = (
   outputs: DirectiveIo[],
   publicName: string,
 ): ((value?: any) => void) | undefined => {
-  const declared = findOutput(outputs, publicName);
+  const declared = findBinding(outputs, publicName);
   if (!declared) {
     return undefined;
   }
 
   // Mock model inputs remain signals, with their emitters stored separately.
   const mockOutputs: DirectiveIo[] | undefined = funcIsMock(instance) ? instance.__ngMocksConfig.outputs : undefined;
-  const configured = findOutput(mockOutputs || [], publicName);
+  const configured = findBinding(mockOutputs || [], publicName);
   const output = instance[configured ? configured.name : declared.name];
   if (typeof output?.emit === 'function') {
     return value => output.emit(value);
@@ -68,10 +68,10 @@ export default (el: DebugNode): ModelControl | undefined => {
     }
 
     const outputs = meta.outputs!;
-    for (const definition of meta.inputs!) {
-      const input = funcDirectiveIoParse(definition);
-      const name = input.alias || input.name;
-      if (!input.isSignal || (name !== 'value' && name !== 'checked') || typeof instance[input.name] !== 'function') {
+    // Angular accepts classic input/output pairs and prefers value over checked.
+    for (const name of ['value', 'checked']) {
+      const input = findBinding(meta.inputs!, name);
+      if (!input || (input.isSignal && typeof instance[input.name] !== 'function')) {
         continue;
       }
 

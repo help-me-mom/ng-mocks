@@ -1,5 +1,6 @@
 import {
   Component,
+  DebugNode,
   Directive,
   EventEmitter,
   InjectionToken,
@@ -57,6 +58,160 @@ class OutputOnly {
 }
 
 describe('func.get-model-control', () => {
+  it('emits inherited aliased classic value changes without writing the input', () => {
+    @Directive({ selector: '[classicValue]', standalone: false })
+    class ClassicValue {
+      @Input('value') public inputValue = 'initial';
+      @Output('valueChange') public readonly changed =
+        new EventEmitter<string>();
+    }
+    @Component({
+      selector: 'inherited-classic-value',
+      standalone: false,
+      template: '',
+    })
+    class InheritedClassicValue extends ClassicValue {}
+    const instance = new InheritedClassicValue();
+    const values: string[] = [];
+    instance.changed.subscribe(value => values.push(value));
+    // The stub exposes only the local injector and tokens used by the lookup.
+    const node = {
+      nativeNode: {},
+      injector: Injector.create({
+        providers: [
+          { provide: NgControl, useValue: { valueAccessor: null } },
+          { provide: InheritedClassicValue, useValue: instance },
+        ],
+      }),
+      providerTokens: [NgControl, InheritedClassicValue],
+    } as unknown as DebugNode;
+
+    const control = funcGetModelControl(node);
+    expect(control?.touch).toBeUndefined();
+    control!.change('updated');
+
+    // Angular consumes the output and writes inputs during change detection.
+    expect(values).toEqual(['updated']);
+    expect(instance.inputValue).toBe('initial');
+  });
+
+  it('accepts undefined and object values without requiring a callable input', () => {
+    @Component({
+      selector: 'classic-object-value',
+      standalone: false,
+      template: '',
+    })
+    class ClassicObjectValue {
+      @Input() public value: { id: number } | undefined;
+      @Output() public readonly valueChange = new EventEmitter<
+        { id: number } | undefined
+      >();
+    }
+    const instance = new ClassicObjectValue();
+    const initial = { id: 1 };
+    const updated = { id: 2 };
+    const values: Array<{ id: number } | undefined> = [];
+    instance.valueChange.subscribe(value => values.push(value));
+    const node = {
+      nativeNode: {},
+      injector: Injector.create({
+        providers: [
+          { provide: NgControl, useValue: { valueAccessor: null } },
+          { provide: ClassicObjectValue, useValue: instance },
+        ],
+      }),
+      providerTokens: [NgControl, ClassicObjectValue],
+    } as unknown as DebugNode;
+
+    // An unset input still has a valid classic input/output connection.
+    funcGetModelControl(node)!.change(updated);
+    expect(values).toEqual([updated]);
+    expect(values[0]).toBe(updated);
+    expect(instance.value).toBeUndefined();
+
+    instance.value = initial;
+    funcGetModelControl(node)!.change(undefined);
+    expect(values).toEqual([updated, undefined]);
+    expect(instance.value).toBe(initial);
+  });
+
+  it('emits classic checked changes and an aliased touchedChange output', () => {
+    @Component({
+      selector: 'classic-checked',
+      standalone: false,
+      template: '',
+    })
+    class ClassicChecked {
+      @Input('checked') public inputValue = false;
+      @Output('checkedChange') public readonly changed =
+        new EventEmitter<boolean>();
+      @Output('touchedChange') public readonly touched =
+        new EventEmitter<boolean>();
+    }
+    const instance = new ClassicChecked();
+    const values: boolean[] = [];
+    const touches: boolean[] = [];
+    instance.changed.subscribe(value => values.push(value));
+    instance.touched.subscribe(value => touches.push(value));
+    const node = {
+      nativeNode: {},
+      injector: Injector.create({
+        providers: [
+          { provide: NgControl, useValue: { valueAccessor: null } },
+          { provide: ClassicChecked, useValue: instance },
+        ],
+      }),
+      providerTokens: [NgControl, ClassicChecked],
+    } as unknown as DebugNode;
+
+    const control = funcGetModelControl(node);
+    control!.change(true);
+    control!.touch!();
+
+    expect(values).toEqual([true]);
+    expect(touches).toEqual([true]);
+    expect(instance.inputValue).toBe(false);
+  });
+
+  it('prefers the value pair when checked is declared first', () => {
+    @Component({
+      selector: 'classic-value-and-checked',
+      standalone: false,
+      template: '',
+    })
+    class ClassicValueAndChecked {
+      @Input() public checked = false;
+      @Output() public readonly checkedChange =
+        new EventEmitter<boolean>();
+      @Input() public value = 'initial';
+      @Output() public readonly valueChange =
+        new EventEmitter<string>();
+    }
+    const instance = new ClassicValueAndChecked();
+    const values: string[] = [];
+    const checks: boolean[] = [];
+    instance.valueChange.subscribe(value => values.push(value));
+    instance.checkedChange.subscribe(value => checks.push(value));
+    const node = {
+      nativeNode: {},
+      injector: Injector.create({
+        providers: [
+          { provide: NgControl, useValue: { valueAccessor: null } },
+          { provide: ClassicValueAndChecked, useValue: instance },
+        ],
+      }),
+      providerTokens: [NgControl, ClassicValueAndChecked],
+    } as unknown as DebugNode;
+
+    // FormField chooses the value connection independently of declaration order.
+    funcGetModelControl(node)!.change('updated');
+
+    expect(values).toEqual(['updated']);
+    expect(checks).toEqual([]);
+    expect(instance.value).toBe('initial');
+    expect(instance.checked).toBe(false);
+  });
+
   it('skips declarations without inputs or outputs while preserving a co-located model control', () => {
     @Directive({ selector: '[unboundState]', standalone: false })
     class UnboundState {
@@ -355,11 +510,36 @@ describe('func.get-model-control', () => {
     expect(touches).toEqual([]);
   });
 
-  it('ignores ordinary inputs and unrelated signal model aliases', () => {
+  it('does not combine classic input and output metadata from different declarations', () => {
+    @Directive({ selector: '[classicInputOnly]', standalone: false })
+    class ClassicInputOnly {
+      @Input('value') public inputValue = 'initial';
+    }
+    const instance = new ClassicInputOnly();
+    const output = new OutputOnly();
+    const values: string[] = [];
+    output.changed.subscribe(value => values.push(value));
+    const node = {
+      nativeNode: {},
+      injector: Injector.create({
+        providers: [
+          { provide: NgControl, useValue: { valueAccessor: null } },
+          { provide: ClassicInputOnly, useValue: instance },
+          { provide: OutputOnly, useValue: output },
+        ],
+      }),
+      providerTokens: [NgControl, ClassicInputOnly, OutputOnly],
+    } as unknown as DebugNode;
+
+    expect(funcGetModelControl(node)).toBeUndefined();
+    expect(instance.inputValue).toBe('initial');
+    expect(values).toEqual([]);
+  });
+
+  it('ignores unpaired inputs and unrelated signal model aliases', () => {
     @Directive({ selector: '[unrelatedModels]', standalone: false })
     class UnrelatedModels {
-      @Input() @Output('valueChange') public readonly value =
-        signal('ordinary');
+      @Input() public readonly value = signal('ordinary');
       @Input({ alias: 'other', isSignal: true } as never)
       @Output('otherChange')
       public readonly other = signal('unrelated');
@@ -381,7 +561,7 @@ describe('func.get-model-control', () => {
     expect(instance.other()).toBe('unrelated');
   });
 
-  it('ignores missing signal instances and unusable model outputs', () => {
+  it('ignores missing and unusable model outputs', () => {
     @Directive({ selector: '[invalidModel]', standalone: false })
     class InvalidModel {
       @Input({ isSignal: true } as never) public value: any =

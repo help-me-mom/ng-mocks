@@ -8,6 +8,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { NgControl } from '@angular/forms';
 
+import { MockControlValueAccessorProxy } from '../../common/mock-control-value-accessor-proxy';
 import { MockRender } from '../../mock-render/mock-render';
 import { ngMocks } from '../mock-helper';
 
@@ -33,6 +34,77 @@ describe('model-control-dispatch', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({ declarations: [ModelControl] }),
   );
+
+  it('uses classic outputs when the attached proxy has no registered callbacks', () => {
+    const accessor = new MockControlValueAccessorProxy();
+    const placeholders = {
+      __simulateChange: jasmine.createSpy('unused change'),
+      __simulateTouch: jasmine.createSpy('unused touch'),
+    };
+    accessor.instance = placeholders;
+    @Component({
+      selector: 'classic-model-control-dispatch',
+      standalone: false,
+      template: '{{ value }}',
+      // Model the reported injector state independently of Material construction.
+      providers: [
+        { provide: NgControl, useValue: { valueAccessor: accessor } },
+      ],
+    })
+    class ClassicModelControl {
+      @Input() public value = 'initial';
+      @Output() public readonly valueChange =
+        new EventEmitter<string>();
+      @Output() public readonly touch = new EventEmitter<void>();
+    }
+    TestBed.configureTestingModule({
+      declarations: [ClassicModelControl],
+    });
+    const events: string[] = [];
+    const fixture = MockRender(
+      `<classic-model-control-dispatch
+        [value]="inputValue"
+        (valueChange)="inputValue = $event"
+        (input)="events.push('input')"
+        (blur)="events.push('blur')"
+      />`,
+      { inputValue: 'initial', events },
+    );
+    const child = ngMocks.find(ClassicModelControl);
+    const instance = ngMocks.get(child, ClassicModelControl);
+    const values: string[] = [];
+    const touches: unknown[] = [];
+    instance.valueChange.subscribe(value => values.push(value));
+    instance.touch.subscribe(value => touches.push(value));
+
+    expect(ngMocks.get(child, NgControl).valueAccessor).toBe(
+      accessor,
+    );
+    expect(accessor.isRegistered('__simulateChange')).toBe(false);
+    expect(accessor.isRegistered('__simulateTouch')).toBe(false);
+
+    // The connected output updates the host; the proxy's placeholders do not.
+    ngMocks.change(child, 'updated');
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.inputValue).toBe('updated');
+    expect(instance.value).toBe('updated');
+    expect(values).toEqual(['updated']);
+    expect(touches).toEqual([]);
+    expect(events).toEqual([]);
+
+    ngMocks.touch(child);
+    fixture.detectChanges();
+
+    expect(values).toEqual(['updated']);
+    expect(touches).toEqual([undefined]);
+    expect(events).toEqual([]);
+    expect(placeholders.__simulateChange).not.toHaveBeenCalled();
+    expect(placeholders.__simulateTouch).not.toHaveBeenCalled();
+    expect(accessor.isRegistered('__simulateChange')).toBe(false);
+    expect(accessor.isRegistered('__simulateTouch')).toBe(false);
+    expect(ngMocks.formatText(child)).toBe('updated');
+  });
 
   it('changes a bound signal model once without dispatching native input or blur', () => {
     const events: string[] = [];
