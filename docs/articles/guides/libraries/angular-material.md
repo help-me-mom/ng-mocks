@@ -172,61 +172,27 @@ it('provides correct template for mat-row', () => {
 });
 ```
 
-## Keeping MatButton and MatIcon
+## Keep Material Components
 
-This standalone Angular Material 22 component renders a button containing an icon:
+Use [`.keep`](/api/MockBuilder.md#keep) to render real Material components.
+**Keep their root services too**, otherwise default mocks can cause errors.
 
-```ts
-import { Component } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-
-@Component({
-  selector: 'target-15042',
-  imports: [MatButton, MatIcon],
-  template: '<button matButton><mat-icon>home</mat-icon></button>',
-})
-class TargetComponent {}
-```
-
-To render the real button and icon, keep `MatButton` and `MatIcon` with
-[`MockBuilder.keep`](/api/MockBuilder.md#keep). **Keep their root services with additional `.keep` calls:**
-`MediaMatcher` for the button and `MatIconRegistry` for the icon.
+For example, keep `MatButton` and `MatIcon` in a standalone `TargetComponent`:
 
 ```ts
-import { MediaMatcher } from '@angular/cdk/layout';
-import { MatIconRegistry } from '@angular/material/icon';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
-
 beforeEach(() =>
   MockBuilder(TargetComponent)
     .keep(MatButton)
     .keep(MatIcon)
-    .keep(MediaMatcher)
-    .keep(MatIconRegistry),
+    .keep(MediaMatcher) // root service used by MatButton
+    .keep(MatIconRegistry), // root service used by MatIcon
 );
-
-it('renders the button and icon', () => {
-  const fixture = MockRender(TargetComponent);
-
-  expect(ngMocks.formatText(fixture)).toEqual('home');
-});
 ```
 
-Keeping the components preserves their real implementations, while root services can still be mocked.
-A default mock method returns `undefined`: `MatIcon` can then fail when it calls `.filter()` on the result of
-`MatIconRegistry.getDefaultFontSetClass()`, and `MatButton` can fail when it reads `.matches` from
-`MediaMatcher.matchMedia(...)`. Keeping the two services supplies the values those real implementations need.
-Other application root services remain eligible for automatic mocking.
-
-### Keeping all root providers
-
-For a simpler setup, replace the individual service keeps with
+Alternatively, keep all root providers with
 [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token):
 
 ```ts
-import { NG_MOCKS_ROOT_PROVIDERS } from 'ng-mocks';
-
 beforeEach(() =>
   MockBuilder(TargetComponent)
     .keep(MatButton)
@@ -235,15 +201,10 @@ beforeEach(() =>
 );
 ```
 
-This keeps **all root providers**, including non-Material application services.
-Explicit `.mock(...)` calls still apply when particular application services should remain mocked.
+:::note
+`NG_MOCKS_ROOT_PROVIDERS` keeps **all root providers**, including non-Material services.
+:::
 
-You can also configure a mock to return the values its real consumer expects. For example, an icon-only test can
-use `.mock(MatIconRegistry, { getDefaultFontSetClass: () => ['custom-icon', ''] })` to render the icon with a
-`custom-icon` class. Configure other methods when the tested behavior needs them.
-
-The [executable Material example](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/issue-15042/test.spec.ts)
-checks errors from unconfigured root mocks, both keep options, explicit application mocks, and the customized icon registry.
-
+- [Full example](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/issue-15042/test.spec.ts)
 - [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/tests/issue-15042/test.spec.ts&initialpath=%3Fspec%3Dissue-15042%3Amaterial)
 - [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/tests/issue-15042/test.spec.ts&initialpath=%3Fspec%3Dissue-15042%3Amaterial)
