@@ -171,3 +171,40 @@ it('provides correct template for mat-row', () => {
   );
 });
 ```
+
+## Keep Material Components
+
+Use [`.keep`](/api/MockBuilder.md#keep) to render real Material components.
+**Keep their root services too**, otherwise default mocks can cause errors.
+
+For example, keep `MatButton` and `MatIcon` in a standalone `TargetComponent`:
+
+```ts
+beforeEach(() =>
+  MockBuilder(TargetComponent)
+    .keep(MatButton)
+    .keep(MatIcon)
+    .keep(MediaMatcher) // root service used by MatButton
+    .keep(MatIconRegistry), // root service used by MatIcon
+);
+```
+
+Alternatively, keep all root providers with
+[`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token):
+
+```ts
+beforeEach(() =>
+  MockBuilder(TargetComponent)
+    .keep(MatButton)
+    .keep(MatIcon)
+    .keep(NG_MOCKS_ROOT_PROVIDERS),
+);
+```
+
+:::note
+`NG_MOCKS_ROOT_PROVIDERS` keeps **all root providers**, including non-Material services.
+:::
+
+- [Full example](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/issue-15042/test.spec.ts)
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/tests/issue-15042/test.spec.ts&initialpath=%3Fspec%3Dissue-15042%3Amaterial)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/tests/issue-15042/test.spec.ts&initialpath=%3Fspec%3Dissue-15042%3Amaterial)
