@@ -177,11 +177,11 @@ describe('issue-9397', () => {
     });
   });
 
-  describe('shallow kept standalone declarations', () => {
+  describe('kept standalone declarations', () => {
     beforeEach(() =>
       MockBuilder(HostComponent)
-        .keep(TargetDirective, { shallow: true })
-        .keep(TargetPipe, { shallow: true }),
+        .keep(TargetDirective)
+        .keep(TargetPipe),
     );
 
     it('mocks inject() dependencies for directives and pipes before use', () => {
@@ -196,29 +196,6 @@ describe('issue-9397', () => {
         service,
       );
       expect(TargetService.constructed).toBe(0);
-    });
-  });
-
-  describe('deep kept standalone declarations', () => {
-    beforeEach(() =>
-      MockBuilder(HostComponent)
-        .keep(TargetDirective)
-        .keep(TargetPipe),
-    );
-
-    it('preserves the shared root of kept directives and pipes with auto-spy enabled', () => {
-      const fixture = MockRender(HostComponent);
-      const service = TestBed.inject(TargetService);
-
-      expect(
-        ngMocks.findInstance(fixture, TargetDirective).service,
-      ).toBe(service);
-      expect(ngMocks.findInstance(fixture, TargetPipe).service).toBe(
-        service,
-      );
-      expect(service.echo()).toBe('real');
-      expect(ngMocks.formatText(fixture)).toEqual('value');
-      expect(TargetService.constructed).toBe(1);
     });
   });
 });

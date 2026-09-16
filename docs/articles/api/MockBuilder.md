@@ -565,9 +565,9 @@ beforeEach(() => {
 });
 ```
 
-Without this token, keeping a module or a standalone declaration without [`shallow`](#shallow-flag)
-does not automatically request mocks for its root dependencies.
-Root dependencies of other declarations are mocked by default, including kept non-standalone declarations of mocked modules.
+If we do not pass `NG_MOCKS_ROOT_PROVIDERS` anywhere,
+then only root providers for kept modules will stay as they are.
+All other root providers will be replaced with their mocks, even for kept declarations of mock modules.
 
 ## Factory function
 

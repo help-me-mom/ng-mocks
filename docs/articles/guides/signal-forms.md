@@ -42,10 +42,16 @@ beforeEach(() =>
 );
 ```
 
-Keeping `FormField` preserves the root services used by the real field binding.
-The additional [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token)
-line keeps root providers throughout the test. Use explicit `.mock(MyService)`
+:::warning Keep root providers real
+
+Keep [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token):
+native input handling in Angular 22 needs the real root services. Without them,
+an input event can fail with `validityMonitor.isBadInput is not a function`.
+
+The token keeps root providers throughout the test. Use explicit `.mock(MyService)`
 calls for application services you want to replace.
+
+:::
 
 ## Testing the input
 
