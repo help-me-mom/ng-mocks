@@ -50,9 +50,10 @@ beforeEach(() =>
 );
 ```
 
-Keeping [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token)
-preserves the services used by the real form binding. Mocking `FormField` itself would
-remove the connection between the parent form and the control.
+Keeping the standalone `FormField` also preserves its root services. This example
+additionally keeps root providers throughout the test with
+[`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token).
+Mocking `FormField` itself would remove the connection between the parent form and the control.
 
 ## Testing the parent binding
 

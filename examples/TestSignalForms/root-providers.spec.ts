@@ -19,8 +19,9 @@ class TargetComponent {
 }
 
 // @see https://github.com/help-me-mom/ng-mocks/issues/14987
+// @see https://github.com/help-me-mom/ng-mocks/issues/15042
 describe('TestSignalForms:root-providers', () => {
-  for (const mode of ['default', 'kept']) {
+  for (const mode of ['default', 'shallow', 'kept']) {
     describe(`${mode} root providers`, () => {
       let errors: Error[];
 
@@ -41,6 +42,10 @@ describe('TestSignalForms:root-providers', () => {
             });
           });
 
+        if (mode === 'shallow') {
+          return builder.keep(FormField, { shallow: true });
+        }
+
         return mode === 'kept'
           ? builder.keep(NG_MOCKS_ROOT_PROVIDERS)
           : builder;
@@ -55,23 +60,27 @@ describe('TestSignalForms:root-providers', () => {
         ]);
 
         expect(component.model().inputValue).toBe('Ada');
+        expect(component.f.inputValue().value()).toBe('Ada');
         expect(input.nativeNode.value).toBe('Ada');
         expect(errors).toEqual([]);
 
         input.nativeNode.value = 'Grace';
         input.nativeNode.dispatchEvent(new Event('input'));
 
-        if (mode === 'default') {
-          // Angular 22's real FormField calls a method on its mocked root service.
+        if (mode === 'shallow') {
+          // Explicit shallow testing mocks the root service used by the native listener.
           expect(errors.length).toBe(1);
           expect(errors[0].message).toBe(
             'validityMonitor.isBadInput is not a function',
           );
           expect(component.model().inputValue).toBe('Ada');
+          expect(component.f.inputValue().value()).toBe('Ada');
           expect(component.f.inputValue().dirty()).toBe(false);
         } else {
+          // A kept FormField retains its own roots without additional root keeps.
           expect(errors).toEqual([]);
           expect(component.model().inputValue).toBe('Grace');
+          expect(component.f.inputValue().value()).toBe('Grace');
           expect(component.f.inputValue().dirty()).toBe(true);
         }
 

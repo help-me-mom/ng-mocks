@@ -406,7 +406,8 @@ beforeEach(() => {
 ### `shallow` flag
 
 The `shallow` flag works with kept standalone declarations.
-It signals `MockBuilder` to mock all imports of the declaration, whereas the declaration itself won't be mocked.
+It signals `MockBuilder` to mock the declaration's imports and root dependencies while keeping the declaration itself.
+Explicit [`.keep`](#keep), [`.mock`](#mock), and [`.provide`](#provide) settings still apply.
 
 ```ts
 beforeEach(() => {
@@ -426,6 +427,14 @@ beforeEach(() => {
   return MockBuilder(StandaloneComponent).keep(OneOfItsDependenciesPipe);
 });
 ```
+
+Chaining `.keep(StandaloneDependency)` does not enable `shallow` for that dependency. Its own root services remain
+real unless another provider setting mocks them. Use `.keep(StandaloneDependency, { shallow: true })` when those
+services should be mocked too. To disable shallow testing for the first argument, use
+`MockBuilder(StandaloneComponent).keep(StandaloneComponent, { shallow: false })`.
+
+See the [migration note](../migrations.md#kept-standalone-root-providers) for tests that relied on automatic root
+mocking in kept standalone dependencies.
 
 ### `render` flag
 
@@ -565,9 +574,14 @@ beforeEach(() => {
 });
 ```
 
-If we do not pass `NG_MOCKS_ROOT_PROVIDERS` anywhere,
-then only root providers for kept modules will stay as they are.
-All other root providers will be replaced with their mocks, even for kept declarations of mock modules.
+Without this token, kept modules and standalone dependencies kept without [`shallow`](#shallow-flag) retain their
+root providers. Standalone declarations passed as the first argument of `MockBuilder` are shallow by default and
+mock their root dependencies. Keeping a non-standalone declaration of a mocked module does not preserve its roots.
+
+`.mock(NG_MOCKS_ROOT_PROVIDERS)` also requests root mocks for kept standalone dependencies.
+Individual [`.keep`](#keep), [`.mock`](#mock), and [`.provide`](#provide) settings take precedence over the root token.
+When shallow and kept declarations share a service discovered only through `inject()`, configure that service
+explicitly if both declarations need the same real or mocked instance.
 
 ## Factory function
 

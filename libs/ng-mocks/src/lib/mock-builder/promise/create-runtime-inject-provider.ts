@@ -19,10 +19,15 @@ export default (
     return undefined;
   }
 
-  // Builder resolutions are restored before runtime injection. Kept root
-  // fallbacks and exclusions may have no provider or shared touches entry.
+  const mockRootProviders = ngMocksUniverse.getResolution(NG_MOCKS_ROOT_PROVIDERS) === 'mock';
+  // Builder resolutions are restored before runtime injection. Reflected roots
+  // of deeply kept declarations, root fallbacks and exclusions need a snapshot.
   // eslint-disable-next-line unicorn/prefer-set-methods -- Set.union is unavailable on supported legacy runtimes.
-  const preserved = new Set([...keepDef, ...excludeDef]);
+  const preserved = new Set([
+    ...keepDef,
+    ...excludeDef,
+    ...(mockRootProviders ? [] : (ngMocksUniverse.config.get('ngMocksDepsSkip') ?? [])),
+  ]);
   const declarations = new Set<any>();
   // Kept modules preserve their root providers, but one-argument MockBuilder
   // calls auto-mock root dependencies for classic declarations too.
@@ -35,7 +40,11 @@ export default (
   }
   for (const def of keepDef) {
     const isDeclaration = isNgDef(def, 'c') || isNgDef(def, 'd') || isNgDef(def, 'p');
-    if ((isStandalone(def) || autoMockDeclarations) && isDeclaration) {
+    // Standalone test targets are shallow; explicitly kept dependencies retain their roots.
+    if (
+      isDeclaration &&
+      (isStandalone(def) ? configDef.get(def).shallow === true || mockRootProviders : autoMockDeclarations)
+    ) {
       declarations.add(def);
     }
     if (!isDeclaration && configDef.get(def).shallow === false && typeof def === 'function' && def.ɵprov?.factory) {
