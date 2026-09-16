@@ -87,6 +87,11 @@ Create and maintain a plain Markdown checklist:
      unverified areas and avoid claiming exhaustive coverage from a single reproducer.
    - For form-control, accessor or binding reports, read the [forms investigation checklist](references/forms.md).
      It covers real and mocked registration contracts without requiring an external UI library in regressions.
+   - For root-provider failures, distinguish incorrect provider selection from unconfigured mock return values.
+     Compare the [documented policy](../../../docs/articles/api/MockBuilder.md#ng_mocks_root_providers-token)
+     with constructor and `inject()` behavior, with and without auto-spies. Earlier success may reflect missing
+     dependency discovery. Verify existing provider keeps or mock customizations before changing defaults or
+     revising earlier regression expectations.
 5. Reproduce before fixing:
    - Add the smallest local test that fails on the current implementation and passes only after the real fix.
    - Keep the test focused on the reported behavior, not the eventual implementation detail.
