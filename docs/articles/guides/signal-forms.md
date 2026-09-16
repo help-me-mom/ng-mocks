@@ -42,14 +42,10 @@ beforeEach(() =>
 );
 ```
 
-Keeping the standalone `FormField` also preserves the root services it needs.
+Keeping `FormField` preserves the root services used by the real field binding.
 The additional [`NG_MOCKS_ROOT_PROVIDERS`](/api/MockBuilder.md#ng_mocks_root_providers-token)
-line keeps root providers throughout this example's test. Use explicit `.mock(MyService)`
+line keeps root providers throughout the test. Use explicit `.mock(MyService)`
 calls for application services you want to replace.
-
-Making `FormField` shallow with `.keep(FormField, { shallow: true })` instead mocks its
-root dependencies. Without a root-provider keep, an Angular 22 native input event can
-then fail with `validityMonitor.isBadInput is not a function`.
 
 ## Testing the input
 

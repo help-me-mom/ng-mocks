@@ -11,56 +11,6 @@ Bug fixes which can affect tests that relied on the previous behavior are listed
 
 If you are facing an issue, despite the instructions, please, feel free to [contact us](need-help.md).
 
-## Root providers of kept standalone dependencies {#kept-standalone-root-providers}
-
-The correction for [#15042](https://github.com/help-me-mom/ng-mocks/issues/15042) distinguishes shallow standalone
-test targets from dependencies kept with `.keep(StandaloneDependency)`. Kept dependencies retain their root
-services; a standalone declaration passed directly to `MockBuilder` still mocks its own root dependencies.
-
-In ng-mocks `14.16.0` through `14.17.6`, kept standalone dependencies also received runtime `inject()` mocks when
-[`ngMocks.autoSpy`](extra/auto-spy.md) was enabled. In `14.18.0`, this happened with default mock functions too,
-which could break real dependencies expecting return values from their root services.
-
-The original `MockBuilder(TargetComponent).keep(MatButton).keep(MatIcon)` setup works with the correction.
-It does not require keeping additional root services or `NG_MOCKS_ROOT_PROVIDERS`.
-
-If your tests intentionally relied on automatic root mocks for kept standalone dependencies, request shallow
-testing explicitly. For example, this setup previously mocked the roots used by `TargetDirective` and
-`TargetPipe` with auto-spy enabled:
-
-```ts
-beforeEach(() =>
-  MockBuilder(HostComponent)
-    .keep(TargetDirective)
-    .keep(TargetPipe),
-);
-```
-
-To retain those mocks and spy assertions, change it to:
-
-```ts
-beforeEach(() =>
-  MockBuilder(HostComponent)
-    .keep(TargetDirective, { shallow: true })
-    .keep(TargetPipe, { shallow: true }),
-);
-```
-
-Review assertions against services injected by kept standalone components, directives, and pipes before updating.
-If only one service should be mocked, use `.mock(Service)` or a customized mock instead of making the declaration
-shallow. Real services may perform work during construction, so make the intended mock explicit when a test must
-avoid that work.
-
-`MockBuilder(StandaloneTarget)`, explicit service keeps and mocks, and the
-[`NG_MOCKS_ROOT_PROVIDERS`](api/MockBuilder.md#ng_mocks_root_providers-token) overrides retain their behavior.
-`ngMocks.autoSpy` controls how mock methods are created; it does not select which dependencies are mocked.
-
-The [executable regression](https://github.com/help-me-mom/ng-mocks/tree/main/tests/issue-9397/test.spec.ts) covers
-both shallow and kept standalone dependencies with auto-spy enabled:
-
-- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/tests/issue-9397/test.spec.ts&initialpath=%3Fspec%3Dissue-9397)
-- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/tests/issue-9397/test.spec.ts&initialpath=%3Fspec%3Dissue-9397)
-
 ## From ng-mocks 14.15 to 14.16
 
 ### Signal inputs of mocked components and directives {#signal-inputs-of-mocked-components}
