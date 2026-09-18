@@ -1,3 +1,10 @@
+## [14.18.1](https://github.com/help-me-mom/ng-mocks/compare/v14.18.0...v14.18.1) (2026-09-18)
+
+
+### Bug Fixes
+
+* **forms:** support classic model control bindings [#15034](https://github.com/help-me-mom/ng-mocks/issues/15034) ([#15041](https://github.com/help-me-mom/ng-mocks/issues/15041)) ([5d5704a](https://github.com/help-me-mom/ng-mocks/commit/5d5704abb87ef44f28e7a2c0b1f3d12c7a673d01))
+
 # [14.18.0](https://github.com/help-me-mom/ng-mocks/compare/v14.17.6...v14.18.0) (2026-09-15)
 
 
