@@ -1,76 +1,57 @@
+import { CommonModule } from '@angular/common';
+import { ApplicationModule } from '@angular/core';
+import * as angularCore from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import * as angularPlatformBrowser from '@angular/platform-browser';
+
+import { isNgInjectionToken } from './func.is-ng-injection-token';
+
+const core = angularCore as unknown as Record<string, unknown>;
+const browser = angularPlatformBrowser as unknown as Record<string, unknown>;
+
 export default {
   flags: ['cacheModule', 'cacheComponent', 'cacheDirective', 'cacheProvider', 'correctModuleExports'],
   mockRenderCacheSize: 25,
-  neverMockModule: [
-    'ApplicationModule',
-    'CommonModule',
-    'BrowserModule',
-
-    // Angular 16 adds underscores
-    '_ApplicationModule',
-    '_CommonModule',
-    '_BrowserModule',
-  ],
+  neverMockModule: [ApplicationModule, CommonModule, BrowserModule],
   neverMockProvidedFunction: [
-    'DomRendererFactory2',
-    'EventManager',
-    'Injector', // ivy only
-    'RendererFactory2',
-
-    // https://github.com/help-me-mom/ng-mocks/issues/538
-    'Sanitizer',
-    'DomSanitizer',
-    'DomSanitizerImpl',
-
-    // Angular runtime primitives require their concrete root infrastructure.
-    'AfterRenderEventManager',
-    'AfterRenderImpl',
-    'AfterRenderManager',
-    'PendingTasks',
-    'PendingTasksInternal',
-
-    // ApplicationModule, A14 made them global at root level
-    'ApplicationInitStatus',
-    'ApplicationRef',
-    'Compiler',
-    'IterableDiffers',
-    'KeyValueDiffers',
-
-    // Angular effects require the concrete manager or scheduler implementation.
-    'EffectManager',
-    'EffectScheduler',
-
-    // Angular 16 adds underscores
-    '_AfterRenderEventManager',
-    '_AfterRenderImpl',
-    '_AfterRenderManager',
-    '_PendingTasks',
-    '_PendingTasksInternal',
-    '_DomRendererFactory2',
-    '_EventManager',
-    '_Injector',
-    '_Sanitizer',
-    '_DomSanitizer',
-    '_DomSanitizerImpl',
-    '_ApplicationInitStatus',
-    '_ApplicationRef',
-    '_Compiler',
-    '_IterableDiffers',
-    '_KeyValueDiffers',
-    '_EffectManager',
-    '_EffectScheduler',
-  ],
+    ...[
+      'Injector',
+      'RendererFactory2',
+      'Sanitizer',
+      'ApplicationInitStatus',
+      'ApplicationRef',
+      'Compiler',
+      'IterableDiffers',
+      'KeyValueDiffers',
+      'ɵAfterRenderEventManager',
+      'ɵAfterRenderManager',
+      'ɵPendingTasks',
+      'PendingTasks',
+      'ɵPendingTasksInternal',
+      'ɵEffectScheduler',
+    ].map(name => core[name]),
+    ...[
+      'ɵDomRendererFactory2',
+      'EventManager',
+      'DomSanitizer',
+      'ɵDomSanitizerImpl',
+      'ɵe', // Angular 5's DomSanitizerImpl export.
+    ].map(name => browser[name]),
+  ].filter(value => typeof value === 'function'),
   neverMockToken: [
-    'InjectionToken Set Injector scope.', // INJECTOR_SCOPE // ivy only
-    'InjectionToken EventManagerPlugins', // EVENT_MANAGER_PLUGINS
-    'InjectionToken HammerGestureConfig', // HAMMER_GESTURE_CONFIG
-
-    // ApplicationModule, A14 made them global at root level
-    'InjectionToken AppId', // APP_ID
-    'InjectionToken DefaultCurrencyCode', // DEFAULT_CURRENCY_CODE
-    'InjectionToken LocaleId', // LOCALE_ID
-    'InjectionToken SCHEDULER_TOKEN', // SCHEDULER
-  ],
+    ...[
+      'ɵINJECTOR_SCOPE',
+      'APP_ID',
+      'DEFAULT_CURRENCY_CODE',
+      'LOCALE_ID',
+      // Angular 8–12 export SCHEDULER under changing aliases also reused for other values.
+      'ɵangular_packages_core_core_ba',
+      'ɵangular_packages_core_core_x',
+      'ɵangular_packages_core_core_y',
+      'ɵangular_packages_core_core_bf',
+    ].map(name => core[name]),
+    ...['EVENT_MANAGER_PLUGINS', 'HAMMER_GESTURE_CONFIG'].map(name => browser[name]),
+  ].filter(isNgInjectionToken),
   onMockBuilderMissingDependency: 'throw',
   onMockInstanceRestoreNeed: 'warn',
   onTestBedFlushNeed: 'warn',
