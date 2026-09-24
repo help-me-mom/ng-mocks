@@ -30,7 +30,7 @@
     "@angular/cli": "22.1.8",
     "@angular/compiler-cli": "22.1.8",
     "jsdom": "30.1.1",
-    "ng-packagr": "22.1.1",
+    "ng-packagr": "22.2.1",
     "npm": "12.0.2",
     "typescript": "6.0.3",
     "vitest": "4.1.11"
