@@ -104,6 +104,8 @@ const tsJsRules = {
   'unicorn/no-declarations-before-early-exit': 'off',
   'unicorn/no-duplicate-if-branches': 'off',
   'unicorn/no-for-loop': 'off',
+  // Keep conditional initialization readable without requiring spreads.
+  'unicorn/no-immediate-mutation': 'off',
   'unicorn/no-mismatched-map-key': 'off',
   'unicorn/no-non-function-verb-prefix': 'off',
   'unicorn/no-nonstandard-builtin-properties': 'off',
@@ -131,12 +133,16 @@ const tsJsRules = {
   'unicorn/prefer-at': 'off',
   'unicorn/prefer-await': 'off',
   'unicorn/prefer-boolean-return': 'off',
+  // Keep separate guards and their explanations readable.
+  'unicorn/prefer-combined-guards': 'off',
   'unicorn/prefer-continue': 'off',
   'unicorn/prefer-dom-node-html-methods': 'off',
   'unicorn/prefer-early-return': 'off',
   'unicorn/prefer-event-target': 'off',
   'unicorn/prefer-global-number-constants': 'off',
   'unicorn/prefer-global-this': 'off',
+  // Supported runtimes do not all provide Object.groupBy or Map.groupBy.
+  'unicorn/prefer-group-by': 'off',
   'unicorn/prefer-https': 'off',
   'unicorn/prefer-includes': 'off',
   'unicorn/prefer-includes-over-repeated-comparisons': 'off',
@@ -298,6 +304,13 @@ export default defineConfig([
         // CI lints before these dependencies are installed; local installs must not change the rules.
         project: false,
       },
+    },
+  },
+  {
+    files: ['e2e/a5es5/src/test.ts', 'e2e/a5es2015/src/test.ts', 'e2e/a14/src/test.ts'],
+    rules: {
+      // Webpack's require.context().keys() returns an array.
+      'unicorn/no-unused-iterator-helper': 'off',
     },
   },
   {
