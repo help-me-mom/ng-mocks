@@ -86,7 +86,5 @@ export function isMockedNgDefOf<T extends PipeTransform>(
 export function isMockedNgDefOf<T>(declaration: any, type: Type<T>): declaration is Type<T>;
 
 export function isMockedNgDefOf<T>(declaration: any, type: Type<T>, ngType?: any): declaration is Type<T> {
-  return (
-    typeof declaration === 'function' && declaration.mockOf === type && (ngType ? isNgDef(declaration, ngType) : true)
-  );
+  return typeof declaration === 'function' && declaration.mockOf === type && (!ngType || isNgDef(declaration, ngType));
 }
