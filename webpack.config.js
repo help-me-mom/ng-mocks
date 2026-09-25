@@ -38,22 +38,19 @@ const optimization = {
   moduleIds: 'deterministic',
   usedExports: true,
   // Development builds still discard unused helpers, while keeping names and formatting.
-  minimize:
-    process.env.MODE === 'development'
-      ? {
-          javascript: {
-            compress: { defaults: false, dead_code: true, unused: true, side_effects: true },
-            mangle: false,
-            format: { beautify: true, comments: false, indent_level: 2 },
-          },
-        }
-      : true,
+  minimize: process.env.MODE !== 'development' || {
+    javascript: {
+      compress: { defaults: false, dead_code: true, unused: true, side_effects: true },
+      mangle: false,
+      format: { beautify: true, comments: false, indent_level: 2 },
+    },
+  },
 };
 
 module.exports = [
   {
     mode: process.env.MODE || 'production',
-    devtool: process.env.MODE ? false : 'source-map',
+    devtool: !process.env.MODE && 'source-map',
     entry: './libs/ng-mocks/src/index.ts',
     target: ['web', 'es3'],
     output: {
@@ -105,7 +102,7 @@ module.exports = [
   },
   {
     mode: process.env.MODE || 'production',
-    devtool: process.env.MODE ? false : 'source-map',
+    devtool: !process.env.MODE && 'source-map',
     entry: './libs/ng-mocks/src/index.ts',
     target: ['web', 'es2015'],
     experiments: {
