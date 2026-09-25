@@ -53,14 +53,18 @@ describe('TestSignalForms:native-multiple-select', () => {
 
     select.nativeElement.options[1].selected = true;
     select.nativeElement.options[2].selected = true;
+    // Verify the user's selection before Angular handles the input event.
+    expect(select.nativeElement.options[1].selected).toBe(true);
+    expect(select.nativeElement.options[2].selected).toBe(true);
+
     select.nativeElement.dispatchEvent(new Event('input'));
 
     // Inspect the runtime value because this deliberately unsupported binding breaks its array type.
     const value: unknown = component.model().multiSelectValue;
     expect(value).toBe('second');
-    expect(select.nativeElement.options[1].selected).toBe(true);
-    expect(select.nativeElement.options[2].selected).toBe(true);
 
+    // Angular's select mutation observer may already have synchronized the DOM during dispatch.
+    // Finish change detection before asserting the resulting single selection.
     fixture.detectChanges();
 
     expect(select.nativeElement.value).toBe('second');

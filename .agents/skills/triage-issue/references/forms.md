@@ -34,6 +34,9 @@ Assert the meaningful parts of the observed connection inline:
 - A touch with no pending edit preserves the value, and a pristine touch does not create an edit. With a
   pending edit, assert the configured commit policy: blur can apply it. Check dirty state, deferred updates
   and disabled forwarding when the failing mechanism can affect them.
+- Check native DOM preconditions before event dispatch and resulting bindings after change detection.
+  Dispatch can drain mutation callbacks in zoned runners; do not assume the pre-event DOM survives until
+  an explicit `detectChanges()`. See the [native select example](../../../../examples/TestSignalForms/native-multiple-select.spec.ts).
 - Default, built-in and custom accessor precedence remains Angular's own policy. Genuine duplicate custom
   candidates must still fail; selecting the first provider is not a category-preserving fix.
 - A registered mock proxy retains its connection instead of falling back to another binding. Preserve the
