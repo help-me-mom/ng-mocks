@@ -24,7 +24,7 @@
     "@angular/platform-browser": "22.2.0",
     "@angular/platform-browser-dynamic": "22.2.0",
     "@angular/router": "22.2.0",
-    "@ng-select/ng-select": "24.1.4",
+    "@ng-select/ng-select": "24.2.0",
     "@ngneat/transloco": "6.0.4",
     "@ngrx/effects": "22.0.1",
     "@ngrx/store": "22.0.1",
