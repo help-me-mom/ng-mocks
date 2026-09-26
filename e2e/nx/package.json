@@ -32,7 +32,7 @@
     "@nx/workspace": "23.2.1",
     "@types/jasmine": "6.0.0",
     "@types/jest": "30.0.0",
-    "@types/node": "24.13.6",
+    "@types/node": "24.19.0",
     "jest": "30.5.2",
     "jest-environment-jsdom": "30.5.2",
     "jest-preset-angular": "17.0.1",
