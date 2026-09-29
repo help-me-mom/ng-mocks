@@ -30,7 +30,7 @@
     "@angular/language-service": "22.2.0",
     "@nx/jest": "23.2.1",
     "@nx/workspace": "23.2.1",
-    "@types/jasmine": "6.0.0",
+    "@types/jasmine": "7.0.0",
     "@types/jest": "30.0.0",
     "@types/node": "24.19.0",
     "jest": "30.5.2",
