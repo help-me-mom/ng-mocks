@@ -31,7 +31,7 @@
     "@angular/build": "22.2.0",
     "@angular/cli": "22.2.0",
     "@angular/compiler-cli": "22.2.0",
-    "@types/jasmine": "6.0.0",
+    "@types/jasmine": "7.0.0",
     "@types/jest": "30.0.0",
     "@types/node": "24.19.0",
     "jasmine-core": "6.3.0",
