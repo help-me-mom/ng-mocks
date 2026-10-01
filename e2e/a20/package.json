@@ -34,7 +34,7 @@
     "zone.js": "0.15.1"
   },
   "devDependencies": {
-    "@angular/build": "20.3.37",
+    "@angular/build": "22.2.1",
     "@angular/cli": "20.3.37",
     "@angular/compiler-cli": "20.3.32",
     "@types/jasmine": "5.1.15",
