@@ -1,6 +1,42 @@
+import { Sanitizer } from '@angular/core';
+
+import coreDefineProperty from '../common/core.define-property';
+
 import checkIsFunc, { guessClass } from './check.is-func';
 
 describe('check.is-func', () => {
+  // @see https://github.com/help-me-mom/ng-mocks/issues/15005
+  it('recognizes an Angular abstract class even with an empty ES5 constructor', () => {
+    const definition = Object.getOwnPropertyDescriptor(
+      Sanitizer,
+      'ɵprov',
+    )!;
+    coreDefineProperty(Sanitizer, 'ɵprov', undefined);
+    const constructor: { toString: () => string } = Sanitizer;
+    spyOn(constructor, 'toString').and.returnValue(
+      'function Sanitizer() {}',
+    );
+
+    try {
+      expect(Object.keys(Sanitizer.prototype)).toEqual([]);
+      expect(checkIsFunc(Sanitizer)).toBe(false);
+    } finally {
+      Object.defineProperty(Sanitizer, 'ɵprov', definition);
+    }
+  });
+
+  it('keeps a same-named application function subject to ordinary classification', () => {
+    let calls = 0;
+    const application = () => {
+      calls += 1;
+    };
+    coreDefineProperty(application, 'name', 'Sanitizer');
+
+    expect(application.name).toBe('Sanitizer');
+    expect(checkIsFunc(application)).toBe(true);
+    expect(calls).toBe(0);
+  });
+
   it('detects angular classes with known props', () => {
     const test = () => undefined;
     test.ɵprov = {};

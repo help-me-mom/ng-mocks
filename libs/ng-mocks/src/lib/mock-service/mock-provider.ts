@@ -3,6 +3,7 @@ import { Provider } from '@angular/core';
 import coreConfig from '../common/core.config';
 import { Type } from '../common/core.types';
 import funcGetType from '../common/func.get-type';
+import isNeverMockProvidedFunction from '../common/func.is-never-mock-provided-function';
 import { isNgInjectionToken } from '../common/func.is-ng-injection-token';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 
@@ -11,7 +12,7 @@ import helperExtractPropertyDescriptor from './helper.extract-property-descripto
 import helperUseFactory from './helper.use-factory';
 import { MockService } from './mock-service';
 
-const { neverMockProvidedFunction, neverMockToken } = coreConfig;
+const { neverMockToken } = coreConfig;
 
 const applyMissingClassProperties = (instance: any, useClass: Type<any>) => {
   const existing = [...Object.getOwnPropertyNames(instance), ...Object.getOwnPropertySymbols(instance)];
@@ -109,18 +110,15 @@ const handleProvider = (provider: any, provide: any, useFactory: boolean) => {
   return mockProvider;
 };
 
-const isNeverMockFunction = (provide: any): boolean =>
-  typeof provide === 'function' && neverMockProvidedFunction.indexOf(provide.name) !== -1;
-
 const isNeverMockToken = (provide: any): boolean =>
-  isNgInjectionToken(provide) && neverMockToken.indexOf(provide.toString()) !== -1;
+  isNgInjectionToken(provide) && neverMockToken.indexOf(provide) !== -1;
 
 export default (provider: any, useFactory = false): Provider | undefined => {
   const provide = funcGetType(provider);
 
   if (ngMocksUniverse.getResolution(provide) === 'mock') {
     // nothing to do
-  } else if (isNeverMockFunction(provide)) {
+  } else if (isNeverMockProvidedFunction(provide)) {
     return provider;
   } else if (isNeverMockToken(provide)) {
     return undefined;
