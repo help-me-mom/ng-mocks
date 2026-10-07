@@ -4,10 +4,8 @@ import helperMockService from './helper.mock-service';
 import { MockedFunction } from './types';
 
 // istanbul ignore next
-const createName = (name: string | symbol, mockName?: string, instance?: any, accessType?: string) =>
-  `${mockName ?? (typeof instance.prototype === 'function' ? instance.prototype.name : funcGetName(instance))}.${String(name)}${
-    accessType ?? ''
-  }`;
+const createName = (name: string | symbol, mockName?: string, instance?: any, accessType = '') =>
+  `${mockName ?? (typeof instance.prototype === 'function' ? instance.prototype.name : funcGetName(instance))}.${String(name)}${accessType}`;
 
 const generateMockDef = (def: any, mock: any, accessType?: string): PropertyDescriptor => ({
   ...(accessType === 'get' && def && def.set

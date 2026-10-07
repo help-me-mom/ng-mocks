@@ -9,14 +9,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MockBuilder, ngMocks } from 'ng-mocks';
 
-// Older targets expose only TestBed.get, whereas newer ones prefer TestBed.inject.
-// The regression should document the behavior across the full support matrix.
-const testBedInject = <T>(token: any): T => {
-  const testBed: any = TestBed;
-
-  return (testBed.inject || testBed.get).call(testBed, token);
-};
-
 // Some runners auto-spy mocked members and some do not, so the test seeds a concrete spy explicitly.
 const createSpy = (name: string, value: string): any =>
   typeof jest === 'undefined'
@@ -71,7 +63,16 @@ describe('issue-7937', () => {
     // Before the fix, TestBed.inject returned a seeded mock pipe instance, but Angular injected a
     // different local pipe instance into the component. ng-mocks now replays those seeded overrides
     // onto the local instance and then returns that local instance from future TestBed.inject calls.
-    const targetPipe = testBedInject<TargetPipe>(TargetPipe);
+    // Older targets expose only TestBed.get, whereas newer ones prefer TestBed.inject.
+    const testBed: {
+      inject?: (token: typeof TargetPipe) => TargetPipe;
+      get?: (token: typeof TargetPipe) => TargetPipe;
+    } = TestBed;
+    const inject = testBed.inject || testBed.get;
+    if (!inject) {
+      throw new Error('TestBed injection is unavailable');
+    }
+    const targetPipe: TargetPipe = inject.call(testBed, TargetPipe);
     const transform = createSpy('targetTransform', 'mock');
     ngMocks.stub(targetPipe, { transform });
 
@@ -82,7 +83,13 @@ describe('issue-7937', () => {
     expect(component.targetPipe.transform).toBe(targetPipe.transform);
     expect(component.echo()).toEqual('mock');
     expect(transform).toHaveBeenCalledWith('test');
-    expect(testBedInject(TargetPipe)).toBe(component.targetPipe);
+    const resolvedInject = testBed.inject || testBed.get;
+    if (!resolvedInject) {
+      throw new Error('TestBed injection is unavailable');
+    }
+    expect(resolvedInject.call(testBed, TargetPipe)).toBe(
+      component.targetPipe,
+    );
   });
 });
 
@@ -108,8 +115,16 @@ describe('issue-7937:baseline', () => {
   it('uses a different pipe instance than TestBed.inject in Angular itself', () => {
     // This documents the Angular baseline: plain Angular keeps TestBed.inject(TargetPipe) separate
     // from the component-local pipe instance. ng-mocks intentionally bridges that gap for mocks.
+    const testBed: {
+      inject?: (token: typeof TargetPipe) => TargetPipe;
+      get?: (token: typeof TargetPipe) => TargetPipe;
+    } = TestBed;
+    const inject = testBed.inject || testBed.get;
+    if (!inject) {
+      throw new Error('TestBed injection is unavailable');
+    }
     expect(fixture.componentInstance.targetPipe).not.toBe(
-      testBedInject(TargetPipe),
+      inject.call(testBed, TargetPipe),
     );
     expect(fixture.componentInstance.echo()).toEqual('hi there test');
   });
