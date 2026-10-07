@@ -34,6 +34,7 @@ class ToggleValueAccessor implements ControlValueAccessor {
 
   public constructor(private readonly elementRef: ElementRef) {}
 
+  // eslint-disable-next-line unicorn/prefer-default-parameters -- Angular forms can pass null.
   public writeValue(value: unknown): void {
     this.elementRef.nativeElement.checked = this.lastValue =
       value ?? false;
