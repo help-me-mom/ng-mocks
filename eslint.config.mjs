@@ -117,6 +117,7 @@ const tsJsRules = {
   'unicorn/no-top-level-side-effects': 'off',
   'unicorn/no-typeof-undefined': 'off',
   'unicorn/no-unnecessary-boolean-comparison': 'off',
+  'unicorn/no-unnecessary-parameters': 'off',
   'unicorn/no-unnecessary-splice': 'off',
   'unicorn/no-unnecessary-polyfills': 'off',
   'unicorn/no-unreadable-for-of-expression': 'off',
