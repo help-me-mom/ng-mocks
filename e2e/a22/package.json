@@ -56,7 +56,7 @@
     "puppeteer": "25.14.0",
     "ts-node": "10.9.2",
     "typescript": "6.0.3",
-    "vitest": "4.1.11"
+    "vitest": "4.1.12"
   },
   "engines": {
     "npm": "11.21.0"
