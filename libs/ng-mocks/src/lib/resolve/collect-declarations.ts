@@ -136,6 +136,22 @@ const parseDecorators = (
   }
 };
 
+const findDirectiveIoIndex = (definitions: DirectiveIo[], definition: DirectiveIo): number => {
+  const { name, alias } = funcDirectiveIoParse(definition);
+  for (let index = 0; index < definitions.length; index += 1) {
+    const existing = definitions[index];
+    if (existing === definition) {
+      return index;
+    }
+    const parsed = funcDirectiveIoParse(existing);
+    if (parsed.name === name && parsed.alias === alias) {
+      return index;
+    }
+  }
+
+  return -1;
+};
+
 const addUniqueDirectiveIo = (
   declaration: Declaration,
   key: 'inputs' | 'outputs',
@@ -146,33 +162,26 @@ const addUniqueDirectiveIo = (
   transform?: (value: any) => any,
 ): void => {
   const normalizedDef = funcDirectiveIoBuild({ name, alias, required, isSignal, transform });
+  const index = findDirectiveIoIndex(declaration[key], normalizedDef);
+  if (index === -1) {
+    declaration[key].unshift(normalizedDef);
 
-  for (let index = 0; index < declaration[key].length; index += 1) {
-    const def = declaration[key][index];
-    if (def === normalizedDef) {
-      return;
-    }
-
-    const {
-      name: defName,
-      alias: defAlias,
-      required: defRequired,
-      isSignal: defIsSignal,
-      transform: defTransform,
-    } = funcDirectiveIoParse(def);
-    if (defName === name && defAlias === alias) {
-      declaration[key][index] = funcDirectiveIoBuild({
-        name,
-        alias,
-        required: defRequired ?? required,
-        isSignal: defIsSignal ?? isSignal,
-        transform: defTransform ?? transform,
-      });
-      return;
-    }
+    return;
   }
 
-  declaration[key].unshift(normalizedDef);
+  const def = declaration[key][index];
+  if (def === normalizedDef) {
+    return;
+  }
+
+  const parsed = funcDirectiveIoParse(def);
+  declaration[key][index] = funcDirectiveIoBuild({
+    name,
+    alias,
+    required: parsed.required ?? required,
+    isSignal: parsed.isSignal ?? isSignal,
+    transform: parsed.transform ?? transform,
+  });
 };
 
 const parsePropMetadataParserFactoryProp =
@@ -561,14 +570,7 @@ const buildDeclaration = (def: any | undefined, declaration: Declaration): void 
     def.inputs = [...(def.inputs || [])];
     for (const input of declaration.inputs) {
       const parsed = funcDirectiveIoParse(input);
-      let index = -1;
-      for (let position = 0; position < def.inputs.length; position += 1) {
-        const existing = funcDirectiveIoParse(def.inputs[position]);
-        if (existing.name === parsed.name && existing.alias === parsed.alias) {
-          index = position;
-          break;
-        }
-      }
+      const index = findDirectiveIoIndex(def.inputs, input);
       if (index === -1) {
         def.inputs.push(input);
       } else if (
@@ -593,13 +595,7 @@ const buildDeclaration = (def: any | undefined, declaration: Declaration): void 
     // isolated and compare bindings semantically so formatting cannot duplicate them.
     def.outputs = [...(def.outputs || [])];
     for (const output of declaration.outputs) {
-      const { name, alias } = funcDirectiveIoParse(output);
-      const existing = def.outputs.some((value: DirectiveIo) => {
-        const parsed = funcDirectiveIoParse(value);
-
-        return parsed.name === name && parsed.alias === alias;
-      });
-      if (!existing) {
+      if (findDirectiveIoIndex(def.outputs, output) === -1) {
         def.outputs.push(output);
       }
     }
@@ -647,14 +643,7 @@ const parse = (def: any): any => {
   declaration.inputs = [...(parentDeclarations.inputs || [])];
   for (const input of inputs.reverse()) {
     const parsed = funcDirectiveIoParse(input);
-    let index = -1;
-    for (let position = 0; position < declaration.inputs.length; position += 1) {
-      const inherited = funcDirectiveIoParse(declaration.inputs[position]);
-      if (parsed.name === inherited.name && parsed.alias === inherited.alias) {
-        index = position;
-        break;
-      }
-    }
+    const index = findDirectiveIoIndex(declaration.inputs, input);
     if (index === -1) {
       declaration.inputs.unshift(input);
     } else {

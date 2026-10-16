@@ -1,12 +1,12 @@
 import { DebugNode } from '@angular/core';
 
 import coreForm from '../../common/core.form';
+import coreReflectDirectiveResolve from '../../common/core.reflect.directive-resolve';
 import { DirectiveIo, DirectiveIoParsed } from '../../common/core.types';
 import funcDirectiveIoParse from '../../common/func.directive-io-parse';
 import funcIsMock from '../../common/func.is-mock';
 import { isNgDef } from '../../common/func.is-ng-def';
 import funcGetFromNode from '../func.get-from-node';
-import funcParseProviderTokensDirectives from '../func.parse-provider-tokens-directives';
 
 interface ModelControl {
   change: (value: any) => void;
@@ -62,8 +62,13 @@ export default (el: DebugNode): ModelControl | undefined => {
       continue;
     }
     const instance = funcGetFromNode<any>([], el, token)[0];
-    const meta = instance && funcParseProviderTokensDirectives(el, token);
-    if (!meta) {
+    if (!instance) {
+      continue;
+    }
+    let meta: ReturnType<typeof coreReflectDirectiveResolve>;
+    try {
+      meta = coreReflectDirectiveResolve(instance.constructor);
+    } catch {
       continue;
     }
 
@@ -81,7 +86,7 @@ export default (el: DebugNode): ModelControl | undefined => {
       }
 
       const touch = resolveOutput(instance, outputs, 'touch');
-      const touchedChange = resolveOutput(instance, outputs, 'touchedChange');
+      const touchedChange = touch ? undefined : resolveOutput(instance, outputs, 'touchedChange');
 
       return {
         change,
