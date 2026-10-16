@@ -15,6 +15,7 @@ import funcGetMockFormField from './func.get-mock-form-field';
 import funcGetModelControl from './func.get-model-control';
 import funcGetVca from './func.get-vca';
 import funcHasMockNativeAccessor from './func.has-mock-native-accessor';
+import funcHasNativeFormField from './func.has-native-form-field';
 import triggerInput from './func.trigger-input';
 
 const handleKnown = (valueAccessor: any, value: any): boolean => {
@@ -144,7 +145,8 @@ export default (selector: Type<any> | DebugNodeSelector, value: any, methodName?
 
       return;
     }
-    nativeControl = !hasListener(el) && (isUnboundNativeControl(el) || funcHasMockNativeAccessor(el));
+    nativeControl =
+      !hasListener(el) && (isUnboundNativeControl(el) || funcHasMockNativeAccessor(el) || funcHasNativeFormField(el));
     valueAccessor = funcGetVca(el, hasListener(el) || nativeControl, '__simulateChange') || {};
   }
   if (handleKnown(valueAccessor, value) || hasListener(el) || nativeControl) {

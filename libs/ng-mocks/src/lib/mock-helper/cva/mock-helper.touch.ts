@@ -13,6 +13,7 @@ import funcGetMockFormField from './func.get-mock-form-field';
 import funcGetModelControl from './func.get-model-control';
 import funcGetVca from './func.get-vca';
 import funcHasMockNativeAccessor from './func.has-mock-native-accessor';
+import funcHasNativeFormField from './func.has-native-form-field';
 
 // default html behavior
 const triggerTouch = (el: DebugElement): void => {
@@ -91,7 +92,7 @@ export default (sel: Type<any> | DebugElement | DebugNodeSelector, methodName?: 
 
       return;
     }
-    nativeControl = funcHasMockNativeAccessor(el);
+    nativeControl = funcHasMockNativeAccessor(el) || funcHasNativeFormField(el);
     valueAccessor = funcGetVca(el, hasListener(el) || nativeControl, '__simulateTouch') || {};
   }
   if (handleKnown(valueAccessor) || hasListener(el) || nativeControl) {
