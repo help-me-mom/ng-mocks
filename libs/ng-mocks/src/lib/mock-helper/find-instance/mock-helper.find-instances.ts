@@ -1,3 +1,4 @@
+import { DebugNode } from '@angular/core';
 import { getTestBed } from '@angular/core/testing';
 
 import { Type } from '../../common/core.types';
@@ -20,13 +21,19 @@ export default <T>(...args: any[]): T[] => {
   const declaration: Type<T> = getSourceOfMock(sel);
   const result: T[] = [];
   const scanned = new Set<any>();
+  const traversed = new Set<DebugNode>();
   const fixture = funcGetLastFixture();
   if (fixture) {
     const elements = mockHelperFindAll(fixture, el, undefined);
     for (const element of elements) {
+      if (traversed.has(element)) {
+        continue;
+      }
       mockHelperCrawl(
         element,
         (node, parent) => {
+          // Parent fallback probes do not traverse the parent's subtree.
+          traversed.add(node);
           if (!scanned.has(node)) {
             funcGetFromNode(result, node, declaration);
             scanned.add(node);

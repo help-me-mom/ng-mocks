@@ -28,8 +28,17 @@ export interface Node {
   parent?: (DebugNode & Node) | null;
 }
 
-export default <T>(result: T[], node: DebugNode & Node, proto: AnyDeclaration<T>): T[] => {
+export default <T>(
+  result: T[],
+  node: DebugNode & Node,
+  proto: AnyDeclaration<T>,
+  mode: 'all' | 'first' = 'all',
+): T[] => {
   funcGetFromNodeInjector(result, node, proto);
+  // Singular lookups already have their result; view scans only add more instances.
+  if (mode === 'first' && result.length > 0) {
+    return result;
+  }
   if (!isNgDef(proto, 't') && typeof proto !== 'string') {
     funcGetFromNodeStandard(result, node, proto);
     funcGetFromNodeIvy(result, node, proto);

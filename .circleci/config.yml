@@ -379,6 +379,9 @@ jobs:
             - run:
                 name: MockRender
                 command: KARMA_SUITE=tests-performance/mock-render.spec.ts npm run test
+            - run:
+                name: Lookup
+                command: KARMA_SUITE=tests-performance/lookup.spec.ts npm run test
   IE:
     executor:
       name: windows/server-2019

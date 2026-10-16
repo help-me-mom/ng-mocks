@@ -46,7 +46,7 @@ export default <T>(...args: any[]) => {
 
   // Looking in the root.
   if (root) {
-    const result = funcGetFromNode([], root, source);
+    const result = funcGetFromNode([], root, source, 'first');
     if (result.length > 0) {
       return result[0];
     }
@@ -56,7 +56,7 @@ export default <T>(...args: any[]) => {
   if (root) {
     const parent = nestedCheckParent(root, undefined);
     if (parent && parent.nativeNode.nodeName === '#comment') {
-      const result = funcGetFromNode([], parent, source);
+      const result = funcGetFromNode([], parent, source, 'first');
       if (result.length > 0) {
         return result[0];
       }
