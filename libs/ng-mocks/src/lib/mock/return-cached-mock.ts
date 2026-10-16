@@ -1,4 +1,5 @@
 import { NG_MOCKS } from '../common/core.tokens';
+import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import funcGetLastFixture from '../mock-helper/func.get-last-fixture';
 
@@ -11,7 +12,7 @@ export default (declaration: any) => {
     // nothing to do.
   }
 
-  if (!result) {
+  if (!result || !isMockNgDef(result)) {
     result = ngMocksUniverse.cacheDeclarations.get(declaration);
   }
 
