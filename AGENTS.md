@@ -10,6 +10,7 @@
   - `test.sh`
   - `compose.yml`
   - `package.json`
+  - `eslint.config.mjs`
   - `.commitlintrc.yml`
   - `.releaserc.yml`
   - `semantic-release-release-notes.mjs`
@@ -116,6 +117,7 @@
   use both Ivy profiles.
 - Standalone, signals, and defer support must match the compatibility tables in `README.md` and `docs/articles/index.md`.
 - Do not claim support beyond those tables unless you update the tables and the implementation together.
+- Follow the library runtime restrictions in `eslint.config.mjs`; an API's ES version alone does not make it allowed.
 - When enabling new recommended lint rules, keep fixes that remain compatible with the supported Angular, Node.js, and ES targets. Disable rules that require newer framework APIs or runtime features. In `eslint.config.mjs`, keep explanations in block comments for groups rather than comments attached to individual settings.
 
 ## Package Metadata
@@ -150,6 +152,8 @@
 - Record the inspected areas, existing coverage, added cases, and scope decisions in work notes. Summarize the
   affected behavior and regression scope in the PR description, keeping validation commands and results in the
   work notes as required by `Pull Request Quality`.
+- For cache fixes, test both invalidation and safe reuse. Include behavior flags and provider tokens, recipes,
+  dependencies, multi flags, and falsy values when they contribute to the cached result.
 
 ## Spec and Documentation Examples
 

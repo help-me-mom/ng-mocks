@@ -1,16 +1,49 @@
 import { flatten } from '../../common/core.helpers';
 
-const areEqualProviderDefs = (thisDef: any, prototypeDef: any, ...keys: string[]) => {
-  for (const key of keys) {
-    if (prototypeDef && thisDef && prototypeDef[key] && thisDef[key] && prototypeDef[key] === thisDef[key]) {
-      return true;
+const areEqualDependencies = (source: unknown, destination: unknown): boolean => {
+  if (source === destination) {
+    return true;
+  }
+  if (!Array.isArray(source) || !Array.isArray(destination) || source.length !== destination.length) {
+    return false;
+  }
+
+  for (let index = 0; index < source.length; index += 1) {
+    if (source[index] !== destination[index]) {
+      return false;
     }
   }
 
-  return prototypeDef === thisDef;
+  return true;
 };
 
-export default (prototype: any, source: any): boolean => {
+const areEqualProviderDefs = (source: unknown, destination: unknown): boolean => {
+  if (source === destination) {
+    return true;
+  }
+  if (!source || !destination || typeof source !== 'object' || typeof destination !== 'object') {
+    return false;
+  }
+
+  const sourceDef = source as Record<string, unknown>;
+  const destinationDef = destination as Record<string, unknown>;
+  if (
+    sourceDef.provide !== destinationDef.provide ||
+    sourceDef.multi !== destinationDef.multi ||
+    !areEqualDependencies(sourceDef.deps, destinationDef.deps)
+  ) {
+    return false;
+  }
+  for (const key of ['useValue', 'useClass', 'useFactory', 'useExisting']) {
+    if (key in sourceDef || key in destinationDef) {
+      return key in sourceDef && key in destinationDef && sourceDef[key] === destinationDef[key];
+    }
+  }
+
+  return false;
+};
+
+export default (prototype: unknown, source: unknown): boolean => {
   if (Array.isArray(prototype) !== Array.isArray(source)) {
     return false;
   }
@@ -21,16 +54,9 @@ export default (prototype: any, source: any): boolean => {
   }
 
   for (let index = 0; index < prototypeDefs.length; index += 1) {
-    const [prototypeDef, thisDef] = [prototypeDefs[index], thisDefs[index]];
-
-    if (prototypeDef && thisDef && prototypeDef.multi !== thisDef.multi) {
+    if (!areEqualProviderDefs(prototypeDefs[index], thisDefs[index])) {
       return false;
     }
-    if (areEqualProviderDefs(thisDef, prototypeDef, 'useValue', 'useClass', 'useFactory', 'useExisting')) {
-      continue;
-    }
-
-    return false;
   }
 
   return true;

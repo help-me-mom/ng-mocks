@@ -1,14 +1,36 @@
+import coreDefineProperty from '../common/core.define-property';
 import funcGetGlobal from '../common/func.get-global';
 
 import collectDeclarations from './collect-declarations';
 
 describe('collect-declarations:inputs', () => {
+  let reflectionOverride: PropertyDescriptor | undefined;
+
+  beforeEach(() => {
+    reflectionOverride = Object.getOwnPropertyDescriptor(
+      funcGetGlobal(),
+      '__ngMocksReflectComponentType',
+    );
+    coreDefineProperty(
+      funcGetGlobal(),
+      '__ngMocksReflectComponentType',
+      false,
+    );
+  });
+
   afterEach(() => {
-    delete funcGetGlobal().__ngMocksReflectComponentType;
+    if (reflectionOverride) {
+      Object.defineProperty(
+        funcGetGlobal(),
+        '__ngMocksReflectComponentType',
+        reflectionOverride,
+      );
+    } else {
+      delete funcGetGlobal().__ngMocksReflectComponentType;
+    }
   });
 
   it('uses the effective compiled transform while retaining explicit required metadata', () => {
-    funcGetGlobal().__ngMocksReflectComponentType = false;
     const inputs = [
       { name: 'value', required: true, transform: String },
     ];
@@ -30,7 +52,6 @@ describe('collect-declarations:inputs', () => {
   });
 
   it('removes a class input transform when the effective compiled binding has none', () => {
-    funcGetGlobal().__ngMocksReflectComponentType = false;
     const inputs = [{ name: 'value', transform: String }];
     const actual = collectDeclarations({
       __annotations__: [{ ngMetadataName: 'Component', inputs }],
@@ -46,7 +67,6 @@ describe('collect-declarations:inputs', () => {
   });
 
   it('preserves legacy directive transforms stored by the compiled runtime field name', () => {
-    funcGetGlobal().__ngMocksReflectComponentType = false;
     const inputs = [
       { name: 'value', alias: 'publicValue', transform: Number },
     ];
@@ -71,7 +91,6 @@ describe('collect-declarations:inputs', () => {
   });
 
   it('deduplicates formatted input aliases without modifying their annotation array', () => {
-    funcGetGlobal().__ngMocksReflectComponentType = false;
     const inputs = ['value : publicValue'];
     const actual = collectDeclarations({
       __annotations__: [{ ngMetadataName: 'Component', inputs }],
@@ -87,7 +106,6 @@ describe('collect-declarations:inputs', () => {
   });
 
   it('enriches existing input metadata with signal flags and transforms while preserving required', () => {
-    funcGetGlobal().__ngMocksReflectComponentType = false;
     const inputs = [
       { name: 'value', alias: 'publicValue', required: true },
     ];
@@ -114,7 +132,6 @@ describe('collect-declarations:inputs', () => {
   });
 
   it('uses explicit class input names when an older compiler reports the alias as the declared name', () => {
-    funcGetGlobal().__ngMocksReflectComponentType = false;
     const actual = collectDeclarations({
       __annotations__: [
         {
@@ -133,7 +150,6 @@ describe('collect-declarations:inputs', () => {
   });
 
   it('prefers an effective compiled field over a stale class input annotation', () => {
-    funcGetGlobal().__ngMocksReflectComponentType = false;
     const inputs = ['original : publicValue'];
     const actual = collectDeclarations({
       __annotations__: [{ ngMetadataName: 'Component', inputs }],
@@ -152,7 +168,6 @@ describe('collect-declarations:inputs', () => {
   });
 
   it('preserves an unaliased compiled override when the original annotation names another field', () => {
-    funcGetGlobal().__ngMocksReflectComponentType = false;
     const inputs = ['original : publicValue'];
     const actual = collectDeclarations({
       __annotations__: [{ ngMetadataName: 'Directive', inputs }],
@@ -171,7 +186,6 @@ describe('collect-declarations:inputs', () => {
   });
 
   it('uses the compiled field when declared input metadata is absent and the annotation is stale', () => {
-    funcGetGlobal().__ngMocksReflectComponentType = false;
     const inputs = ['original : publicValue'];
     const actual = collectDeclarations({
       __annotations__: [{ ngMetadataName: 'Directive', inputs }],
@@ -189,7 +203,6 @@ describe('collect-declarations:inputs', () => {
   });
 
   it('retains declared input names when a minified field has no explicit class binding', () => {
-    funcGetGlobal().__ngMocksReflectComponentType = false;
     const actual = collectDeclarations({
       __annotations__: [{ ngMetadataName: 'Directive' }],
       ɵdir: {
