@@ -1,3 +1,17 @@
+## [14.18.2](https://github.com/help-me-mom/ng-mocks/compare/v14.18.1...v14.18.2) (2026-10-16)
+
+
+### Bug Fixes
+
+* **ngMocks:** honor builder changes and declared selector bindings ([#15336](https://github.com/help-me-mom/ng-mocks/issues/15336)) ([9f23513](https://github.com/help-me-mom/ng-mocks/commit/9f23513259afbaff7ca21f2be7a3abd3404d3bb4))
+* **ngMocks:** support native signal form listeners ([#15333](https://github.com/help-me-mom/ng-mocks/issues/15333)) ([8478bf7](https://github.com/help-me-mom/ng-mocks/commit/8478bf7f78e1b8292ff930d15956c9b629628751))
+
+
+### Performance Improvements
+
+* **ngMocks:** avoid repeated work in instance lookups ([#15337](https://github.com/help-me-mom/ng-mocks/issues/15337)) ([b1d0599](https://github.com/help-me-mom/ng-mocks/commit/b1d0599bb2a9b00eda2e98e5e34498741b6f2e4e))
+* **ngMocks:** reduce redundant library discovery ([#15335](https://github.com/help-me-mom/ng-mocks/issues/15335)) ([3aeaa10](https://github.com/help-me-mom/ng-mocks/commit/3aeaa104a923c72ac989a3f0cbf3491753b5d0d3))
+
 ## [14.18.1](https://github.com/help-me-mom/ng-mocks/compare/v14.18.0...v14.18.1) (2026-09-18)
 
 
