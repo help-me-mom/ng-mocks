@@ -1,4 +1,4 @@
-import { DebugElement, ViewContainerRef } from '@angular/core';
+import { DebugElement, EmbeddedViewRef, ViewContainerRef } from '@angular/core';
 
 import coreInjector from '../../common/core.injector';
 
@@ -28,8 +28,10 @@ const getScanViewRefRootNodes = (node: any, child: any): Array<[number, any]> =>
       continue;
     }
 
-    for (let rnIndex = 0; rnIndex < (vr as any).rootNodes.length; rnIndex += 1) {
-      result.push([rnIndex, (vr as any).rootNodes[rnIndex]]);
+    // Angular rebuilds this array on every getter access.
+    const rootNodes = (vr as EmbeddedViewRef<unknown>).rootNodes;
+    for (let rnIndex = 0; rnIndex < rootNodes.length; rnIndex += 1) {
+      result.push([rnIndex, rootNodes[rnIndex]]);
     }
   }
 

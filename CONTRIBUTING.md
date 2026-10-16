@@ -182,6 +182,21 @@ nvm use
 npm run test:debug
 ```
 
+### Runtime performance
+
+The timing suites in `tests-performance` run through the existing Karma configuration and CI performance job.
+For example, measure lookup workloads inside the configured Docker service:
+
+```shell
+COMPOSE_PROJECT_NAME=ngmocks_<your-unique-string> docker compose run --rm \
+  -e KARMA_SUITE=tests-performance/lookup.spec.ts ng-mocks npm run test
+```
+
+Compare several runs before and after a change with the same workload, runtime and machine load.
+The lookup suite reports query time separately from fixture setup. Its timings describe those workloads,
+not the speed of an entire test suite. Keep operation-count assertions in functional specs so avoidable
+work is checked without machine-dependent timing thresholds.
+
 ### How to run tests in IE locally
 
 - login to a Windows OS: https://developer.microsoft.com/en-us/microsoft-edge/tools/vms
