@@ -66,6 +66,41 @@ describe('ng-mocks-change:signal-native', () => {
     TestBed.configureTestingModule({ imports: [TargetComponent] }),
   );
 
+  it('changes a native signal field without Angular debug listeners', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const input = ngMocks.find<HTMLInputElement>('#number');
+    // Angular 22.2.3 uses native listeners, which DebugElement does not expose.
+    ngMocks.stubMember(input, 'listeners', () => [], 'get');
+
+    ngMocks.change(input, '23.5');
+
+    expect(input.listeners).toEqual([]);
+    expect(input.nativeElement.valueAsNumber).toBe(23.5);
+    expect(component.model().amount).toBe(23.5);
+    expect(component.f.amount().dirty()).toBe(true);
+    expect(component.f.amount().touched()).toBe(true);
+    expect(component.model().name).toBe('unchanged');
+    expect(component.f.name().dirty()).toBe(false);
+    expect(component.f.name().touched()).toBe(false);
+  });
+
+  it('touches a native signal field without Angular debug listeners', () => {
+    const fixture = MockRender(TargetComponent);
+    const component = fixture.point.componentInstance;
+    const input = ngMocks.find<HTMLInputElement>('#checkbox');
+    ngMocks.stubMember(input, 'listeners', () => [], 'get');
+
+    ngMocks.touch(input);
+
+    expect(input.listeners).toEqual([]);
+    expect(input.nativeElement.checked).toBe(false);
+    expect(component.model().enabled).toBe(false);
+    expect(component.f.enabled().touched()).toBe(true);
+    expect(component.f.enabled().dirty()).toBe(false);
+    expect(component.f.name().touched()).toBe(false);
+  });
+
   it('preserves Date parsing across native input events before using helpers', () => {
     const fixture = TestBed.createComponent(TargetComponent);
     fixture.detectChanges();
