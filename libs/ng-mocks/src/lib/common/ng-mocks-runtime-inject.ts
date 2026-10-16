@@ -1,8 +1,8 @@
 import helperUseFactory from '../mock-service/helper.use-factory';
 
-import coreConfig from './core.config';
 import coreDefineProperty from './core.define-property';
 import coreReflectProvidedIn from './core.reflect.provided-in';
+import isNeverMockProvidedFunction from './func.is-never-mock-provided-function';
 import ngMocksUniverse from './ng-mocks-universe';
 
 interface RuntimeInjectConfig {
@@ -25,7 +25,7 @@ const shouldMock = (provide: any, config: RuntimeInjectConfig): boolean => {
     return false;
   }
 
-  if (resolution !== 'mock' && coreConfig.neverMockProvidedFunction.indexOf(provide.name) !== -1) {
+  if (resolution !== 'mock' && isNeverMockProvidedFunction(provide)) {
     return false;
   }
 

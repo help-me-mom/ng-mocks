@@ -1,5 +1,9 @@
+import { ApplicationRef } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+
 import { ngMocks } from '../mock-helper/mock-helper';
 
+import coreDefineProperty from './core.define-property';
 import {
   installRuntimeInject,
   resetRuntimeInject,
@@ -63,15 +67,18 @@ describe('ng-mocks-runtime-inject', () => {
   });
 
   // @see https://github.com/help-me-mom/ng-mocks/issues/14896
+  // @see https://github.com/help-me-mom/ng-mocks/issues/15005
   for (const name of [
     'EffectManager',
     '_EffectManager',
     'AfterRenderEventManager',
     '_AfterRenderEventManager',
   ]) {
-    it(`preserves ${name} while mocking an application dependency`, () => {
+    it(`mocks an application ${name} like an ordinary dependency`, () => {
       let managerConstructorCalls = 0;
+      let managerMethodCalls = 0;
       let dependencyConstructorCalls = 0;
+      let dependencyMethodCalls = 0;
 
       class RuntimeManager {
         public constructor() {
@@ -79,6 +86,8 @@ describe('ng-mocks-runtime-inject', () => {
         }
 
         public echo(): string {
+          managerMethodCalls += 1;
+
           return 'real manager';
         }
       }
@@ -89,18 +98,29 @@ describe('ng-mocks-runtime-inject', () => {
         }
 
         public echo(): string {
+          dependencyMethodCalls += 1;
+
           return 'real dependency';
         }
       }
 
-      Object.defineProperty(RuntimeManager, 'name', { value: name });
-      (RuntimeManager as any).ɵprov = { providedIn: 'root' };
-      (ApplicationDependency as any).ɵprov = { providedIn: 'root' };
+      coreDefineProperty(RuntimeManager, 'name', name);
+      coreDefineProperty(RuntimeManager, 'ɵprov', {
+        providedIn: 'root',
+      });
+      coreDefineProperty(ApplicationDependency, 'ɵprov', {
+        providedIn: 'root',
+      });
 
       const destroyCallbacks: Array<() => void> = [];
       const originalGet = jasmine
         .createSpy('get')
-        .and.callFake((provide: any) => new provide());
+        .and.callFake(
+          (
+            provide:
+              typeof RuntimeManager | typeof ApplicationDependency,
+          ) => new provide(),
+        );
       const injector = {
         get: originalGet,
         onDestroy: (callback: () => void) =>
@@ -109,64 +129,98 @@ describe('ng-mocks-runtime-inject', () => {
 
       installRuntimeInject(injector, new Set(), new Set());
 
-      const { manager, dependency } = runRuntimeInject(
-        injector,
-        () => ({
-          manager: injector.get(RuntimeManager),
-          dependency: injector.get(ApplicationDependency),
-        }),
-      );
+      const {
+        manager,
+        dependency,
+      }: {
+        manager: RuntimeManager;
+        dependency: ApplicationDependency;
+      } = runRuntimeInject(injector, () => ({
+        manager: injector.get(RuntimeManager),
+        dependency: injector.get(ApplicationDependency),
+      }));
 
       expect(manager instanceof RuntimeManager).toBe(true);
-      expect(manager.echo()).toBe('real manager');
+      expect(manager.echo()).toBeUndefined();
+      expect(manager.echo).toHaveBeenCalledTimes(1);
       expect(dependency.echo()).toBeUndefined();
-      expect(dependency.echo).toHaveBeenCalled();
-      expect(managerConstructorCalls).toBe(1);
+      expect(dependency.echo).toHaveBeenCalledTimes(1);
+      expect(managerConstructorCalls).toBe(0);
+      expect(managerMethodCalls).toBe(0);
       expect(dependencyConstructorCalls).toBe(0);
-      expect(originalGet).toHaveBeenCalledWith(RuntimeManager);
-      expect(originalGet).toHaveBeenCalledTimes(1);
+      expect(dependencyMethodCalls).toBe(0);
+      expect(originalGet).not.toHaveBeenCalled();
 
       const configuredManager = { echo: () => 'configured manager' };
       originalGet.and.returnValue(configuredManager);
 
-      const overriddenManager = runRuntimeInject(injector, () =>
-        injector.get(RuntimeManager),
+      const repeatedManager: RuntimeManager = runRuntimeInject(
+        injector,
+        () => injector.get(RuntimeManager),
       );
 
-      expect(overriddenManager).toBe(configuredManager);
-      expect(overriddenManager.echo()).toBe('configured manager');
+      expect(repeatedManager).toBe(manager);
+      expect(injector.get(RuntimeManager)).toBe(manager);
       expect(injector.get(ApplicationDependency)).toBe(dependency);
-      expect(originalGet).toHaveBeenCalledTimes(2);
-      expect(managerConstructorCalls).toBe(1);
+      expect(originalGet).not.toHaveBeenCalled();
+      expect(managerConstructorCalls).toBe(0);
+      expect(managerMethodCalls).toBe(0);
       expect(dependencyConstructorCalls).toBe(0);
+      expect(dependencyMethodCalls).toBe(0);
 
       destroyCallbacks[0]();
+
+      expect(injector.get).toBe(originalGet);
+      expect(injector.get(RuntimeManager)).toBe(configuredManager);
+      expect(originalGet).toHaveBeenCalledWith(RuntimeManager);
+      expect(originalGet).toHaveBeenCalledTimes(1);
     });
   }
 
-  it('honors an explicit mock resolution for untouched runtime infrastructure', () => {
-    let constructorCalls = 0;
-    let methodCalls = 0;
-
-    class EffectManager {
-      public constructor() {
-        constructorCalls += 1;
-      }
-
-      public echo(): string {
-        methodCalls += 1;
-
-        return 'real manager';
-      }
-    }
-
-    (EffectManager as any).ɵprov = { providedIn: 'root' };
-    spyOn(ngMocksUniverse, 'getResolution').and.returnValue('mock');
-
+  it('preserves the actual Angular provider and its original injector result', () => {
+    const applicationRef = TestBed.inject(ApplicationRef);
     const destroyCallbacks: Array<() => void> = [];
     const originalGet = jasmine
       .createSpy('get')
-      .and.callFake((provide: any) => new provide());
+      .and.returnValue(applicationRef);
+    const injector = {
+      get: originalGet,
+      onDestroy: (callback: () => void) =>
+        destroyCallbacks.push(callback),
+    };
+
+    installRuntimeInject(injector, new Set(), new Set());
+
+    expect(
+      runRuntimeInject(injector, () => injector.get(ApplicationRef)),
+    ).toBe(applicationRef);
+    expect(
+      runRuntimeInject(injector, () => injector.get(ApplicationRef)),
+    ).toBe(applicationRef);
+    expect(originalGet.calls.allArgs()).toEqual([
+      [ApplicationRef],
+      [ApplicationRef],
+    ]);
+
+    const configured = { tick: () => undefined };
+    originalGet.and.returnValue(configured);
+
+    expect(
+      runRuntimeInject(injector, () => injector.get(ApplicationRef)),
+    ).toBe(configured);
+    expect(injector.get(ApplicationRef)).toBe(configured);
+    expect(originalGet).toHaveBeenCalledTimes(4);
+
+    destroyCallbacks[0]();
+
+    expect(injector.get).toBe(originalGet);
+  });
+
+  it('honors an explicit mock resolution for an untouched Angular provider', () => {
+    spyOn(ngMocksUniverse, 'getResolution').and.returnValue('mock');
+
+    const destroyCallbacks: Array<() => void> = [];
+    const originalGet = jasmine.createSpy('get');
     const injector = {
       get: originalGet,
       onDestroy: (callback: () => void) =>
@@ -176,18 +230,23 @@ describe('ng-mocks-runtime-inject', () => {
     // No registered provider or touch protects the explicit mock resolution.
     installRuntimeInject(injector, new Set(), new Set());
 
-    const manager = runRuntimeInject(injector, () =>
-      injector.get(EffectManager),
+    const applicationRef: ApplicationRef = runRuntimeInject(
+      injector,
+      () => injector.get(ApplicationRef),
     );
 
-    expect(manager instanceof EffectManager).toBe(true);
+    expect(applicationRef instanceof ApplicationRef).toBe(true);
     expect(originalGet).not.toHaveBeenCalled();
-    expect(constructorCalls).toBe(0);
-    expect(manager.echo()).toBeUndefined();
-    expect(methodCalls).toBe(0);
-    expect(manager.echo).toHaveBeenCalledTimes(1);
+    expect(applicationRef.tick()).toBeUndefined();
+    expect(applicationRef.tick).toHaveBeenCalledTimes(1);
+    expect(
+      runRuntimeInject(injector, () => injector.get(ApplicationRef)),
+    ).toBe(applicationRef);
+    expect(injector.get(ApplicationRef)).toBe(applicationRef);
 
     destroyCallbacks[0]();
+
+    expect(injector.get).toBe(originalGet);
   });
 
   // @see https://github.com/help-me-mom/ng-mocks/issues/14900
