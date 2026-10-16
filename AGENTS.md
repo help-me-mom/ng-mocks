@@ -214,6 +214,8 @@
   spec files when one suite becomes hard to follow; prefer explicit cases over conditional test setup.
 - Never add helper functions in tests. Keep setup, actions, and assertions inline, even when a short block is
   repeated, so the regression remains clear across spread targets.
+- Keep spread specs compatible with Jasmine, Jest, and Vitest. Prefer inline counters or ng-mocks helpers over
+  runner-specific spies, and use assertions supported by all three runners. Root-only unit specs may use Jasmine APIs.
 - Prefer static ES imports. For APIs unavailable in older Angular targets, gate the file in `test-spread.conf`
   with `versions=` or `features=`. Do not bypass TypeScript compatibility with dynamic imports or runtime skips.
 - Some root tests only transpile TypeScript. When an API requires Angular's compiler transform, follow the
