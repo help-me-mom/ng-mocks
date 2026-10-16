@@ -44,8 +44,14 @@ const detectInIvy = (node: MockedDebugNode, attribute: string, value: any): bool
         };
       }
     )._tNode;
-    const nodeInputs = inputs?.[attr] || [];
-    const inputEntries = [...nodeInputs, ...(hostDirectiveInputs?.[attr] || [])];
+    // Only own entries in Angular's input maps describe declared bindings.
+    const nodeInputs = (inputs && Object.prototype.hasOwnProperty.call(inputs, attr) && inputs[attr]) || [];
+    const hostInputs =
+      (hostDirectiveInputs &&
+        Object.prototype.hasOwnProperty.call(hostDirectiveInputs, attr) &&
+        hostDirectiveInputs[attr]) ||
+      [];
+    const inputEntries = [...nodeInputs, ...hostInputs];
     for (let inputIndex = 0; inputIndex < inputEntries.length; inputIndex += 1) {
       const attrIndex = inputEntries[inputIndex];
       // Input flags are numeric too, but fall below the node's directive indices.

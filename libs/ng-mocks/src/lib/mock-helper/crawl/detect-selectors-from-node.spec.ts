@@ -1,4 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, DebugElement, Input } from '@angular/core';
+
+import coreDefineProperty from '../../common/core.define-property';
 
 import detectSelectorsFromNode from './detect-selectors-from-node';
 
@@ -98,6 +100,67 @@ describe('detect-selectors-from-node', () => {
       expect(detectSelectorsFromNode(node)).toEqual([
         [],
         ['1', '3', '5', '6'],
+      ]);
+    });
+
+    it('finds exposed host inputs without an ordinary input map', () => {
+      const node = new DebugElement(document.createElement('div'));
+      coreDefineProperty(node, 'providerTokens', []);
+      coreDefineProperty(node, 'injector', {
+        _tNode: {
+          attrs: [3, 'exposed'],
+          hostDirectiveInputs: { exposed: [5, 'original'] },
+          inputs: null,
+        },
+      });
+
+      expect(detectSelectorsFromNode(node)).toEqual([
+        [],
+        ['exposed'],
+      ]);
+    });
+
+    it('deduplicates ordinary and exposed host inputs in binding order', () => {
+      const node = new DebugElement(document.createElement('div'));
+      coreDefineProperty(node, 'providerTokens', []);
+      coreDefineProperty(node, 'injector', {
+        _tNode: {
+          attrs: [
+            'ordinary',
+            'value',
+            3,
+            'shared',
+            'exposed',
+            'shared',
+          ],
+          hostDirectiveInputs: {
+            exposed: [5, 'original'],
+            shared: [5, 'shared'],
+          },
+          inputs: { ordinary: [6], shared: [6] },
+        },
+      });
+
+      expect(detectSelectorsFromNode(node)).toEqual([
+        [],
+        ['ordinary', 'shared', 'exposed'],
+      ]);
+    });
+
+    it('requires a host input binding on the current node', () => {
+      const node = new DebugElement(document.createElement('div'));
+      coreDefineProperty(node, 'providerTokens', []);
+      coreDefineProperty(node, 'injector', {
+        _tNode: {
+          attrs: [3, 'ordinary'],
+          hostDirectiveInputs: { exposed: [5, 'original'] },
+          inputs: { ordinary: [6] },
+        },
+      });
+
+      expect(detectSelectorsFromNode(node)).toEqual([
+        [],
+        ['ordinary'],
       ]);
     });
   });
