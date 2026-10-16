@@ -97,6 +97,34 @@ describe('func.get-mock-form-field', () => {
     expect(state.markAsTouched).not.toHaveBeenCalled();
   });
 
+  it('skips an incomplete mock and stops at the first usable field', () => {
+    const read = jasmine.createSpy('later field');
+    const incomplete = Object.assign(
+      Object.create(MockDirective(FormField).prototype),
+      { __ngMocks: true, field: () => undefined },
+    );
+    const later = Object.assign(
+      Object.create(MockDirective(FormField).prototype),
+      { __ngMocks: true, field: read },
+    );
+    node.injector._tNode.directiveEnd = 23;
+    node.injector._tNode.inputs = { formField: [20, 21, 22] };
+    node.injector._lView = {
+      20: incomplete,
+      21: instance,
+      22: later,
+    };
+
+    funcGetMockFormField(node)!.change('updated');
+
+    expect(state.controlValue.set.calls.allArgs()).toEqual([
+      ['updated'],
+    ]);
+    expect(read).not.toHaveBeenCalled();
+    expect(state.markAsTouched).not.toHaveBeenCalled();
+    expect(node.injector.get).not.toHaveBeenCalled();
+  });
+
   it('finds a forwarded host-directive alias among other bound inputs', () => {
     node.injector._tNode.attrs = [
       'name',

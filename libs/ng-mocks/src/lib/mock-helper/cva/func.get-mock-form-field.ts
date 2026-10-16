@@ -7,37 +7,17 @@ import { getSourceOfMock } from '../../common/func.get-source-of-mock';
 import funcIsMock from '../../common/func.is-mock';
 import { MockControlValueAccessorProxy } from '../../common/mock-control-value-accessor-proxy';
 
+import funcFindBoundFormField from './func.find-bound-form-field';
+
 interface FieldState {
   controlValue: (() => unknown) & { set(value: any): void };
   markAsTouched(): void;
-}
-
-interface NodeInputs {
-  attrs?: unknown[];
-  directiveStart: number;
-  directiveEnd: number;
-  inputs?: Record<string, Array<number | string>>;
-  hostDirectiveInputs?: Record<string, Array<number | string>>;
 }
 
 interface MockFieldControl {
   change(value: any): void;
   touch(): void;
 }
-
-const hasBinding = (attrs: unknown[], name: string): boolean => {
-  let bindings = false;
-  for (const attribute of attrs) {
-    if (typeof attribute === 'number') {
-      // Angular stores template binding names after AttributeMarker.Bindings (3).
-      bindings = attribute === 3;
-    } else if (bindings && attribute === name) {
-      return true;
-    }
-  }
-
-  return false;
-};
 
 const readState = (instance: any): FieldState | undefined => {
   if (!funcIsMock(instance)) {
@@ -82,41 +62,6 @@ const readState = (instance: any): FieldState | undefined => {
   return undefined;
 };
 
-const findState = (node: NodeInputs, view: Record<number, any>): FieldState | undefined => {
-  const tables = [node.inputs, node.hostDirectiveInputs];
-  for (let tableIndex = 0; tableIndex < tables.length; tableIndex += 1) {
-    const table = tables[tableIndex];
-    if (!table) {
-      continue;
-    }
-    const hostDirective = tableIndex === 1;
-    for (const alias of Object.keys(table)) {
-      if (!hasBinding(node.attrs || [], alias)) {
-        continue;
-      }
-      const entries = table[alias];
-      for (let position = 0; position < entries.length; position += hostDirective ? 2 : 1) {
-        const index = entries[position];
-        const publicName = hostDirective ? entries[position + 1] : alias;
-        if (
-          publicName !== 'formField' ||
-          typeof index !== 'number' ||
-          index < node.directiveStart ||
-          index >= node.directiveEnd
-        ) {
-          continue;
-        }
-        const state = readState(view[index]);
-        if (state) {
-          return state;
-        }
-      }
-    }
-  }
-
-  return undefined;
-};
-
 const change = (el: DebugElement, state: FieldState, value: any): void => {
   const element = el.nativeElement;
   if (element.tagName === 'INPUT') {
@@ -152,13 +97,7 @@ export default (
     return undefined;
   }
 
-  // Input tables advertise unbound inputs too. Inspect the actual binding and rendered instance,
-  // without constructing DI-only declarations or consulting an ancestor's forms provider.
-  const injector = el.injector as { _tNode?: NodeInputs; _lView?: Record<number, any> };
-  if (!injector._tNode || !injector._lView) {
-    return undefined;
-  }
-  const state = findState(injector._tNode, injector._lView);
+  const state = funcFindBoundFormField(el, readState);
 
   return state ? { change: value => change(el, state, value), touch: () => state.markAsTouched() } : undefined;
 };
