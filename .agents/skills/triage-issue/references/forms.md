@@ -14,8 +14,10 @@ and authoring APIs vary by Angular version.
 - Distinguish native event handlers, CVA callbacks, model input/output pairs and a helper's mocked-binding
   fallback. Identify the path actually used by the failing host. An initialized null property is not necessarily
   an immutable getter, and a silent result is not proof that execution reached the native event fallback.
-- `DebugElement.listeners` omits native `addEventListener` handlers. Inspect the real binding and dispatch
-  DOM events for native signal fields; see the [native regressions](../../../../tests/ng-mocks-change/signal-native.spec.ts).
+- `DebugElement.listeners` omits native `addEventListener` handlers. Use the
+  [local binding scan](../../../../libs/ng-mocks/src/lib/mock-helper/cva/func.find-bound-form-field.ts)
+  for real and mocked signal fields; provider tokens alone do not prove a rendered, bound directive.
+  Retain separate native-event and mock-state behavior; see the [native regressions](../../../../tests/ng-mocks-change/signal-native.spec.ts).
 - Since [Angular 22.2.3](https://github.com/angular/angular/commit/cc515b8b2331df643e7ff80915efc402bc97d3bb), native listener errors can reach `ErrorEvent`
   instead of `ErrorHandler`. Invoke registered listeners directly for intentional errors and restore interception
   without changing root-provider policy; see the [root-provider example](../../../../examples/TestSignalForms/root-providers.spec.ts).

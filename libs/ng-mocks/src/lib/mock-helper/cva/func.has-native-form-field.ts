@@ -5,26 +5,7 @@ import coreReflectDirectiveResolve from '../../common/core.reflect.directive-res
 import funcDirectiveIoParse from '../../common/func.directive-io-parse';
 import funcIsMock from '../../common/func.is-mock';
 
-interface NodeInputs {
-  attrs?: unknown[];
-  directiveStart: number;
-  directiveEnd: number;
-  inputs?: Record<string, Array<number | string>>;
-  hostDirectiveInputs?: Record<string, Array<number | string>>;
-}
-
-const hasBinding = (attrs: unknown[], name: string): boolean => {
-  let bindings = false;
-  for (const attribute of attrs) {
-    if (typeof attribute === 'number') {
-      bindings = attribute === 3;
-    } else if (bindings && attribute === name) {
-      return true;
-    }
-  }
-
-  return false;
-};
+import funcFindBoundFormField from './func.find-bound-form-field';
 
 const isRealField = (instance: unknown): boolean => {
   if (!instance || typeof instance !== 'object' || funcIsMock(instance)) {
@@ -59,42 +40,6 @@ export default (el: DebugElement): boolean => {
     return false;
   }
 
-  const injector = el.injector as { _tNode?: NodeInputs; _lView?: Record<number, unknown> };
-  const node = injector._tNode;
-  const view = injector._lView;
-  if (!node || !view) {
-    return false;
-  }
-
   // Angular 22.2.3 registers native field listeners outside DebugElement.listeners.
-  // Inspect bound, rendered directives only; provider lookup could create unrelated services.
-  const tables = [node.inputs, node.hostDirectiveInputs];
-  for (let tableIndex = 0; tableIndex < tables.length; tableIndex += 1) {
-    const table = tables[tableIndex];
-    if (!table) {
-      continue;
-    }
-    const hostDirective = tableIndex === 1;
-    for (const alias of Object.keys(table)) {
-      if (!hasBinding(node.attrs || [], alias)) {
-        continue;
-      }
-      const entries = table[alias];
-      for (let position = 0; position < entries.length; position += hostDirective ? 2 : 1) {
-        const index = entries[position];
-        const publicName = hostDirective ? entries[position + 1] : alias;
-        if (
-          publicName === 'formField' &&
-          typeof index === 'number' &&
-          index >= node.directiveStart &&
-          index < node.directiveEnd &&
-          isRealField(view[index])
-        ) {
-          return true;
-        }
-      }
-    }
-  }
-
-  return false;
+  return !!funcFindBoundFormField(el, instance => isRealField(instance) || undefined);
 };

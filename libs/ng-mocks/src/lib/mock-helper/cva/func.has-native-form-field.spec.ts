@@ -2,6 +2,7 @@ import { DebugElement, Directive, Input } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 import coreDefineProperty from '../../common/core.define-property';
+import helperDefinePropertyDescriptor from '../../mock-service/helper.define-property-descriptor';
 
 import funcHasNativeFormField from './func.has-native-form-field';
 
@@ -121,6 +122,22 @@ describe('func.has-native-form-field:bindings', () => {
     };
 
     expect(funcHasNativeFormField(node)).toBe(false);
+    expect(instance.current).not.toHaveBeenCalled();
+    expect(injector.get).not.toHaveBeenCalled();
+  });
+
+  it('skips unrelated instances and stops at the first real field', () => {
+    const read = jasmine.createSpy('later declaration');
+    const later = {};
+    helperDefinePropertyDescriptor(later, 'constructor', {
+      get: read,
+    });
+    nodeInputs.directiveEnd = 23;
+    nodeInputs.inputs = { formField: [20, 21, 22] };
+    injector._lView = { 20: {}, 21: instance, 22: later };
+
+    expect(funcHasNativeFormField(node)).toBe(true);
+    expect(read).not.toHaveBeenCalled();
     expect(instance.current).not.toHaveBeenCalled();
     expect(injector.get).not.toHaveBeenCalled();
   });
