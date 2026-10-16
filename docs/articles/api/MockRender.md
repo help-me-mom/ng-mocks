@@ -175,6 +175,54 @@ describe('MockRender:value-keys', () => {
 });
 ```
 
+#### Signal field trees
+
+A signal `FieldTree` is callable data. When passing it through a custom template,
+include its **params key** in `valueKeys`: use `['f']` for `[formField]="f.name"`,
+or `['field']` for `[formField]="field"`. This preserves the tree's identity and
+its child fields, including a field named `name`. Rendering the component that
+owns the form with `MockRender(TargetComponent)` needs no `valueKeys` option.
+
+For a template-only test, keep `FormField` and its root providers in `beforeEach`:
+
+```ts
+beforeEach(() =>
+  MockBuilder().keep(FormField).keep(NG_MOCKS_ROOT_PROVIDERS),
+);
+```
+
+Create the wrapper before calling `TestBed.runInInjectionContext` to create the
+form. Delaying the first check lets you supply the field before Angular reads it:
+
+```ts
+const params: { f: FieldTree<{ name: string }> | undefined } = { f: undefined };
+
+// Configure the wrapper before creating the form in TestBed's injection context.
+const fixture = MockRender('<input [formField]="f.name" />', params, {
+  detectChanges: false,
+  valueKeys: ['f'],
+});
+const model = signal({ name: 'Ada' });
+const f = TestBed.runInInjectionContext(() => form(model));
+
+// Supply the original tree, then render its field binding.
+params.f = f;
+fixture.detectChanges();
+expect(fixture.componentInstance.f).toBe(f);
+expect(ngMocks.get('input', FormField).field()).toBe(f.name);
+
+// Change the input and assert the model update.
+ngMocks.change('input', 'Grace');
+fixture.detectChanges();
+expect(model()).toEqual({ name: 'Grace' });
+```
+
+The [complete signal field-tree spec](https://github.com/help-me-mom/ng-mocks/blob/main/examples/TestSignalForms/field-tree.spec.ts)
+also covers passing a child field directly. Signal forms require Angular 21 or newer.
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/TestSignalForms/field-tree.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Afield-tree)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/TestSignalForms/field-tree.spec.ts&initialpath=%3Fspec%3DTestSignalForms%3Afield-tree)
+
 ### Updating bindings in zoneless tests
 
 In zoneless tests, assigning an input through `params` or `fixture.componentInstance` schedules change detection.
