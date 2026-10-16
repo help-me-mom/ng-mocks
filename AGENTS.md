@@ -210,6 +210,8 @@
 
 ## Test Style
 
+- Keep spec files focused and readable for humans and agents. Split distinct behaviors or fixtures into named
+  spec files when one suite becomes hard to follow; prefer explicit cases over conditional test setup.
 - Never add helper functions in tests. Keep setup, actions, and assertions inline, even when a short block is
   repeated, so the regression remains clear across spread targets.
 - Prefer static ES imports. For APIs unavailable in older Angular targets, gate the file in `test-spread.conf`
