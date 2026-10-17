@@ -235,9 +235,10 @@
   `test.spec.ts`. Add specs under `libs` only when the same behavior cannot be tested through the public interface;
   explain that limitation and pair internal coverage with a real-Angular regression where applicable. Assert the
   reported outcome, preserved behavior, and the absence of relevant side effects.
-- When an integration exposes a core defect, reproduce its relevant providers, bindings and registration with
-  repository-owned declarations. Use existing integration dependencies as reference evidence; do not add the
-  external library to core or versioned regression targets. For form controls, follow the
+- When an issue involves a third-party library already available in `tests-e2e`, add an integration regression in
+  `tests-e2e/src` using that real dependency. When it exposes a core defect, also reproduce its relevant providers,
+  bindings and registration with repository-owned declarations in `tests`. Do not add the external library to core
+  or versioned regression targets. For form controls, follow the
   [forms investigation checklist](.agents/skills/triage-issue/references/forms.md) to check injector identity,
   callback registration and real, kept and mocked behavior independently.
 - When a spread test depends on Zone.js, gate it with `environments=zoned` in `test-spread.conf` so the zoned and
