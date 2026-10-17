@@ -1,3 +1,10 @@
+## [14.18.3](https://github.com/help-me-mom/ng-mocks/compare/v14.18.2...v14.18.3) (2026-10-17)
+
+
+### Bug Fixes
+
+* **ngMocks:** skip non-mock fixture entries when reusing mocks ([#15340](https://github.com/help-me-mom/ng-mocks/issues/15340)) ([#15341](https://github.com/help-me-mom/ng-mocks/issues/15341)) ([4747108](https://github.com/help-me-mom/ng-mocks/commit/47471082f11d73a9b221be1af65e98619ec9b26b))
+
 ## [14.18.2](https://github.com/help-me-mom/ng-mocks/compare/v14.18.1...v14.18.2) (2026-10-16)
 
 
