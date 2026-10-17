@@ -140,7 +140,7 @@
   Use the root cause to select meaningful cases; this is not a requirement to test every unrelated combination.
 - Identify which related cases already have meaningful coverage. Add regression tests for uncovered cases that
   could share the defect, including cases that already work, and assert preserved behavior and relevant side
-  effects. Follow `Test Style` for test placement, source-unit and real-Angular coverage, and compatibility gates.
+  effects. Follow `Test Style` for test placement, coverage, and compatibility gates.
 - Capture failing reproducers before changing source. Fix other confirmed instances of the same defect within
   the task's scope, retaining the original and adjacent regression assertions. Passing adjacent cases need
   coverage where missing, not speculative source changes.
@@ -231,8 +231,10 @@
 - Gate spread tests at each API's actual introduction version, feature, and environment boundary, not only the
   reporter's Angular version. Split independently testable APIs when they have different compatibility boundaries;
   keep a cohesive regression at the first common boundary when it necessarily combines them.
-- For framework-internal or multi-branch fixes, pair a focused source-unit spec with a real-Angular spread regression.
-  Assert the reported outcome as well as preserved behavior and the absence of the relevant side effects.
+- Prefer public-interface regression and preservation tests in `tests`, including named specs beside an issue's
+  `test.spec.ts`. Add specs under `libs` only when the same behavior cannot be tested through the public interface;
+  explain that limitation and pair internal coverage with a real-Angular regression where applicable. Assert the
+  reported outcome, preserved behavior, and the absence of relevant side effects.
 - When an integration exposes a core defect, reproduce its relevant providers, bindings and registration with
   repository-owned declarations. Use existing integration dependencies as reference evidence; do not add the
   external library to core or versioned regression targets. For form controls, follow the
