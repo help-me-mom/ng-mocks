@@ -1,4 +1,9 @@
-import { Component, Injectable, Pipe, PipeTransform } from '@angular/core';
+import {
+  Component,
+  Injectable,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MockComponent, MockPipe, ngMocks } from 'ng-mocks';
@@ -41,7 +46,8 @@ class SecondComponent {}
 
 // TestBed with real and mock declarations uses a hidden MockBuilder, which provides NG_MOCKS.
 // There, the injectable pipe is mapped to a provider object, which must not become an import of a mock.
-describe('injectable-pipe-cached-mock', () => {
+// @see https://github.com/help-me-mom/ng-mocks/issues/15340
+describe('issue-15340', () => {
   beforeAll(() => ngMocks.reset());
   afterAll(() => ngMocks.reset());
 
