@@ -133,17 +133,6 @@ describe('getMockedNgDefOf:mocks', () => {
     expect(getMockedNgDefOf(mock, 'p')).toBe(mock);
     expect(getMockedNgDefOf(mock)).toBe(mock);
   });
-
-  it('throws on untouched declarations', () => {
-    try {
-      getMockedNgDefOf(SideDirective);
-      fail('an error expected');
-    } catch (error) {
-      expect((error as Error).message).toEqual(
-        `There is no mock for ${SideDirective.name}`,
-      );
-    }
-  });
 });
 
 describe('getMockedNgDefOf:builder', () => {

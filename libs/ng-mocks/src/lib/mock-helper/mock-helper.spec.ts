@@ -91,7 +91,7 @@ describe('MockHelper:getDirective', () => {
     expect(elementFromHelper).toBe(element);
   });
 
-  it('should return right structural directive via getDirective', () => {
+  it('returns the structural directive through ngMocks.get', () => {
     const fixture = MockRender(`
       <div id="example-structural-directive" *exampleStructuralDirective="false">hi</div>
     `);
@@ -116,34 +116,6 @@ describe('MockHelper:getDirective', () => {
     if (!elementFromHelper) {
       return;
     }
-
-    // Verification.
-    expect(elementFromHelper.exampleStructuralDirective).toEqual(
-      false,
-    );
-  });
-
-  it('should return right structural directive via getDirectiveOrFail', () => {
-    const fixture = MockRender(`
-      <div id="example-structural-directive" *exampleStructuralDirective="false">hi</div>
-    `);
-
-    // we need to render mock structural directives manually
-    for (const instance of ngMocks.findInstances(
-      fixture.debugElement,
-      ExampleStructuralDirective,
-    )) {
-      if (isMockOf(instance, ExampleStructuralDirective, 'd')) {
-        instance.__render();
-      }
-    }
-    fixture.detectChanges();
-
-    // Using helper.
-    const elementFromHelper = ngMocks.get(
-      fixture.debugElement.query(By.css('div')),
-      ExampleStructuralDirective,
-    );
 
     // Verification.
     expect(elementFromHelper.exampleStructuralDirective).toEqual(
@@ -247,7 +219,7 @@ describe('MockHelper:getDirective', () => {
     expect(componentB[0].componentInstance).toEqual(
       jasmine.any(BComponent),
     );
-    expect(componentB[0].componentInstance).toEqual(
+    expect(componentB[1].componentInstance).toEqual(
       jasmine.any(BComponent),
     );
 

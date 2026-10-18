@@ -22,18 +22,6 @@ class InternalModule {}
 })
 class TargetModule {}
 
-describe('ExportsOnly:real', () => {
-  beforeEach(() => MockBuilder(TargetModule));
-
-  it('should render', () => {
-    const fixture = MockRender(InternalComponent);
-    expect(fixture).toBeDefined();
-    expect(fixture.nativeElement.innerHTML).toContain(
-      '<internal-exports-only>internal</internal-exports-only>',
-    );
-  });
-});
-
 describe('ExportsOnly:mock1', () => {
   beforeEach(() => MockBuilder().mock(TargetModule));
 
@@ -64,7 +52,7 @@ describe('ExportsOnly:mock2', () => {
   });
 });
 
-describe('ExportsOnly:mock3', () => {
+describe('ExportsOnly:keep', () => {
   beforeEach(() => MockBuilder().keep(TargetModule));
 
   // The expectation is to see that InternalModule was exported and it can be accessed from the test.

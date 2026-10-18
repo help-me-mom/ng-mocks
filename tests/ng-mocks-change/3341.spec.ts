@@ -51,7 +51,7 @@ class TargetModule {}
 describe('ng-mocks-change:3341', () => {
   beforeEach(() => MockBuilder(TargetModule));
 
-  it('throws error about the default method', () => {
+  it('reports the default method and possible callback names', () => {
     MockRender(TargetComponent);
     const cvaEl = ngMocks.find('custom');
 
@@ -62,17 +62,6 @@ describe('ng-mocks-change:3341', () => {
       expect((error as Error).message).toContain(
         `please ensure it has 'onChange' method`,
       );
-    }
-  });
-
-  it('throws error with suggestions', () => {
-    MockRender(TargetComponent);
-    const cvaEl = ngMocks.find('custom');
-
-    try {
-      ngMocks.change(cvaEl, 123);
-      fail('an error expected');
-    } catch (error) {
       expect((error as Error).message).toContain(
         `customChangeClb, customTouchedClb`,
       );

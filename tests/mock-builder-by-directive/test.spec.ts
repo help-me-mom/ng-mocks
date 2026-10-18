@@ -36,21 +36,18 @@ describe('MockBuilderByDirective:real', () => {
 describe('MockBuilderByDirective:mock', () => {
   beforeEach(() => MockBuilder().mock(TargetModule));
 
-  it('should find mock', () => {
+  it('finds the same element by its original or mock declaration', () => {
     const fixture = MockRender(InternalComponent);
-    const element = ngMocks.find(
+    const mockElement = ngMocks.find(
       fixture.debugElement,
       MockComponent(InternalComponent),
     );
-    expect(element).toBeDefined();
-  });
-
-  it('should find original', () => {
-    const fixture = MockRender(InternalComponent);
-    const element = ngMocks.find(
+    const originalElement = ngMocks.find(
       fixture.debugElement,
       InternalComponent,
     );
-    expect(element).toBeDefined();
+    expect(mockElement).toBeDefined();
+    expect(originalElement).toBeDefined();
+    expect(originalElement).toBe(mockElement);
   });
 });

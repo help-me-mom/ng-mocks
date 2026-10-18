@@ -18,6 +18,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormControlDirective } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
+import { isMockOf } from '../common/func.is-mock-of';
 import { isMockedNgDefOf } from '../common/func.is-mocked-ng-def-of';
 import { MockBuilder } from '../mock-builder/mock-builder';
 import { ngMocks } from '../mock-helper/mock-helper';
@@ -99,7 +100,7 @@ class GettersAndSettersDirective {
     >
       hi
     </div>
-    <input [formControl]="fooControl" />
+    <input [formControl]="foo" />
     <div getters-and-setters></div>
   `,
 })
@@ -138,17 +139,11 @@ describe('MockDirective', () => {
     fixture.detectChanges();
   });
 
-  it('should have use a selector of the original component', () => {
-    const element = fixture.debugElement.query(
-      By.directive(ExampleDirective),
-    );
-    expect(element).not.toBeNull();
-  });
-
   it('should have the input set on the mock component', () => {
     const debugElement = fixture.debugElement.query(
       By.directive(ExampleDirective),
     );
+    expect(debugElement).not.toBeNull();
     const element = ngMocks.get(debugElement, ExampleDirective);
     expect(element.something).toEqual('hi');
     expect(element.exampleDirective).toEqual('bye');
@@ -173,15 +168,16 @@ describe('MockDirective', () => {
     );
   });
 
-  it('can mock formControlDirective from angular', () => {
-    // Some angular directives set up their metadata in a different way than @Directive does
-    // I found that FormControlDirective is one of those weird directives.
-    // Since I do not know how they did it, I don't know how to test it except to write this
-    // Test around a known-odd directive.
+  it('can mock FormControlDirective from Angular', () => {
+    // FormControlDirective exposes Angular framework metadata and an aliased input.
+    // Its mock must retain the original directive token and the bound control.
     const debugElement = fixture.debugElement.query(
-      By.directive(ExampleDirective),
+      By.directive(FormControlDirective),
     );
     expect(debugElement).not.toBeNull();
+    const directive = ngMocks.get(debugElement, FormControlDirective);
+    expect(isMockOf(directive, FormControlDirective, 'd')).toBe(true);
+    expect(directive.form).toBe(component.foo);
   });
 
   it('should display structural directive content', () => {

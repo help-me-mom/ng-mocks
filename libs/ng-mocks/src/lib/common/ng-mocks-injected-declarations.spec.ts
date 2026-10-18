@@ -22,7 +22,7 @@ describe('ng-mocks-injected-declarations', () => {
     resetInjectedDeclarations();
   });
 
-  it('reuses a seed before a local declaration has been resolved', () => {
+  it('reuses a seed until the replayed local declaration becomes canonical', () => {
     // Explicit TestBed.inject should stay stable until Angular resolves a declaration-local instance.
     rememberMockDeclarations(
       new Map([[TargetDirective, MockTargetDirective]]),
@@ -37,26 +37,17 @@ describe('ng-mocks-injected-declarations', () => {
     expect(rememberInjectedDeclaration(TargetDirective, {})).toBe(
       seed,
     );
-  });
 
-  it('tracks declaration mocks from remembered declarations', () => {
     // Once Angular resolves the local declaration instance, the seeded descriptors should be replayed
     // onto it and the local instance becomes the canonical result.
-    rememberMockDeclarations(
-      new Map([[TargetDirective, MockTargetDirective]]),
-    );
-    const seed = {
-      echo: jasmine.createSpy(),
-    };
-    const local: any = {};
-
-    expect(rememberInjectedDeclaration(TargetDirective, seed)).toBe(
-      seed,
-    );
+    const local: Partial<typeof seed> = {};
     expect(resolveMockDeclaration(TargetDirective, local)).toBe(
       local,
     );
     expect(local.echo).toBe(seed.echo);
+    expect(rememberInjectedDeclaration(TargetDirective, {})).toBe(
+      local,
+    );
   });
 
   it('ignores mocked declarations whose source is not a class', () => {

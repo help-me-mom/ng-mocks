@@ -59,28 +59,6 @@ describe('MockDeclaration', () => {
     expect(mocks[2].name).toEqual('MockOfTargetPipe');
   });
 
-  it('should process components with an empty template correctly', () => {
-    const mock: any = MockDeclaration(TargetComponent);
-    expect(mock.nameConstructor).toEqual(
-      'MockMiddlewareComponentMockBase',
-    );
-    expect(mock.name).toEqual('MockOfTargetComponent');
-  });
-
-  it('should process directives correctly', () => {
-    const mock: any = MockDeclaration(TargetDirective);
-    expect(mock.nameConstructor).toEqual(
-      'MockMiddlewareDirectiveMockBase',
-    );
-    expect(mock.name).toEqual('MockOfTargetDirective');
-  });
-
-  it('should process pipes correctly', () => {
-    const mock: any = MockDeclaration(TargetPipe);
-    expect(mock.nameConstructor).toEqual('MockMiddlewareMock');
-    expect(mock.name).toEqual('MockOfTargetPipe');
-  });
-
   it('throws on unknown types', () => {
     expect(() => MockDeclaration(Target)).toThrowError(
       /MockDeclaration does not know how to mock Target/,

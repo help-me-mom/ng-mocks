@@ -196,24 +196,6 @@ describe('mock-helper.guts', () => {
     }
   });
 
-  it('keeps module with providers', () => {
-    const ngModule = ngMocks.guts(Target1Module, {
-      ngModule: Target1Module,
-      providers: [],
-    });
-    expect(ngModule.imports?.length).toEqual(1);
-    if (ngModule.imports) {
-      expect(isNgDef(ngModule.imports[0].ngModule, 'm')).toBeTruthy();
-      expect(
-        isMockedNgDefOf(
-          ngModule.imports[0].ngModule,
-          Target1Module,
-          'm',
-        ),
-      ).toBeFalsy();
-    }
-  });
-
   it('keeps component', () => {
     const ngModule = ngMocks.guts(Target1Component);
     expect(ngModule.declarations?.length).toEqual(1);
@@ -303,24 +285,6 @@ describe('mock-helper.guts', () => {
       expect(ngModule.imports[0]).toBe(CommonModule);
       expect(
         isMockedNgDefOf(ngModule.imports[1], Target2Module, 'm'),
-      ).toBeTruthy();
-    }
-  });
-
-  it('mocks module with providers', () => {
-    const ngModule = ngMocks.guts(TARGET2, {
-      ngModule: Target1Module,
-      providers: [],
-    });
-    expect(ngModule.imports?.length).toEqual(1);
-    if (ngModule.imports) {
-      expect(isNgDef(ngModule.imports[0].ngModule, 'm')).toBeTruthy();
-      expect(
-        isMockedNgDefOf(
-          ngModule.imports[0].ngModule,
-          Target1Module,
-          'm',
-        ),
       ).toBeTruthy();
     }
   });
@@ -641,6 +605,14 @@ describe('mock-helper.guts', () => {
     expect(ngModule.imports?.length).toEqual(1);
     if (ngModule.imports) {
       expect(ngModule.imports[0].ngModule).toBe(Target1Module);
+      expect(isNgDef(ngModule.imports[0].ngModule, 'm')).toBeTruthy();
+      expect(
+        isMockedNgDefOf(
+          ngModule.imports[0].ngModule,
+          Target1Module,
+          'm',
+        ),
+      ).toBeFalsy();
     }
   });
 

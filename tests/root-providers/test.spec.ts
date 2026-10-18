@@ -226,14 +226,14 @@ describe('root-providers', () => {
     });
   });
 
-  describe('keep', () => {
+  describe('exclude from mocking', () => {
     beforeEach(() =>
       MockBuilder(TargetComponent, TargetModule).exclude(
         TargetService,
       ),
     );
 
-    it('uses mock providers', () => {
+    it('uses the real root service while mocking the other providers', () => {
       const fixture = MockRender(TargetComponent);
       expect(fixture.nativeElement.innerHTML).toContain(
         '"service:service"',
@@ -291,29 +291,6 @@ describe('root-providers', () => {
       expect(fixture.nativeElement.innerHTML).toContain(
         '"token:token"',
       );
-    });
-  });
-
-  describe('keep as dependency', () => {
-    beforeEach(() =>
-      MockBuilder(TargetComponent, TargetModule).exclude(
-        TargetService,
-      ),
-    );
-
-    it('uses mock providers', () => {
-      const fixture = MockRender(TargetComponent);
-      expect(fixture.nativeElement.innerHTML).toContain(
-        '"service:service"',
-      );
-      expect(fixture.nativeElement.innerHTML).toContain('"fake:"');
-      expect(fixture.nativeElement.innerHTML).toContain(
-        '"injected:service"',
-      );
-      expect(fixture.nativeElement.innerHTML).toContain(
-        '"provided:"',
-      );
-      expect(fixture.nativeElement.innerHTML).toContain('"token:"');
     });
   });
 });

@@ -113,20 +113,6 @@ describe('ng-mocks-change:reactive-forms:mock', () => {
     }
   });
 
-  it('throws on unknown CVA', () => {
-    MockRender(TargetComponent);
-    const valueAccessorEl = ngMocks.find('custom');
-
-    try {
-      ngMocks.change(valueAccessorEl, 123);
-      fail('an error expected');
-    } catch (error) {
-      expect((error as Error).message).toContain(
-        `Unsupported type of ControlValueAccessor`,
-      );
-    }
-  });
-
   it('keeps unknown CVA diagnostics readable when symbol callbacks are present', () => {
     MockRender(TargetComponent);
     const valueAccessorEl = ngMocks.find('custom');

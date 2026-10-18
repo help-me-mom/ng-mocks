@@ -306,23 +306,6 @@ describe('mock-helper.change', () => {
     expect(ngMocks.find('input', undefined)).toBeUndefined();
   });
 
-  it('changes a native input with a directive that declares no inputs', () => {
-    @Directive({ selector: '[nativeMarker]', standalone: false })
-    class MarkerDirective {}
-
-    TestBed.configureTestingModule({
-      declarations: [MarkerDirective],
-    });
-    MockRender('<input nativeMarker value="initial" />');
-    const input = ngMocks.find('input');
-    const marker = ngMocks.get(input, MarkerDirective);
-
-    ngMocks.change(input, 'updated');
-
-    expect(input.nativeElement.value).toBe('updated');
-    expect(ngMocks.get(input, MarkerDirective)).toBe(marker);
-  });
-
   it('does not treat a provided directive stub as a bound form input', () => {
     @Directive({ selector: '[providedControl]', standalone: false })
     class ProvidedControlDirective {
@@ -412,6 +395,7 @@ describe('mock-helper.change', () => {
     TestBed.configureTestingModule({ declarations: [HintDirective] });
     MockRender('<input nativeHint value="initial" />');
     const input = ngMocks.find('input');
+    const hint = ngMocks.get(input, HintDirective);
 
     expect(create).not.toHaveBeenCalled();
     expect(input.nativeElement.value).toBe('initial');
@@ -420,6 +404,7 @@ describe('mock-helper.change', () => {
     expect(() => ngMocks.change(input, 'updated')).not.toThrow();
 
     expect(input.nativeElement.value).toBe('updated');
+    expect(ngMocks.get(input, HintDirective)).toBe(hint);
     expect(create).not.toHaveBeenCalled();
 
     expect(

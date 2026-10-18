@@ -156,35 +156,7 @@ describe('mat-table:props', () => {
     );
   });
 
-  it('provides correct template for matColumnDef="weight" via findTemplateRef', () => {
-    MockRender(TargetComponent);
-    // looking for the table and container
-    const tableEl = ngMocks.reveal(['mat-table']);
-    const containerEl = ngMocks.reveal(['matColumnDef', 'weight']);
-
-    // checking that there are no artifacts around
-    expect(ngMocks.formatHtml(containerEl)).toEqual('');
-
-    // checking header
-    const header = ngMocks.findTemplateRef(containerEl, [
-      'matHeaderCellDef',
-    ]);
-    ngMocks.render(tableEl.componentInstance, header);
-    expect(ngMocks.formatHtml(containerEl)).toContain(
-      '<th mat-header-cell="">Weight</th>',
-    );
-
-    // checking cell
-    const cell = ngMocks.findTemplateRef(containerEl, ['matCellDef']);
-    ngMocks.render(tableEl.componentInstance, cell, {
-      weight: 'testWeight',
-    });
-    expect(ngMocks.formatHtml(containerEl)).toContain(
-      '<td mat-cell=""> testWeight </td>',
-    );
-  });
-
-  it('provides correct template for matColumnDef="symbol"', () => {
+  it('provides correct template for matColumnDef="symbol" via findTemplateRef', () => {
     MockRender(TargetComponent);
     // looking for the table and container
     const tableEl = ngMocks.reveal(['mat-table']);
