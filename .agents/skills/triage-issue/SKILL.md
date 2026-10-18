@@ -18,13 +18,14 @@ Create and maintain a plain Markdown checklist:
 - [ ] Inspect repo state, source-of-truth docs, and the GitHub issue
 - [ ] Create a dedicated issue worktree from `upstream/main`
 - [ ] Find the closest functional examples and read their specs and docs before implementing
-- [ ] Trace the root cause and review related use cases for a wider defect and missing coverage
+- [ ] Trace shared data producers, readers, and callers; review related behavior and coverage gaps
 - [ ] Reproduce the reported and related failures, and add missing preservation tests
-- [ ] Fix the implementation without changing the reproducer test
+- [ ] Fix the reported and all confirmed same-cause failures in scope without weakening reproducers
 - [ ] Clear affected Angular CLI caches and run coverage and e2e validation
 - [ ] Assess whether docs add useful reader guidance; update and verify examples only when needed
 - [ ] Complete final formatting, ESLint, and TypeScript checks, then commit and prepare the PR against `upstream/main`
 - [ ] Verify the requested CI status on the current PR commit
+- [ ] Reconcile completion evidence with the report and scope; list unverified areas and follow-ups
 ```
 
 ## Workflow
@@ -75,16 +76,17 @@ Create and maintain a plain Markdown checklist:
    If `issues/<issue-number>` or the default worktree path already exists, inspect it with `git worktree list`, `git status --short`, and `git log --oneline --decorate --max-count=10`. Reuse it only when it is already the dedicated worktree for this issue. Otherwise create a timestamped branch and path from `upstream/main`, for example `issues/<issue-number>-<timestamp>` and `../ng-mocks-issue-<issue-number>-<timestamp>`.
 
 4. Review the wider scope before fixing:
-   - Follow [Fix Scope Review](../../../AGENTS.md#fix-scope-review). Trace the failing mechanism through shared
-     helpers and their callers, analogous implementations, and related previous fixes.
+   - Follow [Fix Scope Review](../../../AGENTS.md#fix-scope-review), including its audit of relevant data
+     producers, shared state and helpers, readers, and callers. Compare the reported failure and proposed fix
+     with analogous implementations and related previous fixes.
    - Select adjacent cases based on the cause: for example, an input metadata defect may also affect outputs,
      view/content queries, aliases, inheritance, or other declaration types. Consider decorator/signal forms,
      provider policies, lookup order, cache state, and Angular profiles when the same mechanism uses them.
    - Read the existing tests for those cases and identify coverage gaps. Add meaningful regressions for plausible
      affected paths even when they already work, including preserved behavior and absence of unwanted side effects.
-   - Record the inspected areas, evidence, and scope decisions in work notes. Include confirmed instances of the
-     same defect within the task's scope; record distinct causes or out-of-scope work as follow-ups. State any
-     unverified areas and avoid claiming exhaustive coverage from a single reproducer.
+   - Maintain the scope and evidence mapping required by `Fix Scope Review` in work notes. Include every confirmed
+     instance of the same defect within the task's scope; list distinct causes, out-of-scope work, and unverified
+     areas separately rather than claiming exhaustive coverage from a single reproducer.
    - For form-control, accessor or binding reports, read the [forms investigation checklist](references/forms.md).
      It covers real and mocked registration contracts without requiring an external UI library in regressions.
    - For root-provider failures, distinguish incorrect provider selection from unconfigured mock return values.
@@ -92,6 +94,10 @@ Create and maintain a plain Markdown checklist:
      with constructor and `inject()` behavior, with and without auto-spies. Earlier success may reflect missing
      dependency discovery. Verify existing provider keeps or mock customizations before changing defaults or
      revising earlier regression expectations.
+   - For declarations also decorated with `@Injectable`, check declaration lookup and DI recipes separately.
+     Preserve both class selection and provider behavior. Compare mock classes with builder metadata;
+     mock instances expose the source prototype, so their `.constructor` is not the generated mock class.
+     See [the injectable declaration regressions](../../../tests/get-mocked-ng-def-of/injectable-declarations.spec.ts).
 5. Reproduce before fixing:
    - Add the smallest local test that fails on the current implementation and passes only after the real fix.
    - Keep the test focused on the reported behavior, not the eventual implementation detail.
@@ -100,8 +106,8 @@ Create and maintain a plain Markdown checklist:
      place broader policy coverage in the relevant feature suite, following `Test Style` in `AGENTS.md`.
 6. Fix narrowly:
    - Change source code after the reproducer exists.
-   - Correct the confirmed shared cause and its affected paths. Preserve adjacent cases that already work and
-     avoid speculative source changes for cases that only need regression coverage.
+   - Correct the confirmed shared cause and all its confirmed affected paths in scope. Preserve adjacent cases
+     that already work and avoid speculative source changes for cases that only need regression coverage.
    - Prefer existing ng-mocks helpers and patterns over new abstractions.
    - Follow `AGENTS.md`'s typing guidance: avoid `any` where practical, including in regression tests.
    - Avoid expanding functionality while fixing wider defects; use existing entry points and defaults unless
@@ -256,8 +262,9 @@ PR rules:
 ## Guardrails
 
 - Do not start with a source fix before a failing local reproduction exists unless the bug is already covered by an existing failing test.
-- Do not consider a fix complete solely because the reported reproducer passes; review related paths that share
-  its cause and cover the relevant gaps before concluding the investigation.
+- Apply the completion review in [Fix Scope Review](../../../AGENTS.md#fix-scope-review) before declaring the
+  issue fixed. A defensive guard, no-throw assertion, or green tests and coverage cannot replace the shared-cause
+  audit and evidence of intended and preserved behavior.
 - Do not triage issue fixes in the original checkout; create or reuse a dedicated worktree based on `upstream/main` first.
 - Do not change the reproducer after fixing source behavior, except for mechanical compatibility edits that preserve the original failure.
 - Do not delete or regenerate lockfiles for ordinary issue fixes. If dependency refresh is required, use the `update-package-locks` skill.
