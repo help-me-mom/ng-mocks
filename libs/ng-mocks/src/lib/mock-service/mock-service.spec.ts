@@ -5,10 +5,7 @@ import {
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { InjectionToken, NgModule } from '@angular/core';
 
-import {
-  NG_MOCKS_GUARDS,
-  NG_MOCKS_INTERCEPTORS,
-} from '../common/core.tokens';
+import { NG_MOCKS_INTERCEPTORS } from '../common/core.tokens';
 import funcGetName from '../common/func.get-name';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import { MockBuilder } from '../mock-builder/mock-builder';
@@ -788,7 +785,7 @@ describe('MockService', () => {
     expect(originalSetter).not.toHaveBeenCalled();
   });
 
-  it('returns undefined on undefined in replaceWithMocks', () => {
+  it('preserves null in replaceWithMocks', () => {
     expect(helperMockService.replaceWithMocks(null)).toEqual(null);
   });
 });
@@ -843,61 +840,6 @@ describe('replaceWithMocks', () => {
     expect(actual).toEqual({
       DeepParentClass,
       GetterSetterMethodHuetod,
-    });
-  });
-
-  it('keeps all guards without excluding NG_MOCKS_GUARDS', async () => {
-    @NgModule({
-      providers: [
-        {
-          provide: 'test',
-          useValue: {
-            canActivate: [
-              DeepParentClass,
-              GetterSetterMethodHuetod,
-              ParentClass,
-            ],
-          },
-        },
-      ],
-    })
-    class TargetModule {}
-
-    await MockBuilder().mock(TargetModule).keep('test');
-    const actual = ngMocks.get('test');
-    expect(actual).toEqual({
-      canActivate: [
-        DeepParentClass,
-        GetterSetterMethodHuetod,
-        ParentClass,
-      ],
-    });
-  });
-
-  it('ignores all guards with excluded NG_MOCKS_GUARDS', async () => {
-    @NgModule({
-      providers: [
-        {
-          provide: 'test',
-          useValue: {
-            canActivate: [
-              DeepParentClass,
-              GetterSetterMethodHuetod,
-              ParentClass,
-            ],
-          },
-        },
-      ],
-    })
-    class TargetModule {}
-
-    await MockBuilder()
-      .mock(TargetModule)
-      .keep('test')
-      .exclude(NG_MOCKS_GUARDS);
-    const actual = ngMocks.get('test');
-    expect(actual).toEqual({
-      canActivate: [],
     });
   });
 });

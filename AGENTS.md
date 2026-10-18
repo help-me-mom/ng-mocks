@@ -224,6 +224,13 @@
 
 - Keep spec files focused and readable for humans and agents. Split distinct behaviors or fixtures into named
   spec files when one suite becomes hard to follow; prefer explicit cases over conditional test setup.
+- Similar component, directive, service, or module definitions in separate specs provide test isolation; they
+  are not redundant coverage. Do not combine files or share fixtures merely to remove those definitions.
+- Before adding or removing a case, compare its setup, action, assertions, and relevant state with existing
+  coverage. Remove genuinely duplicate or subsumed scenarios, or expand an existing focused case when it covers
+  the same contract. Preserve distinct API, lifecycle, cache, side-effect, and compatibility checks.
+- Reduce repeated coverage rather than collecting independent cases into one assertion-heavy `it`. Use a concise
+  comment for additional non-obvious coverage where helpful; comments do not replace executable assertions.
 - Never add helper functions in tests. Keep setup, actions, and assertions inline, even when a short block is
   repeated, so the regression remains clear across spread targets.
 - Keep spread specs compatible with Jasmine, Jest, and Vitest. Prefer inline counters or ng-mocks helpers over

@@ -52,34 +52,20 @@ describe('ag-grid:cell-renderer', () => {
     }),
   );
 
-  it('renders the value supplied through agInit', () => {
-    // Rendering the cell component and accessing its instance.
-    const fixture = MockRender(PriceCellComponent);
-
-    // AG Grid calls agInit; Angular does not treat it as a lifecycle hook or an input.
-    expect(ngMocks.formatText(fixture)).toEqual('');
-    fixture.point.componentInstance.agInit({
-      value: 35_000,
-    } as ICellRendererParams);
-    fixture.point.injector.get(ChangeDetectorRef).markForCheck();
-    fixture.detectChanges();
-
-    // Asserting the rendered cell.
-    expect(ngMocks.formatHtml(fixture)).toContain(
-      '<strong>price: 35000</strong>',
-    );
-  });
-
   it('refreshes the value without replacing the renderer', () => {
     // Rendering the cell component and accessing its instance.
     const fixture = MockRender(PriceCellComponent);
     const renderer = fixture.point.componentInstance;
 
-    // Initializing the cell as AG Grid would.
+    // AG Grid calls agInit; Angular does not treat it as a lifecycle hook or an input.
+    expect(ngMocks.formatText(fixture)).toEqual('');
     renderer.agInit({ value: 35_000 } as ICellRendererParams);
     fixture.point.injector.get(ChangeDetectorRef).markForCheck();
     fixture.detectChanges();
     expect(ngMocks.formatText(fixture)).toEqual('price: 35000');
+    expect(ngMocks.formatHtml(fixture)).toContain(
+      '<strong>price: 35000</strong>',
+    );
 
     // Refreshing the cell with a new value.
     expect(

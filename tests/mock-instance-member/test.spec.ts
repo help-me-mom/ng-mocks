@@ -75,27 +75,6 @@ describe('mock-instance-member', () => {
     expect(component.global).toBeUndefined();
   });
 
-  it('gets right stubs #2', () => {
-    const component =
-      MockRender(TargetComponent).point.componentInstance;
-    expect(component).toEqual(
-      assertion.objectContaining({
-        beforeAll1: 'mock',
-        beforeEach1: 'mock',
-        beforeEach2: 'mock',
-      }),
-    );
-    expect(component.beforeAll2).toBeUndefined();
-    expect(component.beforeEach3).toBeUndefined();
-    expect(component.it1).toBeUndefined();
-    expect(component.it2).toBeUndefined();
-
-    // caused by reset in beforeAll
-    expect(component.describe1).toBeUndefined();
-    expect(component.describe2).toBeUndefined();
-    expect(component.global).toBeUndefined();
-  });
-
   describe('nested w/ overrides', () => {
     MockInstance.scope('all');
 
@@ -199,7 +178,7 @@ describe('mock-instance-member', () => {
     });
   });
 
-  it('gets right stubs #3', () => {
+  it('restores outer stubs after the nested scopes', () => {
     const component =
       MockRender(TargetComponent).point.componentInstance;
     expect(component).toEqual(

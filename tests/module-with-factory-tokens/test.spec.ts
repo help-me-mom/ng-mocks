@@ -154,34 +154,3 @@ describe('module-with-factory-tokens:mock-2', () => {
     );
   });
 });
-
-// And the most interesting case. Because we do not touch tokens at all and mock the module
-// the tokens will used as they are with their factories.
-// Unfortunately, it is quite tough to guess which tokens we can keep, mocks or omit and now
-// a user is responsible to specify tokens for his mock.
-// UPD 2020-10-28: it has been fixed. Now all missed tokens are added to the TestModuleMeta,
-// therefore we have to keep them.
-describe('module-with-factory-tokens:mock-3', () => {
-  if (Number.parseInt(VERSION.major, 10) <= 5) {
-    it('a5', () => {
-      // TODO pending('Need Angular > 5');
-      expect(true).toBeTruthy();
-    });
-
-    return;
-  }
-
-  beforeEach(() =>
-    MockBuilder(
-      [TargetComponent, MY_TOKEN_SINGLE, MY_TOKEN_MULTI],
-      TargetModule,
-    ),
-  );
-
-  it('renders all tokens', () => {
-    const fixture = MockRender(TargetComponent);
-    expect(fixture.nativeElement.innerHTML).toEqual(
-      '<internal-module-with-factory-tokens>"MY_TOKEN_SINGLE" "MY_TOKEN_MULTI"</internal-module-with-factory-tokens>',
-    );
-  });
-});

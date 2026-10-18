@@ -119,12 +119,8 @@ describe('module-with-tokens:mock-2', () => {
 describe('module-with-tokens:mock-3', () => {
   beforeEach(() => MockBuilder(TargetComponent, TargetModule));
 
-  it('does not fail to render all tokens', () => {
-    // InjectionToken
-    expect(() => MockRender(TargetComponent)).not.toThrow();
-  });
-
-  it('renders mock tokens with respect of multi flag', () => {
+  // Successful rendering also verifies that both implicit tokens resolve.
+  it('renders implicit token mocks while preserving the multi flag', () => {
     const fixture = MockRender(TargetComponent);
     expect(fixture.nativeElement.innerHTML).toContain('[]');
   });

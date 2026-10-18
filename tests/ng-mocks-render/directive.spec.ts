@@ -126,8 +126,6 @@ describe('ng-mocks-render:directive', () => {
     ngMocks.render(directive, directiveBody);
     html = ngMocks.formatHtml(fixture.nativeElement);
     expect(html).toContain(':step:3: rendered-body :step:4:');
-
-    expect(html).toContain(':step:3: rendered-body :step:4:');
     ngMocks.hide(directive, directiveBody);
     html = ngMocks.formatHtml(fixture.nativeElement);
     expect(html).toContain(':step:3: :step:4:');

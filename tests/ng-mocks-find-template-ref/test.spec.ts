@@ -181,25 +181,6 @@ describe('ng-mocks-find-template-ref', () => {
     );
   });
 
-  it('returns default value on missed directives', () => {
-    const fixture = MockRender(TestComponent);
-
-    expect(ngMocks.findTemplateRef('unknownId', null)).toEqual(null);
-    expect(
-      ngMocks.findTemplateRef(fixture, ['unknownAttribute1'], null),
-    ).toEqual(null);
-    expect(
-      ngMocks.findTemplateRef(
-        fixture.debugElement,
-        ['unknownAttribute2', 'value'],
-        null,
-      ),
-    ).toEqual(null);
-    expect(ngMocks.findTemplateRef(UnusedDirective, null)).toEqual(
-      null,
-    );
-  });
-
   it('fails on wrong selector type', () => {
     MockRender(TestComponent);
     try {

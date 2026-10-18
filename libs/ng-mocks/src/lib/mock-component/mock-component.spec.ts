@@ -128,14 +128,8 @@ describe('MockComponent', () => {
     ).componentInstance;
     expect(mockComponent.someInput).toEqual('hi');
     expect(mockComponent.someInput2).toEqual('bye');
-  });
-
-  it('has no issues with multiple decorators on an input', () => {
-    fixture.detectChanges();
-    const mockComponent = fixture.debugElement.query(
-      By.directive(SimpleComponent),
-    );
-    expect(mockComponent.componentInstance.someInput3).toEqual(true);
+    // HostBinding must not hide the input declared on the same property.
+    expect(mockComponent.someInput3).toEqual(true);
   });
 
   it('should trigger output bound behavior', () => {

@@ -167,8 +167,14 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
       }
     });
 
-    it('.findAll type', () => {
+    it('.findAll type accepts fixture and debugElement', () => {
       const elements = ngMocks.findAll(fixture, TargetComponent);
+      const debugElements = ngMocks.findAll(
+        fixture.debugElement,
+        TargetComponent,
+      );
+
+      expect(debugElements).toEqual(elements);
       expect(
         isMockOf(elements[0].componentInstance, TargetComponent),
       ).toBeTruthy();
@@ -179,11 +185,17 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
       expect(elements[1].componentInstance.target).toEqual('2');
     });
 
-    it('.findAll css selector', () => {
+    it('.findAll css selector accepts fixture and debugElement', () => {
       const elements = ngMocks.findAll<TargetComponent>(
         fixture,
         'target-ng-mocks-search-with-no-fixture',
       );
+      const debugElements = ngMocks.findAll<TargetComponent>(
+        fixture.debugElement,
+        'target-ng-mocks-search-with-no-fixture',
+      );
+
+      expect(debugElements).toEqual(elements);
       expect(
         isMockOf(elements[0].componentInstance, TargetComponent),
       ).toBeTruthy();
@@ -217,11 +229,17 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
       }
     });
 
-    it('.findInstances', () => {
+    it('.findInstances accepts fixture and debugElement', () => {
       const componentInstances = ngMocks.findInstances(
         fixture,
         TargetComponent,
       );
+      const debugInstances = ngMocks.findInstances(
+        fixture.debugElement,
+        TargetComponent,
+      );
+
+      expect(debugInstances).toEqual(componentInstances);
       expect(
         isMockOf(componentInstances[0], TargetComponent),
       ).toBeTruthy();
@@ -288,36 +306,6 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
       }
     });
 
-    it('.findAll type', () => {
-      const elements = ngMocks.findAll(
-        fixture.debugElement,
-        TargetComponent,
-      );
-      expect(
-        isMockOf(elements[0].componentInstance, TargetComponent),
-      ).toBeTruthy();
-      expect(elements[0].componentInstance.target).toEqual('1');
-      expect(
-        isMockOf(elements[1].componentInstance, TargetComponent),
-      ).toBeTruthy();
-      expect(elements[1].componentInstance.target).toEqual('2');
-    });
-
-    it('.findAll css selector', () => {
-      const elements = ngMocks.findAll<TargetComponent>(
-        fixture.debugElement,
-        'target-ng-mocks-search-with-no-fixture',
-      );
-      expect(
-        isMockOf(elements[0].componentInstance, TargetComponent),
-      ).toBeTruthy();
-      expect(elements[0].componentInstance.target).toEqual('1');
-      expect(
-        isMockOf(elements[1].componentInstance, TargetComponent),
-      ).toBeTruthy();
-      expect(elements[1].componentInstance.target).toEqual('2');
-    });
-
     it('.findInstance', () => {
       const componentInstance = ngMocks.findInstance(
         fixture.debugElement,
@@ -343,21 +331,6 @@ describe('ng-mocks-search-with-no-fixture:fixture', () => {
           `Cannot find an instance via ngMocks.findInstance(${MissedComponent.name})`,
         );
       }
-    });
-
-    it('.findInstances', () => {
-      const componentInstances = ngMocks.findInstances(
-        fixture.debugElement,
-        TargetComponent,
-      );
-      expect(
-        isMockOf(componentInstances[0], TargetComponent),
-      ).toBeTruthy();
-      expect(componentInstances[0].target).toEqual('1');
-      expect(
-        isMockOf(componentInstances[1], TargetComponent),
-      ).toBeTruthy();
-      expect(componentInstances[1].target).toEqual('2');
     });
   });
 });

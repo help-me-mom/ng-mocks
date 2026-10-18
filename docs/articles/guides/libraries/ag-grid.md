@@ -302,5 +302,6 @@ it('refreshes the value without replacing the renderer', () => {
 ```
 
 [`cell-renderer.spec.ts`](https://github.com/help-me-mom/ng-mocks/blob/main/tests-e2e/src/ag-grid/cell-renderer.spec.ts)
-also checks initialization on its own and verifies that a mocked grid preserves
-the renderer configuration without creating cells.
+also checks the blank output before initialization and the initial markup before
+refreshing, and verifies that a mocked grid preserves the renderer configuration
+without creating cells.
