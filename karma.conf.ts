@@ -74,6 +74,7 @@ export default async (config: Config) => {
       './tests/issue-1596/**/*.ts',
       './tests/issue-296/**/*.ts',
       './tests/issue-736/**/*.ts',
+      './tests/issue-15340/component-factory-resolver.spec.ts',
       './tests/issue-14898/experimental.spec.ts',
     ],
     files: [

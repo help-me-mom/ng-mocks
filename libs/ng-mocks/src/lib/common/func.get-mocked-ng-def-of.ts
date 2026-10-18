@@ -15,14 +15,15 @@ const getMock = (declaration: any, source: any, mocks?: Map<any, any>) => {
     throw new Error(`There is no mock for ${funcGetName(source)}`);
   }
   let mock = mocks ? mocks.get(source) : undefined;
-  if (mock === source) {
-    mock = undefined;
+  if (mocks) {
+    // A current keep or exclusion must not fall back to an earlier mock.
+    return mock === source ? undefined : mock;
   }
 
   // If we are not in the MockBuilder env we can rely on the current cache.
-  if (!mock && source !== declaration) {
+  if (source !== declaration) {
     mock = declaration;
-  } else if (!mock && ngMocksUniverse.cacheDeclarations.has(source)) {
+  } else if (ngMocksUniverse.cacheDeclarations.has(source)) {
     mock = ngMocksUniverse.cacheDeclarations.get(source);
   }
 

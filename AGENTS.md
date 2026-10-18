@@ -132,8 +132,10 @@
 - Reread the original report and later comments separately. Distinguish observed failures from the reporter's
   proposed explanation, and compare the reported revision with prior fixes and current `upstream/main`.
   A related fix or a passing adjacent case does not prove that an unreproduced report is resolved.
-- Before implementing a fix, check whether the reported failure is one instance of a wider defect. Trace the
-  root cause through shared helpers, assumptions, and callers, and inspect similar code paths and prior fixes.
+- Before implementing or approving a fix, check whether the reported failure is one instance of a wider defect.
+  Trace relevant data from its producers through shared state and helpers to every reader and caller that could
+  share the defect. Inspect assumptions, similar code paths, and prior fixes; a guard in one reader does not
+  establish that the shared data or other readers are correct.
 - Compare related use cases where they share that mechanism. For metadata, consider inputs, outputs, view and
   content queries, and host metadata; aliases and unaliased properties; inheritance; and decorator and signal
   forms. Check the relevant component, directive, pipe, service, or module paths and supported Angular profiles.
@@ -141,19 +143,25 @@
 - Identify which related cases already have meaningful coverage. Add regression tests for uncovered cases that
   could share the defect, including cases that already work, and assert preserved behavior and relevant side
   effects. Follow `Test Style` for test placement, coverage, and compatibility gates.
-- Capture failing reproducers before changing source. Fix other confirmed instances of the same defect within
-  the task's scope, retaining the original and adjacent regression assertions. Passing adjacent cases need
-  coverage where missing, not speculative source changes.
+- Capture failing reproducers before changing source. Fix the reported failure and every confirmed instance of
+  the same defect within the task's scope, retaining the original and adjacent regression assertions. Passing
+  adjacent cases need coverage where missing, not speculative source changes.
 - Fix reported and confirmed related defects through existing behavior and interfaces where possible. Add
   entry points, parameters, options, abstractions, or public docs only for a demonstrated requirement, and
   explain why the addition is necessary. Do not add configurability for hypothetical future callers.
 - Keep the implementation focused on the confirmed cause. Record separate root causes or work outside the
   requested scope as follow-ups, and state any unverified areas instead of claiming the whole area is covered.
-- Record the inspected areas, existing coverage, added cases, and scope decisions in work notes. Summarize the
-  affected behavior and regression scope in the PR description, keeping validation commands and results in the
-  work notes as required by `Pull Request Quality`.
-- For cache fixes, test both invalidation and safe reuse. Include behavior flags and provider tokens, recipes,
-  dependencies, multi flags, and falsy values when they contribute to the cached result.
+- In work notes, map each inspected area and scope decision to existing or added regression coverage and actual
+  validation results. List unverified areas and follow-ups separately. Summarize the affected behavior and
+  regression scope in the PR description, keeping validation commands and results in the work notes as required
+  by `Pull Request Quality`.
+- Before claiming completion, compare the original report and later scope decisions with the final fix and this
+  evidence. Confirm intended behavior, preserved contracts, and relevant side effects across the reviewed scope;
+  preventing an exception, adding a guard, or obtaining green tests and coverage alone does not establish
+  completeness.
+- For cache fixes, test both invalidation and safe reuse, including current keep/exclude choices after an earlier
+  mock was cached. Include behavior flags and provider tokens, recipes, dependencies, multi flags, and falsy values
+  when they contribute to the cached result.
 
 ## Spec and Documentation Examples
 
@@ -220,6 +228,7 @@
   repeated, so the regression remains clear across spread targets.
 - Keep spread specs compatible with Jasmine, Jest, and Vitest. Prefer inline counters or ng-mocks helpers over
   runner-specific spies, and use assertions supported by all three runners. Root-only unit specs may use Jasmine APIs.
+  For exact error messages, use `toThrow(new Error(message))`; Jest 30 removed `toThrowError`.
 - Prefer static ES imports. For APIs unavailable in older Angular targets, gate the file in `test-spread.conf`
   with `versions=` or `features=`. Do not bypass TypeScript compatibility with dynamic imports or runtime skips.
 - Some root tests only transpile TypeScript. When an API requires Angular's compiler transform, follow the
