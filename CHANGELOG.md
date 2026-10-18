@@ -1,3 +1,10 @@
+## [14.18.4](https://github.com/help-me-mom/ng-mocks/compare/v14.18.3...v14.18.4) (2026-10-18)
+
+
+### Bug Fixes
+
+* **ngMocks:** preserve configured declaration mocks [#15340](https://github.com/help-me-mom/ng-mocks/issues/15340) ([#15343](https://github.com/help-me-mom/ng-mocks/issues/15343)) ([8bee613](https://github.com/help-me-mom/ng-mocks/commit/8bee613dbf436c67fc52e27e9e74d6dc5f227fa7))
+
 ## [14.18.3](https://github.com/help-me-mom/ng-mocks/compare/v14.18.2...v14.18.3) (2026-10-17)
 
 
