@@ -290,7 +290,7 @@
     "@typescript-eslint/eslint-plugin": "8.71.2",
     "@typescript-eslint/parser": "8.71.2",
     "angular-eslint": "22.6.0",
-    "core-js": "3.50.0",
+    "core-js": "3.51.0",
     "coverage-istanbul-loader": "3.0.5",
     "coveralls": "3.1.1",
     "dts-bundle-generator": "9.5.1",
