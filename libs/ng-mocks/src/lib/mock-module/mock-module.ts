@@ -6,7 +6,6 @@ import { extendClass } from '../common/core.helpers';
 import coreReflectModuleResolve from '../common/core.reflect.module-resolve';
 import { AnyType, Type } from '../common/core.types';
 import decorateMock from '../common/decorate.mock';
-import funcGetName from '../common/func.get-name';
 import funcImportExists from '../common/func.import-exists';
 import { isMockNgDef } from '../common/func.is-mock-ng-def';
 import { isNgDef } from '../common/func.is-ng-def';
@@ -25,7 +24,7 @@ const flagReplace = (resolution?: string): boolean =>
   resolution === 'replace' && !ngMocksUniverse.flags.has('skipMock');
 
 const flagNever = (ngModule?: any): boolean =>
-  coreConfig.neverMockModule.indexOf(funcGetName(ngModule)) !== -1 && !ngMocksUniverse.flags.has('skipMock');
+  coreConfig.neverMockModule.indexOf(ngModule) !== -1 && !ngMocksUniverse.flags.has('skipMock');
 
 const preProcessFlags = (ngModule: AnyType<any>): { isRootModule: boolean; toggleSkipMockFlag: boolean } => {
   let toggleSkipMockFlag = false;
