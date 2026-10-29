@@ -103,6 +103,11 @@ const getExistingMockModule = (ngModule: Type<any>, isRootModule: boolean): Type
     return ngModule;
   }
 
+  const selected = ngMocksUniverse.config.get(ngModule)?.__ngMocksMock;
+  if (selected) {
+    return selected;
+  }
+
   // Every module should be replaced with its mock copy only once to avoid errors like:
   // Failed: Type ...Component is part of the declarations of 2 modules: ...Module and ...Module...
   if (ngMocksUniverse.flags.has('cacheModule') && ngMocksUniverse.cacheDeclarations.has(ngModule)) {

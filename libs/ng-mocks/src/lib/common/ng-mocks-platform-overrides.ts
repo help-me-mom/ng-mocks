@@ -73,7 +73,7 @@ const applyPlatformOverrideDef = (def: any) => {
   if (!original) {
     return;
   }
-  const set = getOverrideDef(original);
+  const set = getOverrideDef(original)?.def;
   if (set) {
     (TestBed as any).ngMocksOverrides.set(ngModule, { set: original });
     TestBed.overrideModule(ngModule, { set });

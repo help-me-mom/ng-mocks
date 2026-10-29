@@ -98,6 +98,16 @@ Create and maintain a plain Markdown checklist:
      Preserve both class selection and provider behavior. Compare mock classes with builder metadata;
      mock instances expose the source prototype, so their `.constructor` is not the generated mock class.
      See [the injectable declaration regressions](../../../tests/get-mocked-ng-def-of/injectable-declarations.spec.ts).
+   - For mixed real/mock TestBed configurations, assert the supplied mock class through injector tokens,
+     alongside rendered behavior. Check native overrides before and after configuration, module clones,
+     reset restoration, and current dependency/provider policies after a mock was cached. Retaining class
+     identity must not change mock boundaries or reuse stale dependency resolution. See the standalone
+     specs in `tests/mock-component` and the explicit/native override specs in `tests/mock-module`.
+     Include unused entry components when retaining module classes: older Ivy verifies original
+     annotations alongside compiled declarations, so their nested class identities must agree.
+     Test keep/exclude changes after caching and native-only reuse after reset; another automatic
+     configuration can hide failed metadata restoration. Include `ModuleWithProviders` references
+     when checking native module-import removals, because class identity alone does not identify wrappers.
 5. Reproduce before fixing:
    - Add the smallest local test that fails on the current implementation and passes only after the real fix.
    - Keep the test focused on the reported behavior, not the eventual implementation detail.

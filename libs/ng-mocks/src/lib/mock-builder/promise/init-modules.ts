@@ -1,10 +1,26 @@
+import coreReflectMeta from '../../common/core.reflect.meta';
+import { Type } from '../../common/core.types';
 import { isNgDef } from '../../common/func.is-ng-def';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
 import { MockModule } from '../../mock-module/mock-module';
 import mockNgDef from '../../mock-module/mock-ng-def';
 import collectDeclarations from '../../resolve/collect-declarations';
 
+import { getMockOverrideDef } from './get-override-def';
 import tryMockDeclaration from './try-mock-declaration';
+
+const resolveMockMetadata = (def: Type<unknown>): void => {
+  const mock = ngMocksUniverse.config.get(def).__ngMocksMock;
+  const meta = mock && coreReflectMeta(def);
+  if (!meta) {
+    return;
+  }
+  const override = getMockOverrideDef(def, mock, meta);
+  ngMocksUniverse.configInstance.set(def, {
+    ...ngMocksUniverse.configInstance.get(def),
+    __ngMocksOverride: override,
+  });
+};
 
 export default (
   keepDef: Set<any>,
@@ -34,6 +50,7 @@ export default (
     }
     if (isModule) {
       ngMocksUniverse.builtDeclarations.set(def, MockModule(def));
+      resolveMockMetadata(def);
     }
 
     ngMocksUniverse.flags.delete('skipMock');
@@ -43,6 +60,9 @@ export default (
   }
   for (const def of mockDef) {
     tryMockDeclaration(def);
+    if (!isNgDef(def, 'm')) {
+      resolveMockMetadata(def);
+    }
   }
 
   return loProviders;

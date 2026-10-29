@@ -1,6 +1,6 @@
-import { getTestBed, MetadataOverride, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
+import { getTestBed, TestBed, TestBedStatic, TestModuleMetadata } from '@angular/core/testing';
 
-import funcExtractTokens from '../mock-builder/func.extract-tokens';
+import funcExtractTokens, { NgMocksOverrides } from '../mock-builder/func.extract-tokens';
 import { MockBuilder } from '../mock-builder/mock-builder';
 import { ngMocks } from '../mock-helper/mock-helper';
 import mockHelperFasterInstall from '../mock-helper/mock-helper.faster-install';
@@ -20,20 +20,25 @@ import { resetDeclarationFactories } from './ng-mocks-declaration-factories';
 import { rememberMockDeclarations, resetInjectedDeclarations } from './ng-mocks-injected-declarations';
 import { applyPlatformOverrides, defineTouches } from './ng-mocks-platform-overrides';
 import { resetRuntimeInject } from './ng-mocks-runtime-inject';
-import { installTemplateOverrides, resetTemplateOverrides } from './ng-mocks-template-overrides';
+import {
+  applyMockOverrides,
+  installTemplateOverrides,
+  rememberModuleAliases,
+  resetTemplateOverrides,
+} from './ng-mocks-template-overrides';
 import { installTestBedInjection } from './ng-mocks-test-bed-injection';
 import { rememberTestModuleOptions, resetTestModuleOptions } from './ng-mocks-test-module-metadata';
 import ngMocksUniverse from './ng-mocks-universe';
 import { installViewContainer } from './ng-mocks-view-container';
 
-const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, MetadataOverride<any>]>): void => {
+const applyOverrides = (overrides: NgMocksOverrides, replayNative: boolean): void => {
   // eslint-disable-next-line unicorn/no-useless-spread -- Keep the pending list stable across TestBed override calls.
-  for (const [def, [override, original]] of [...overrides]) {
+  for (const [def, [override, original, resolutions]] of [...overrides]) {
     (TestBed as any).ngMocksOverrides.set(def, {
       ...original,
       override,
     });
-    funcApplyTestBedOverride(def, override);
+    applyMockOverrides(def, override, original, replayNative, resolutions);
   }
 };
 
@@ -65,9 +70,10 @@ const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: Map
 };
 
 const initTestBed = () => {
+  const testBed = getTestBed();
   installTestBedInjection(TestBed as never);
-  installTestBedInjection(getTestBed() as never);
-  installTemplateOverrides(getTestBed());
+  installTestBedInjection(testBed as never);
+  installTemplateOverrides(testBed);
   if (!(TestBed as any).ngMocksSelectors) {
     coreDefineProperty(TestBed, 'ngMocksSelectors', new Map());
   }
@@ -75,6 +81,8 @@ const initTestBed = () => {
   if (!(TestBed as any).ngMocksOverrides) {
     coreDefineProperty(TestBed, 'ngMocksOverrides', new Map());
   }
+
+  return testBed;
 };
 
 const collectMockDeclarations = (moduleDef: TestModuleMetadata, mocks?: Map<any, any>): Map<any, any> | undefined => {
@@ -105,7 +113,7 @@ const configureTestingModule =
     instance: TestBedStatic,
   ): TestBedStatic['configureTestingModule'] =>
   (moduleDef: TestModuleMetadata) => {
-    initTestBed();
+    const testBed = initTestBed();
 
     const useMockBuilder =
       typeof moduleDef === 'object' &&
@@ -176,7 +184,9 @@ const configureTestingModule =
           export: !isNgDef(source, 'm'),
           exportAll: false,
           onRoot: true,
+          ...(isMock ? { __ngMocksMock: def } : {}),
         };
+        // Retain the selected class without changing the graph's mock policies.
         builder =
           isMock && transform
             ? builder.mock(source, transform, options)
@@ -218,8 +228,6 @@ const configureTestingModule =
       };
     }
 
-    const testBed = getTestBed();
-
     const providers = funcExtractTokens(finalModuleDef.providers);
     const { mocks, overrides } = providers;
     // touches are important, therefore we are trying to fetch them from the known providers.
@@ -232,10 +240,11 @@ const configureTestingModule =
     // Track mocked source declarations so TestBed.inject / get only replays overrides for mocked
     // components, directives, and pipes in the current TestBed.
     rememberMockDeclarations(collectMockDeclarations(finalModuleDef, mocks));
+    rememberModuleAliases(mocks, hasMocks === 0b11);
 
     // istanbul ignore else
     if (overrides) {
-      applyOverrides(overrides);
+      applyOverrides(overrides, hasMocks === 0b11);
     }
     // _testModuleRef exists only after the 1st call,
     // so we shouldn't override platform again.

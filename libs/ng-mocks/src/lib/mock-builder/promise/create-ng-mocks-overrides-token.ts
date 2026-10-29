@@ -1,16 +1,15 @@
 import { ValueProvider } from '@angular/core';
-import { MetadataOverride } from '@angular/core/testing';
 
 import coreReflectMeta from '../../common/core.reflect.meta';
 import { NG_MOCKS_OVERRIDES } from '../../common/core.tokens';
-import { Type } from '../../common/core.types';
 import ngMocksUniverse from '../../common/ng-mocks-universe';
+import { NgMocksOverrides } from '../func.extract-tokens';
 
 import getOverrideDef from './get-override-def';
 import skipOverride from './skip-override';
 
 export default (replaceDef: Set<any>, defValue: Map<any, any>): ValueProvider => {
-  const overrides: Map<Type<any>, [MetadataOverride<any>, MetadataOverride<any>]> = new Map();
+  const overrides: NgMocksOverrides = new Map();
   // eslint-disable-next-line unicorn/no-useless-spread -- getOverrideDef can add dependencies to the touches set.
   for (const proto of [...ngMocksUniverse.touches]) {
     const source: any = proto;
@@ -20,10 +19,13 @@ export default (replaceDef: Set<any>, defValue: Map<any, any>): ValueProvider =>
     }
 
     const original = coreReflectMeta(value);
-    const override = getOverrideDef(original);
-    if (!override) {
+    const selected = ngMocksUniverse.config.get(source)?.__ngMocksMock === value;
+    const definition =
+      selected && original ? ngMocksUniverse.configInstance.get(source).__ngMocksOverride : getOverrideDef(original);
+    if (!definition) {
       continue;
     }
+    const { def: override, resolutions } = definition;
 
     // We need to delete standalone, because Angular was too lazy to check whether it has been really changed.
     const patchedOriginal: Partial<typeof original> = {};
@@ -31,7 +33,7 @@ export default (replaceDef: Set<any>, defValue: Map<any, any>): ValueProvider =>
       patchedOriginal[key] = original[key];
     }
 
-    overrides.set(value, [{ set: override }, { set: patchedOriginal }]);
+    overrides.set(value, [{ set: override }, { set: patchedOriginal }, resolutions]);
   }
 
   return {
