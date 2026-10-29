@@ -36,7 +36,8 @@ export default (mockDef: Set<any>, defValue: Map<any, any>): void => {
       const source = getSourceOfMock(dependency);
       const config = ngMocksUniverse.config.get(source);
       const resolution = ngMocksUniverse.getResolution(source);
-      if ((resolution && resolution !== 'mock') || config.__ngMocksMock) {
+      // Historical replacements outside the current graph must not become roots.
+      if (!config || (resolution && resolution !== 'mock') || config.__ngMocksMock) {
         continue;
       }
       // Retain nested class identities, but resolve their metadata again below.

@@ -33,12 +33,12 @@ import { installViewContainer } from './ng-mocks-view-container';
 
 const applyOverrides = (overrides: NgMocksOverrides, replayNative: boolean): void => {
   // eslint-disable-next-line unicorn/no-useless-spread -- Keep the pending list stable across TestBed override calls.
-  for (const [def, [override, original, resolutions]] of [...overrides]) {
+  for (const [def, [override, original, substitutions]] of [...overrides]) {
     (TestBed as any).ngMocksOverrides.set(def, {
       ...original,
       override,
     });
-    applyMockOverrides(def, override, original, replayNative, resolutions);
+    applyMockOverrides(def, override, original, replayNative, substitutions);
   }
 };
 

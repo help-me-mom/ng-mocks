@@ -47,6 +47,27 @@ class UnrelatedComponent {}
 class HostComponent {}
 
 describe('MockComponent:native override composition', () => {
+  it('retains native rejection of set combined with removal without mocks', () => {
+    TestBed.configureTestingModule({
+      imports: [HostComponent],
+    }).overrideComponent(HostComponent, {
+      set: { template: '' },
+      remove: { imports: [ChildComponent] },
+    });
+
+    expect(() => TestBed.createComponent(HostComponent)).toThrow();
+  });
+
+  it('does not make an invalid native set and removal valid by splitting dependency fields', () => {
+    TestBed.configureTestingModule({
+      imports: [HostComponent, MockComponent(ChildComponent)],
+    }).overrideComponent(HostComponent, {
+      set: { template: '' },
+      remove: { imports: [ChildComponent] },
+    });
+
+    expect(() => TestBed.createComponent(HostComponent)).toThrow();
+  });
   afterEach(() => ngMocks.globalWipe(ChildComponent));
 
   it('removes a global replacement before adding a distinct native replacement', async () => {

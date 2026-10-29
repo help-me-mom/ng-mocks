@@ -1,7 +1,8 @@
 import { Component, Directive, NgModule, ViewChild } from '@angular/core';
 
 import CoreDefStack from '../common/core.def-stack';
-import { AnyType, DirectiveIo } from '../common/core.types';
+import coreDefineProperty from '../common/core.define-property';
+import { AnyType, DirectiveIo, MetadataSubstitutions } from '../common/core.types';
 import decorateInputs from '../common/decorate.inputs';
 import decorateMock from '../common/decorate.mock';
 import decorateOutputs from '../common/decorate.outputs';
@@ -87,6 +88,7 @@ export default <T extends Component & Directive>(
   }
 
   try {
+    const substitutions: MetadataSubstitutions = {};
     const options: T & { imports?: any[]; hostDirectives?: any[]; standalone?: boolean } = {
       ...params,
     };
@@ -103,29 +105,31 @@ export default <T extends Component & Directive>(
     }
 
     if (meta.imports) {
-      const [, { imports }] = mockNgDef({ imports: meta.imports, skipExports: true });
+      const [, { imports }, , entries] = mockNgDef({ imports: meta.imports, skipExports: true });
+      substitutions.imports = entries.imports;
       if (imports?.length) {
         options.imports = imports as never;
       }
     }
 
     if (meta.hostDirectives) {
-      const [, { hostDirectives }] = mockNgDef({ hostDirectives: meta.hostDirectives, skipExports: true });
+      const [, { hostDirectives }, , entries] = mockNgDef({ hostDirectives: meta.hostDirectives, skipExports: true });
+      substitutions.hostDirectives = entries.hostDirectives;
       if (hostDirectives?.length) {
         options.hostDirectives = hostDirectives;
       }
     }
 
-    const { setControlValueAccessor, providers } = cloneProviders(
-      source,
-      mock,
-      meta.providers || [],
-      ngMocksUniverse.config.get('mockNgDefResolver'),
-    );
-    providers.push(toExistingProvider(source, mock));
+    const {
+      setControlValueAccessor,
+      providers,
+      substitutions: providerSubstitutions,
+    } = cloneProviders(source, mock, meta.providers || [], ngMocksUniverse.config.get('mockNgDefResolver'));
+    const own = toExistingProvider(source, mock);
+    providers.push(own);
     options.providers = providers;
 
-    const { providers: viewProviders } = cloneProviders(
+    const { providers: viewProviders, substitutions: viewProviderSubstitutions } = cloneProviders(
       source,
       mock,
       meta.viewProviders || [],
@@ -148,6 +152,11 @@ export default <T extends Component & Directive>(
       setControlValueAccessor ?? methods.indexOf('writeValue') !== -1,
     );
     decorateMock(mock, source, config);
+    coreDefineProperty(mock, '__ngMocksMetadataSubstitutions', {
+      ...substitutions,
+      providers: [...providerSubstitutions, { original: source, entries: [[source, own]] }],
+      viewProviders: viewProviderSubstitutions,
+    });
 
     // istanbul ignore else
     if (meta.queries) {

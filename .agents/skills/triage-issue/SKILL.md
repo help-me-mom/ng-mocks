@@ -108,6 +108,14 @@ Create and maintain a plain Markdown checklist:
      Test keep/exclude changes after caching and native-only reuse after reset; another automatic
      configuration can hide failed metadata restoration. Include `ModuleWithProviders` references
      when checking native module-import removals, because class identity alone does not identify wrappers.
+     Record metadata substitutions separately from dependency graph resolutions. Capture field-scoped
+     top-level groups and exact emitted occurrences before flattening; native removals must preserve
+     nested-group semantics, duplicate counts, ordering, and structural recipe matching. Prefer the
+     installed Angular metadata matcher where available and verify its oldest compatibility path.
+     Native `set` replaces earlier provenance; repeated removals must not broaden into other equal
+     outputs. Check initial and existing MockRender middleware, reset restoration, and cached keep,
+     exclude, replace, and export policies. Only produced artifacts should own clone-forwarding metadata;
+     a user-authored subclass is not a generated clone. Keep these contracts covered through public APIs.
 5. Reproduce before fixing:
    - Add the smallest local test that fails on the current implementation and passes only after the real fix.
    - Keep the test focused on the reported behavior, not the eventual implementation detail.

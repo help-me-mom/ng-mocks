@@ -52,6 +52,7 @@ describe('MockModule:explicit declarations', () => {
 
   it('uses current keep and exclude choices after caching the module graph', async () => {
     const module = MockModule(DependencyModule);
+    const entry = MockComponent(EntryComponent);
     ngMocks.globalKeep(ChildComponent);
     ngMocks.globalExclude(EntryComponent);
     await TestBed.configureTestingModule({
@@ -68,6 +69,9 @@ describe('MockModule:explicit declarations', () => {
     ).toBe(false);
     expect(ngMocks.formatText(fixture)).toBe('real child');
     expect(getMockedNgDefOf(DependencyModule, 'm')).toBe(module);
+    expect(() => getMockedNgDefOf(EntryComponent, 'c')).toThrow(
+      new Error(`There is no mock for ${EntryComponent.name}`),
+    );
 
     TestBed.resetTestingModule();
     ngMocks.globalWipe(ChildComponent);
@@ -77,6 +81,12 @@ describe('MockModule:explicit declarations', () => {
     await TestBed.configureTestingModule({ imports: [module] })
       .overrideModule(module, {
         add: { declarations: [HostComponent] },
+      })
+      .overrideComponent(HostComponent, {
+        set: {
+          template:
+            '<explicit-module-child></explicit-module-child><explicit-module-entry></explicit-module-entry>',
+        },
       })
       .compileComponents();
     const restored = TestBed.createComponent(HostComponent);
@@ -89,6 +99,11 @@ describe('MockModule:explicit declarations', () => {
       ),
     ).toBe(true);
     expect(ngMocks.formatText(restored)).toBe('');
+    const restoredEntry = ngMocks.find(restored, EntryComponent);
+    expect(
+      isMockOf(restoredEntry.componentInstance, EntryComponent),
+    ).toBe(true);
+    expect(restoredEntry.providerTokens).toContain(entry);
   });
 
   it('retains the supplied module graph including an unused entry component', async () => {

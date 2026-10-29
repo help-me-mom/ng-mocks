@@ -2,11 +2,11 @@ import { MetadataOverride } from '@angular/core/testing';
 
 import { flatten } from '../common/core.helpers';
 import { NG_MOCKS, NG_MOCKS_OVERRIDES, NG_MOCKS_TOUCHES } from '../common/core.tokens';
-import { AnyType } from '../common/core.types';
+import { AnyType, MetadataSubstitutions } from '../common/core.types';
 
 export type NgMocksOverrides = Map<
   AnyType<unknown>,
-  [MetadataOverride<unknown>, MetadataOverride<unknown>, Map<unknown, unknown>]
+  [MetadataOverride<unknown>, MetadataOverride<unknown>, MetadataSubstitutions]
 >;
 
 export default (

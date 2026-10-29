@@ -2,7 +2,7 @@ import { NgModule, Provider } from '@angular/core';
 
 import CoreDefStack from '../common/core.def-stack';
 import { flatten } from '../common/core.helpers';
-import { dependencyKeys, Type } from '../common/core.types';
+import { dependencyKeys, MetadataSubstitutions, Type } from '../common/core.types';
 import funcGetType from '../common/func.get-type';
 import ngMocksUniverse from '../common/ng-mocks-universe';
 import markExported from '../mock/mark-exported';
@@ -52,6 +52,7 @@ const processMeta = <
   ngModule: T,
   resolve: (def: any) => any,
   resolveProvider: (def: Provider) => any,
+  substitutions: MetadataSubstitutions,
 ): Partial<T> => {
   const mockModuleDef: Partial<T> = {};
   const keys = configureProcessMetaKeys(resolve, resolveProvider);
@@ -63,7 +64,22 @@ const processMeta = <
   try {
     for (const [key, callback] of keys) {
       if (ngModule[key]?.length) {
-        mockModuleDef[key] = flatToExisting(ngModule[key], callback);
+        const originals: unknown[] = ngModule[key];
+        const entries: Array<[unknown, unknown]> = [];
+        mockModuleDef[key] = flatToExisting(originals, entry => {
+          const value = callback(entry);
+          entries.push([entry, value]);
+
+          return value;
+        });
+        let index = 0;
+        substitutions[key] = originals.map(original => {
+          const count = flatten(original).length;
+          const contribution = { original, entries: entries.slice(index, index + count) };
+          index += count;
+
+          return contribution;
+        });
       }
     }
     if (!ngModule.skipMarkProviders) {
@@ -120,6 +136,7 @@ const addExports = (
   change: () => void,
   ngModuleDef: NgModule,
   mockModuleDef: NgModule,
+  substitutions: MetadataSubstitutions,
   ngModule?: Type<any>,
 ): void => {
   const correctExports = ngMocksUniverse.flags.has('skipMock') || ngMocksUniverse.flags.has('correctModuleExports');
@@ -132,6 +149,9 @@ const addExports = (
     change();
     mockModuleDef.exports = mockModuleDef.exports || [];
     mockModuleDef.exports.push(mockDef);
+    const original = funcGetType(def);
+    substitutions.exports = substitutions.exports || [];
+    substitutions.exports.push({ original, entries: [[original, mockDef]] });
   }
 };
 
@@ -144,7 +164,7 @@ export default <
 >(
   ngModuleDef: T,
   ngModule?: Type<any>,
-): [boolean, Partial<T>, Map<any, any>] => {
+): [boolean, Partial<T>, Map<any, any>, MetadataSubstitutions] => {
   const hasResolver = ngMocksUniverse.config.has('mockNgDefResolver');
   if (!hasResolver) {
     ngMocksUniverse.config.set('mockNgDefResolver', new CoreDefStack());
@@ -158,11 +178,12 @@ export default <
   };
   let mockModuleDef: Partial<T>;
   let resolutions: Map<any, any>;
+  const substitutions: MetadataSubstitutions = {};
   try {
     const { resolve, resolveProvider } = createResolvers(change, resolver);
-    mockModuleDef = processMeta(ngModuleDef, resolve, resolveProvider);
+    mockModuleDef = processMeta(ngModuleDef, resolve, resolveProvider, substitutions);
     if (!ngModuleDef.skipExports) {
-      addExports(resolve, change, ngModuleDef, mockModuleDef, ngModule);
+      addExports(resolve, change, ngModuleDef, mockModuleDef, substitutions, ngModule);
     }
     for (const def of ngModule && mockModuleDef.exports ? (flatten(mockModuleDef.exports) as Array<any>) : []) {
       markExported(def, ngModule);
@@ -174,5 +195,5 @@ export default <
     }
   }
 
-  return [changed, mockModuleDef, resolutions];
+  return [changed, mockModuleDef, resolutions, substitutions];
 };

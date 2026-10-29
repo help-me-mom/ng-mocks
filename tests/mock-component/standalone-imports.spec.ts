@@ -40,6 +40,78 @@ class ReplacementComponent {
 }
 
 describe('MockComponent:standalone imports', () => {
+  it('removes both automatic and native occurrences when the installed mock is named explicitly', async () => {
+    const mock = MockComponent(ChildComponent);
+    await TestBed.configureTestingModule({
+      imports: [HostComponent, mock],
+    })
+      .overrideComponent(HostComponent, { add: { imports: [mock] } })
+      .overrideComponent(HostComponent, {
+        remove: { imports: [mock] },
+        add: { imports: [ReplacementComponent] },
+      })
+      .compileComponents();
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    expect(ngMocks.formatText(fixture)).toBe('replacement:bound');
+    expect(ngMocks.find(fixture, ChildComponent, null)).toBeNull();
+  });
+
+  it('applies a later removal to the literal entries from a native set', async () => {
+    const mock = MockComponent(ChildComponent);
+    await TestBed.configureTestingModule({
+      imports: [HostComponent, mock],
+    })
+      .overrideComponent(HostComponent, {
+        set: { imports: [ReplacementComponent] },
+      })
+      .overrideComponent(HostComponent, {
+        remove: { imports: [ReplacementComponent] },
+        add: { imports: [mock] },
+      })
+      .compileComponents();
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    expect(
+      ngMocks.find(fixture, ChildComponent).providerTokens,
+    ).toContain(mock);
+    expect(ngMocks.formatText(fixture)).toBe('');
+  });
+  it('preserves a native explicit mock set when the original import is subsequently removed', async () => {
+    const mock = MockComponent(ChildComponent);
+    await TestBed.configureTestingModule({ imports: [HostComponent] })
+      .overrideComponent(HostComponent, { set: { imports: [mock] } })
+      .overrideComponent(HostComponent, {
+        remove: { imports: [ChildComponent] },
+      })
+      .compileComponents();
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    expect(
+      ngMocks.find(fixture, ChildComponent).providerTokens,
+    ).toContain(mock);
+  });
+
+  it('discards automatic provenance after a native import set', async () => {
+    const mock = MockComponent(ChildComponent);
+    await TestBed.configureTestingModule({
+      imports: [HostComponent, mock],
+    })
+      .overrideComponent(HostComponent, { set: { imports: [mock] } })
+      .overrideComponent(HostComponent, {
+        remove: { imports: [ChildComponent] },
+      })
+      .compileComponents();
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    expect(
+      ngMocks.find(fixture, ChildComponent).providerTokens,
+    ).toContain(mock);
+  });
   beforeEach(() => {
     ChildComponent.constructed = 0;
   });

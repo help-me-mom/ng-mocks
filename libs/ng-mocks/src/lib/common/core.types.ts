@@ -71,6 +71,12 @@ export type DebugNodeSelector =
 /**
  * @internal
  */
+export type MetadataContribution = {
+  original: unknown;
+  entries: Array<[unknown, unknown]>;
+};
+export type MetadataSubstitutions = Partial<Record<dependencyKeys, MetadataContribution[]>>;
+
 export type dependencyKeys =
   | 'declarations'
   | 'hostDirectives'

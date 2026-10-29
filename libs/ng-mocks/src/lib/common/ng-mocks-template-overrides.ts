@@ -1,23 +1,29 @@
-import { Component, ExistingProvider, NgModule } from '@angular/core';
-import { getTestBed, MetadataOverride, TestBedStatic } from '@angular/core/testing';
+import { ExistingProvider } from '@angular/core';
+import { getTestBed, TestBedStatic } from '@angular/core/testing';
 
 import funcInheritDefinition from '../mock-render/func.inherit-definition';
 import helperCreateClone from '../mock-service/helper.create-clone';
 
 import coreDefineProperty from './core.define-property';
-import { flatten } from './core.helpers';
 import coreReflectMeta from './core.reflect.meta';
-import { AnyType, Type } from './core.types';
+import { AnyType, MetadataSubstitutions, Type } from './core.types';
 import funcApplyTestBedOverride from './func.apply-test-bed-override';
-import funcExtractForwardRef from './func.extract-forward-ref';
+import { rebaseMetadata } from './func.compose-metadata-substitutions';
 import { getSourceOfMock } from './func.get-source-of-mock';
-import funcGetType from './func.get-type';
 import { isMockNgDef } from './func.is-mock-ng-def';
 import { isNgDef } from './func.is-ng-def';
+import {
+  createMetadataFields,
+  Metadata,
+  MetadataFields,
+  metadataDependencyKeys as dependencyKeys,
+  Override,
+  trackedMetadataOverride,
+  translateMetadataOverride,
+  untrackedMetadataOverride,
+} from './func.metadata-overrides';
 
 type OverrideKey = 'overrideComponent' | 'overrideDirective' | 'overrideModule';
-type Metadata = Component & NgModule & { entryComponents?: Array<Type<unknown>> };
-type Override = MetadataOverride<Metadata>;
 type OverrideRecord = [OverrideKey, Override];
 type NativeOverrides = Pick<TestBedStatic, OverrideKey>;
 type CompileTypes = (() => unknown) & { ngMocksTemplateOverridesPatched?: boolean };
@@ -30,23 +36,12 @@ type Middleware = ExistingProvider & { provide: Type<unknown>; useExisting: Type
 const overrides = new Map<AnyType<unknown>, OverrideRecord[]>();
 const middleware = new Map<Type<unknown>, Middleware>();
 const moduleAliases = new Map<Type<unknown>, Type<unknown>>();
-const dependencyKeys = [
-  'imports',
-  'declarations',
-  'exports',
-  'bootstrap',
-  'entryComponents',
-  'providers',
-  'viewProviders',
-  'hostDirectives',
-  'schemas',
-] as const;
 const replacements = new Map<
   AnyType<unknown>,
   {
     original: Partial<Metadata>;
     resolved: Partial<Metadata>;
-    definitions: Map<unknown, unknown>;
+    fields: MetadataFields;
   }
 >();
 let automatic = false;
@@ -65,44 +60,6 @@ const syncMockAnnotations = (source: AnyType<unknown>, metadata: Partial<Metadat
       delete annotation[key];
     }
   }
-};
-
-const translateOverride = (source: AnyType<unknown>, override: Override): Override => {
-  const replacement = replacements.get(source);
-  if (!replacement || !override.remove) {
-    return override;
-  }
-
-  let remove = override.remove;
-  for (const key of dependencyKeys) {
-    if (!remove[key]) {
-      continue;
-    }
-    const original = flatten<unknown>(replacement.original[key] ?? []);
-    const resolved = flatten<unknown>(replacement.resolved[key] ?? []);
-    const entries = flatten<unknown>(remove[key]);
-    const translated = [...entries];
-    for (const entry of entries) {
-      const mapped = replacement.definitions.get(entry);
-      if (original.indexOf(entry) !== -1 && resolved.indexOf(mapped) !== -1 && translated.indexOf(mapped) === -1) {
-        translated.push(mapped);
-      }
-      // Native removal compares references. Only translate an original class
-      // or a recorded wrapper, retaining unrelated recipe objects.
-      if (typeof entry !== 'function' || original.indexOf(entry) === -1) {
-        continue;
-      }
-      const type = funcExtractForwardRef(entry);
-      for (const value of resolved) {
-        if (getSourceOfMock(funcGetType(value)) === type && value !== entry && translated.indexOf(value) === -1) {
-          translated.push(value);
-        }
-      }
-    }
-    remove = { ...remove, [key]: translated };
-  }
-
-  return { ...override, remove };
 };
 
 const selectDependencyOverride = (override: Override, rewritten: Partial<Metadata>): Override | undefined => {
@@ -174,18 +131,25 @@ export const installTemplateOverrides = (instance: OverrideTestBed): void => {
         method,
         helperCreateClone(original[method], undefined, undefined, (source: Type<unknown>, override: Override) => {
           const target = method === 'overrideModule' ? (moduleAliases.get(source) ?? source) : source;
-          const forwarded = automatic ? override : translateOverride(target, override);
-          const result = original[method].call(instance, target, forwarded);
+          const replacement = replacements.get(target);
+          const translated = automatic ? undefined : translateMetadataOverride(override, replacement?.fields);
+          let result: ReturnType<NativeOverrides[OverrideKey]> = getTestBed();
+          for (const forwarded of translated?.overrides ?? [override]) {
+            result = original[method].call(instance, target, forwarded);
+            const child = middleware.get(source);
+            if (child) {
+              applyOverride(instance, method, child, forwarded);
+            }
+          }
           if (!automatic) {
+            if (replacement && translated) {
+              replacement.fields = translated.fields;
+            }
             const history = overrides.get(source) ?? [];
             history.push([method, override]);
             overrides.set(source, history);
           }
           installCompiler(instance);
-          const child = middleware.get(source);
-          if (child) {
-            applyOverride(instance, method, child, forwarded);
-          }
 
           return result;
         }),
@@ -201,7 +165,7 @@ export const applyMockOverrides = (
   override: Override,
   original: Override,
   replayNative: boolean,
-  resolutions: Map<unknown, unknown>,
+  substitutions: MetadataSubstitutions,
 ): void => {
   const instance = getTestBed();
   installTemplateOverrides(instance);
@@ -210,13 +174,24 @@ export const applyMockOverrides = (
   try {
     const parent = getSourceOfMock(source);
     const existing = replacements.get(source);
-    replacements.set(source, {
-      ...existing,
-      definitions: new Map([...(existing?.definitions ?? []), ...resolutions]),
-      original: moduleAliases.get(parent) === source ? existing!.original : { ...existing?.original, ...original.set },
+    const alias = moduleAliases.get(parent) === source;
+    const replacement = {
+      original: alias ? existing!.original : { ...existing?.original, ...original.set },
       resolved: { ...existing?.resolved, ...override.set },
-    });
-    syncMockAnnotations(source, { ...coreReflectMeta(source), ...replacements.get(source)!.resolved });
+      fields: new Map(existing?.fields),
+    };
+    const contributions = alias
+      ? rebaseMetadata(
+          (source as AnyType<unknown> & { __ngMocksMetadataSubstitutions: MetadataSubstitutions })
+            .__ngMocksMetadataSubstitutions,
+          substitutions,
+        )
+      : substitutions;
+    for (const [key, field] of createMetadataFields(replacement.original, override.set!, contributions)) {
+      replacement.fields.set(key, field);
+    }
+    replacements.set(source, replacement);
+    syncMockAnnotations(source, { ...coreReflectMeta(source), ...replacement.resolved });
     funcApplyTestBedOverride(source, override);
     // A generated set override must not erase native declaration changes made
     // before configureTestingModule. Replay only those fields, once and in order.
@@ -224,7 +199,11 @@ export const applyMockOverrides = (
     for (const [, native] of history) {
       const selected = selectDependencyOverride(native, override.set!);
       if (selected) {
-        funcApplyTestBedOverride(source, translateOverride(source, selected));
+        const translated = translateMetadataOverride(selected, replacement.fields);
+        for (const forwarded of translated.overrides) {
+          funcApplyTestBedOverride(source, forwarded);
+        }
+        replacement.fields = translated.fields;
       }
     }
   } finally {
@@ -238,7 +217,13 @@ export const rememberModuleAliases = (mocks: Map<unknown, unknown> | undefined, 
   automatic = true;
   try {
     for (const [source, value] of mocks ?? []) {
-      if (!isNgDef(source, 'm') || !isNgDef(value, 'm') || source === value || !(value.prototype instanceof source)) {
+      if (
+        !isNgDef(source, 'm') ||
+        !isNgDef(value, 'm') ||
+        source === value ||
+        !(value.prototype instanceof source) ||
+        !Object.prototype.hasOwnProperty.call(value, '__ngMocksMetadataSubstitutions')
+      ) {
         continue;
       }
       // Kept modules can be cloned when dependencies change. Their native
@@ -247,16 +232,19 @@ export const rememberModuleAliases = (mocks: Map<unknown, unknown> | undefined, 
       const history = overrides.get(source) ?? [];
       overrides.set(source, history);
       overrides.set(value, history);
-      replacements.set(value, {
-        original: coreReflectMeta(source),
-        resolved: coreReflectMeta(value),
-        definitions: new Map(
-          (source as Type<unknown> & { __ngMocksResolutions?: Map<unknown, unknown> }).__ngMocksResolutions,
-        ),
-      });
+      const original = coreReflectMeta(source);
+      const resolved = coreReflectMeta(value);
+      const snapshot = (value as Type<unknown> & { __ngMocksMetadataSubstitutions: MetadataSubstitutions })
+        .__ngMocksMetadataSubstitutions;
+      const replacement = { original, resolved, fields: createMetadataFields(original, resolved, snapshot) };
+      replacements.set(value, replacement);
       if (replayNative) {
         for (const [, native] of history) {
-          instance.overrideModule(value, translateOverride(value, native));
+          const translated = translateMetadataOverride(native, replacement.fields);
+          for (const forwarded of translated.overrides) {
+            instance.overrideModule(value, forwarded);
+          }
+          replacement.fields = translated.fields;
         }
       }
     }
@@ -269,8 +257,20 @@ export const rememberTemplateOverrides = (alias: Middleware): void => {
   const instance = getTestBed();
   installTemplateOverrides(instance);
   middleware.set(alias.provide, alias);
+  const fields = replacements.get(alias.provide)?.fields;
   for (const [method, override] of overrides.get(alias.provide) ?? []) {
-    applyOverride(instance, method, alias, override);
+    const selected = untrackedMetadataOverride(override, fields);
+    if (selected) {
+      applyOverride(instance, method, alias, selected);
+    }
+  }
+  if (fields) {
+    applyOverride(
+      instance,
+      isNgDef(alias.provide, 'c') ? 'overrideComponent' : 'overrideDirective',
+      alias,
+      trackedMetadataOverride(fields),
+    );
   }
 };
 

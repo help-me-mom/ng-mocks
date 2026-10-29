@@ -60,6 +60,76 @@ class HostComponent {
 class HostModule {}
 
 describe('MockModule:native ModuleWithProviders overrides', () => {
+  it('uses Angular removal semantics for an equivalent wrapper without mocks', async () => {
+    await TestBed.configureTestingModule({ imports: [HostModule] })
+      .overrideModule(HostModule, {
+        remove: {
+          imports: [
+            {
+              ngModule: DependencyModule,
+              providers: [{ provide: VALUE, useValue: 0 }],
+            },
+          ],
+        },
+        add: { imports: [ReplacementModule] },
+      })
+      .compileComponents();
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    expect(ngMocks.formatText(fixture)).toBe('2:replacement');
+    expect(ngMocks.find(fixture, ChildComponent, null)).toBeNull();
+    expect(provider.useValue).toBe(0);
+  });
+
+  it('removes an equivalent wrapper after mixed configuration', async () => {
+    await TestBed.configureTestingModule({
+      imports: [HostModule, MockModule(DependencyModule)],
+    })
+      .overrideModule(HostModule, {
+        remove: {
+          imports: [
+            {
+              ngModule: DependencyModule,
+              providers: [{ provide: VALUE, useValue: 0 }],
+            },
+          ],
+        },
+        add: { imports: [ReplacementModule] },
+      })
+      .compileComponents();
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    expect(ngMocks.formatText(fixture)).toBe('2:replacement');
+    expect(ngMocks.find(fixture, ChildComponent, null)).toBeNull();
+    expect(provider.useValue).toBe(0);
+  });
+
+  it('removes an equivalent wrapper before mixed configuration', async () => {
+    const mock = MockModule(DependencyModule);
+    TestBed.overrideModule(HostModule, {
+      remove: {
+        imports: [
+          {
+            ngModule: DependencyModule,
+            providers: [{ provide: VALUE, useValue: 0 }],
+          },
+        ],
+      },
+      add: { imports: [ReplacementModule] },
+    });
+    await TestBed.configureTestingModule({
+      imports: [HostModule, mock],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    expect(ngMocks.formatText(fixture)).toBe('2:replacement');
+    expect(ngMocks.find(fixture, ChildComponent, null)).toBeNull();
+    expect(provider.useValue).toBe(0);
+  });
+
   it('removes the resolved wrapper when a native replacement follows configuration', async () => {
     await TestBed.configureTestingModule({
       imports: [HostModule, MockModule(DependencyModule)],
