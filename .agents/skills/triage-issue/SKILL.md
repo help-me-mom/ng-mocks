@@ -98,24 +98,12 @@ Create and maintain a plain Markdown checklist:
      Preserve both class selection and provider behavior. Compare mock classes with builder metadata;
      mock instances expose the source prototype, so their `.constructor` is not the generated mock class.
      See [the injectable declaration regressions](../../../tests/get-mocked-ng-def-of/injectable-declarations.spec.ts).
-   - For mixed real/mock TestBed configurations, assert the supplied mock class through injector tokens,
-     alongside rendered behavior. Check native overrides before and after configuration, module clones,
-     reset restoration, and current dependency/provider policies after a mock was cached. Retaining class
-     identity must not change mock boundaries or reuse stale dependency resolution. See the standalone
-     specs in `tests/mock-component` and the explicit/native override specs in `tests/mock-module`.
-     Include unused entry components when retaining module classes: older Ivy verifies original
-     annotations alongside compiled declarations, so their nested class identities must agree.
-     Test keep/exclude changes after caching and native-only reuse after reset; another automatic
-     configuration can hide failed metadata restoration. Include `ModuleWithProviders` references
-     when checking native module-import removals, because class identity alone does not identify wrappers.
-     Record metadata substitutions separately from dependency graph resolutions. Capture field-scoped
-     top-level groups and exact emitted occurrences before flattening; native removals must preserve
-     nested-group semantics, duplicate counts, ordering, and structural recipe matching. Prefer the
-     installed Angular metadata matcher where available and verify its oldest compatibility path.
-     Native `set` replaces earlier provenance; repeated removals must not broaden into other equal
-     outputs. Check initial and existing MockRender middleware, reset restoration, and cached keep,
-     exclude, replace, and export policies. Only produced artifacts should own clone-forwarding metadata;
-     a user-authored subclass is not a generated clone. Keep these contracts covered through public APIs.
+   - For mixed real/mock TestBed configurations, assert supplied mock identities through injector tokens,
+     current dependency/provider/export policies, coherent nested and entry-component metadata, and
+     native-only reuse after reset. Class reuse must not retain earlier resolution. Baseline adjacent
+     native-override failures on unchanged upstream before expanding scope: class regeneration and
+     removal of rewritten metadata are distinct causes, and new remapping safeguards do not establish
+     that general remapping is required for an identity fix.
 5. Reproduce before fixing:
    - Add the smallest local test that fails on the current implementation and passes only after the real fix.
    - Keep the test focused on the reported behavior, not the eventual implementation detail.

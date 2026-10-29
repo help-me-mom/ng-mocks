@@ -130,7 +130,7 @@ const getExistingMockModule = (ngModule: Type<any>, isRootModule: boolean): Type
 };
 
 const detectMockModule = (ngModule: Type<any>, mockModule?: Type<any>): Type<any> => {
-  const [changed, ngModuleDef, resolutions, substitutions] = mockModule
+  const [changed, ngModuleDef, resolutions] = mockModule
     ? [false]
     : mockNgDef(coreReflectModuleResolve(ngModule), ngModule);
   if (resolutions) {
@@ -144,7 +144,6 @@ const detectMockModule = (ngModule: Type<any>, mockModule?: Type<any>): Type<any
     // the last thing is to apply decorators.
     NgModule(ngModuleDef)(mock);
     decorateMock(mock, ngModule);
-    coreDefineProperty(mock, '__ngMocksMetadataSubstitutions', substitutions);
 
     return mock;
   }

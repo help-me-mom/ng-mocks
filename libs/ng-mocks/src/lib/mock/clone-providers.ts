@@ -3,7 +3,7 @@ import { Provider } from '@angular/core';
 import CoreDefStack from '../common/core.def-stack';
 import coreForm from '../common/core.form';
 import { flatten } from '../common/core.helpers';
-import { AnyType, MetadataContribution } from '../common/core.types';
+import { AnyType } from '../common/core.types';
 import funcExtractForwardRef from '../common/func.extract-forward-ref';
 import funcGetType from '../common/func.get-type';
 import {
@@ -74,38 +74,24 @@ export default (
   resolutions: CoreDefStack<any, any>,
 ): {
   providers: Provider[];
-  substitutions: MetadataContribution[];
   setControlValueAccessor?: boolean;
 } => {
   const result: Provider[] = [];
-  const entries: Array<[unknown, unknown]> = [];
   let setControlValueAccessor: boolean | undefined;
-  const originals = providers || /* istanbul ignore next */ [];
 
-  for (const provider of flatten(originals)) {
+  for (const provider of flatten(providers || /* istanbul ignore next */ [])) {
     const provide = funcGetType(provider);
     if (provide === coreForm.NG_VALUE_ACCESSOR) {
       setControlValueAccessor = false;
     }
     const mock = processProvider(sourceType, mockType, provider, resolutions);
-    entries.push([provider, mock]);
     if (mock) {
       result.push(mock);
     }
   }
 
-  let index = 0;
-  const substitutions = originals.map((original: unknown) => {
-    const count = flatten(original).length;
-    const contribution = { original, entries: entries.slice(index, index + count) };
-    index += count;
-
-    return contribution;
-  });
-
   return {
     providers: result,
-    substitutions,
     setControlValueAccessor,
   };
 };

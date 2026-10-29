@@ -63,7 +63,7 @@ describe('MockModule:explicit class', () => {
     Dependency.constructed = 0;
   });
 
-  it('retains the supplied module and native provider recipes', async () => {
+  it('applies native provider recipes to the supplied module after configuration', async () => {
     const mock = MockModule(DependencyModule);
     // View Engine compiles plain useValue objects as literals; an instance
     // retains reference identity on every supported compiler profile.
@@ -86,10 +86,11 @@ describe('MockModule:explicit class', () => {
       { provide: MULTI, useValue: 0, multi: true },
       { provide: MULTI, useValue: 2, multi: true },
     ];
-    TestBed.overrideModule(mock, { set: { providers } });
     await TestBed.configureTestingModule({
       imports: [HostModule, mock],
-    }).compileComponents();
+    })
+      .overrideModule(mock, { set: { providers } })
+      .compileComponents();
     const fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
 

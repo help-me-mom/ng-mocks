@@ -52,16 +52,6 @@ class ChildComponent {}
 })
 class HostComponent {}
 
-@Component({
-  selector: 'explicit-provider-override-host',
-  standalone: true,
-  imports: [ChildComponent],
-  providers: [Dependency],
-  viewProviders: [ViewDependency],
-  template: '<explicit-provider-child></explicit-provider-child>',
-})
-class ProviderHostComponent {}
-
 describe('MockComponent:standalone providers', () => {
   beforeEach(() => {
     Dependency.constructed = 0;
@@ -72,40 +62,6 @@ describe('MockComponent:standalone providers', () => {
     ngMocks.globalWipe(Dependency);
     ngMocks.globalWipe(ViewDependency);
     ngMocks.globalWipe(KeptComponent);
-  });
-
-  it('removes automatically mocked provider and view-provider class references', async () => {
-    const mock = MockComponent(ChildComponent);
-    ngMocks.globalMock(Dependency);
-    ngMocks.globalMock(ViewDependency);
-    await TestBed.configureTestingModule({
-      imports: [ProviderHostComponent, mock],
-    })
-      .overrideComponent(ProviderHostComponent, {
-        remove: {
-          providers: [Dependency],
-          viewProviders: [ViewDependency],
-        },
-      })
-      .compileComponents();
-    const fixture = TestBed.createComponent(ProviderHostComponent);
-    fixture.detectChanges();
-    const child = ngMocks.find(fixture, ChildComponent);
-
-    expect(
-      fixture.debugElement.injector.get(Dependency, null),
-    ).toBeNull();
-    expect(
-      fixture.debugElement.injector.get(ViewDependency, null),
-    ).toBeNull();
-    expect(isMockOf(child.injector.get(Dependency), Dependency)).toBe(
-      true,
-    );
-    expect(
-      isMockOf(child.injector.get(ViewDependency), ViewDependency),
-    ).toBe(true);
-    expect(Dependency.constructed).toBe(0);
-    expect(ViewDependency.constructed).toBe(0);
   });
 
   it('reuses the explicit class while mocking providers and retaining its own alias', async () => {

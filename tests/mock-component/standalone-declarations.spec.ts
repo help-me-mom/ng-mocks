@@ -35,22 +35,6 @@ class OriginalPipe implements PipeTransform {
   }
 }
 
-@Directive({
-  selector: '[mixedOriginal]',
-  standalone: true,
-  host: { 'data-replacement': '' },
-})
-class ReplacementDirective {
-  @Input() public value = '';
-}
-
-@Pipe({ name: 'mixedOriginal', standalone: true })
-class ReplacementPipe implements PipeTransform {
-  public transform(value: string): string {
-    return `replacement:${value}`;
-  }
-}
-
 @Component({
   selector: 'mixed-declaration-host',
   standalone: true,
@@ -90,31 +74,5 @@ describe('MockComponent:mixed standalone declarations', () => {
     expect(element.injector.get(directive, null)).toBe(
       ngMocks.get(element, OriginalDirective),
     );
-  });
-
-  it('removes automatic directive and pipe imports before adding native replacements', async () => {
-    const directive = MockDirective(OriginalDirective);
-    const pipe = MockPipe(OriginalPipe, value => `mock:${value}`);
-    await TestBed.configureTestingModule({
-      imports: [HostComponent, directive, pipe],
-    })
-      .overrideComponent(HostComponent, {
-        remove: { imports: [OriginalDirective, OriginalPipe] },
-        add: { imports: [ReplacementDirective, ReplacementPipe] },
-      })
-      .compileComponents();
-    const fixture = TestBed.createComponent(HostComponent);
-    fixture.detectChanges();
-    const element = ngMocks.find(fixture, ReplacementDirective);
-
-    expect(ngMocks.formatText(fixture)).toBe('replacement:bound');
-    expect(ngMocks.get(element, ReplacementDirective).value).toBe(
-      'bound',
-    );
-    expect(element.attributes['data-replacement']).toBe('');
-    expect(ngMocks.find(fixture, OriginalDirective, null)).toBeNull();
-    expect(element.injector.get(directive, null)).toBeNull();
-    expect(OriginalDirective.constructed).toBe(0);
-    expect(OriginalPipe.calls).toBe(0);
   });
 });
