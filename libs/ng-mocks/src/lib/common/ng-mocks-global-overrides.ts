@@ -26,6 +26,21 @@ import { rememberTestModuleOptions, resetTestModuleOptions } from './ng-mocks-te
 import ngMocksUniverse from './ng-mocks-universe';
 import { installViewContainer } from './ng-mocks-view-container';
 
+const syncMockAnnotations = (source: AnyType<unknown>, metadata: Record<string, unknown>): void => {
+  if (!isMockNgDef(source, 'm') && !isMockNgDef(source, 'c') && !isMockNgDef(source, 'd')) {
+    return;
+  }
+  // Older Ivy also verifies the generated annotation when resolving module scopes.
+  const annotation = (source as AnyType<unknown> & { __annotations__: [Record<string, unknown>] }).__annotations__[0];
+  for (const key of Object.keys(metadata)) {
+    if (metadata[key] === undefined) {
+      delete annotation[key];
+    } else {
+      annotation[key] = metadata[key];
+    }
+  }
+};
+
 const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, MetadataOverride<any>]>): void => {
   // eslint-disable-next-line unicorn/no-useless-spread -- Keep the pending list stable across TestBed override calls.
   for (const [def, [override, original]] of [...overrides]) {
@@ -33,6 +48,7 @@ const applyOverrides = (overrides: Map<AnyType<any>, [MetadataOverride<any>, Met
       ...original,
       override,
     });
+    syncMockAnnotations(def, override.set!);
     funcApplyTestBedOverride(def, override);
   }
 };
@@ -53,6 +69,8 @@ const applyNgMocksOverrides = (testBed: TestBedStatic & { ngMocksOverrides?: Map
           funcApplyTestBedOverride(def, original);
         } catch (error) {
           errors.push(error);
+        } finally {
+          syncMockAnnotations(def, original.set!);
         }
       }
     }
@@ -176,6 +194,7 @@ const configureTestingModule =
           export: !isNgDef(source, 'm'),
           exportAll: false,
           onRoot: true,
+          ...(isMock ? { __ngMocksMock: def } : {}),
         };
         builder =
           isMock && transform

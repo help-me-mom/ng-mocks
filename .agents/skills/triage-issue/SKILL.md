@@ -98,6 +98,12 @@ Create and maintain a plain Markdown checklist:
      Preserve both class selection and provider behavior. Compare mock classes with builder metadata;
      mock instances expose the source prototype, so their `.constructor` is not the generated mock class.
      See [the injectable declaration regressions](../../../tests/get-mocked-ng-def-of/injectable-declarations.spec.ts).
+   - For mixed real/mock TestBed configurations, assert supplied mock identities through injector tokens,
+     current dependency/provider/export policies, coherent nested and entry-component metadata, and
+     native-only reuse after reset. Class reuse must not retain earlier resolution. Baseline adjacent
+     native-override failures on unchanged upstream before expanding scope: class regeneration and
+     removal of rewritten metadata are distinct causes, and new remapping safeguards do not establish
+     that general remapping is required for an identity fix.
 5. Reproduce before fixing:
    - Add the smallest local test that fails on the current implementation and passes only after the real fix.
    - Keep the test focused on the reported behavior, not the eventual implementation detail.

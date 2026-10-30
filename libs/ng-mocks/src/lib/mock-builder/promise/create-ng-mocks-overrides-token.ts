@@ -20,7 +20,9 @@ export default (replaceDef: Set<any>, defValue: Map<any, any>): ValueProvider =>
     }
 
     const original = coreReflectMeta(value);
-    const override = getOverrideDef(original);
+    const selected = ngMocksUniverse.config.get(source)?.__ngMocksMock === value;
+    const override =
+      selected && original ? ngMocksUniverse.configInstance.get(source).__ngMocksOverride : getOverrideDef(original);
     if (!override) {
       continue;
     }
