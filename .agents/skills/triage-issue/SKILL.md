@@ -98,6 +98,11 @@ Create and maintain a plain Markdown checklist:
      Preserve both class selection and provider behavior. Compare mock classes with builder metadata;
      mock instances expose the source prototype, so their `.constructor` is not the generated mock class.
      See [the injectable declaration regressions](../../../tests/get-mocked-ng-def-of/injectable-declarations.spec.ts).
+   - For Angular 22+ `@Service` regressions, distinguish the injectable category from raw `Service` provider
+     metadata. Use [the Service regressions](../../../tests/issue-15434) and
+     [inherited factory cases](../../../tests/root-providers/service-inheritance.spec.ts) as references.
+     Angular's compiler requires `inject()` instead of constructor DI and rejects another Angular decorator
+     on the same `@Service` class; use valid declaration subclasses when checking category precedence.
    - For mixed real/mock TestBed configurations, assert supplied mock identities through injector tokens,
      current dependency/provider/export policies, coherent nested and entry-component metadata, and
      native-only reuse after reset. Class reuse must not retain earlier resolution. Baseline adjacent

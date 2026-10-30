@@ -62,6 +62,18 @@ export function isMockOf<T extends PipeTransform>(
 ): instance is MockedPipe<T>;
 
 /**
+ * Checks whether the instance is a mocked injectable.
+ *
+ * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf
+ *
+ * ```ts
+ * isMockOf(serviceInstance, RealService, 'i'); // returns true
+ * isMockOf(serviceInstance, ArbitraryClass, 'i'); // returns false
+ * ```
+ */
+export function isMockOf<T>(instance: any, declaration: Type<T>, ngType: 'i'): instance is T;
+
+/**
  * Checks whether the instance derives from a mock type.
  *
  * @see https://ng-mocks.sudo.eu/api/helpers/isMockOf

@@ -22,7 +22,9 @@ interface Declaration {
   [key: string]: any;
 }
 
-const pushDecorator = (decorators: string[], decorator: string): void => {
+const pushDecorator = (decorators: string[], ngMetadataName: string): void => {
+  // Normalize the category only; Service has its own provider metadata.
+  const decorator = ngMetadataName === 'Service' ? 'Injectable' : ngMetadataName;
   const deleteIndex = decorators.indexOf(decorator);
   if (deleteIndex !== -1) {
     decorators.splice(deleteIndex, 1);
