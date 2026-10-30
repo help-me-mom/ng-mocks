@@ -109,6 +109,11 @@ Create and maintain a plain Markdown checklist:
      native-override failures on unchanged upstream before expanding scope: class regeneration and
      removal of rewritten metadata are distinct causes, and new remapping safeguards do not establish
      that general remapping is required for an identity fix.
+   - For NG0912, identify both original and generated classes: `MockComponent` can first compile an
+     original through reflection. Compare native Angular reflection before changing mock identity.
+     Two equal class names do not prove duplicate module loading. Preserve original prototypes, IDs
+     and native warnings; see [the helper collision regressions](../../../tests/issue-15395/directive-host.spec.ts)
+     and [tested guidance](../../../examples/MockComponent/collision.spec.ts).
 5. Reproduce before fixing:
    - Add the smallest local test that fails on the current implementation and passes only after the real fix.
    - Keep the test focused on the reported behavior, not the eventual implementation detail.
