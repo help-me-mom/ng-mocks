@@ -1,8 +1,6 @@
 import coreDefineProperty from '../common/core.define-property';
 import helperDefinePropertyDescriptor from '../mock-service/helper.define-property-descriptor';
 
-type InheritedGetter = (() => unknown) & { ngMocksInheritedDefinition?: boolean };
-
 // Middleware declarations represent the same Angular declaration under a new
 // selector. Recompiling copied metadata must not add inherited side effects twice.
 const inheritDefinition = (definition: any, original: any): void => {
@@ -46,6 +44,8 @@ export default (child: any, template: any): void => {
     if (!descriptor?.get) {
       continue;
     }
+    type InheritedGetter = (() => unknown) & { ngMocksInheritedDefinition?: boolean };
+
     const getter: InheritedGetter = descriptor.get;
     if (getter.ngMocksInheritedDefinition) {
       continue;
