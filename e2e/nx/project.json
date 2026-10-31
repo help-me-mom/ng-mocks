@@ -2,17 +2,17 @@
   "name": "nx",
   "$schema": "./node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "root": ".",
   "sourceRoot": "src",
   "targets": {
     "build": {
-      "executor": "@nx/angular:application",
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/nx",
         "index": "src/index.html",
         "browser": "src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "tsconfig.json"
+        "tsConfig": "tsconfig.app.json"
       },
       "configurations": {
         "production": {
@@ -27,7 +27,9 @@
       "defaultConfiguration": "development"
     },
     "serve": {
-      "executor": "@nx/angular:dev-server",
+      "executor": "@angular/build:dev-server",
+      "continuous": true,
+      "readyWhen": { "signal": true },
       "configurations": {
         "production": {
           "buildTarget": "nx:build:production"

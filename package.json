@@ -132,7 +132,7 @@
     "clean:jest": "rm -Rf e2e/jest/node_modules/ng-mocks",
     "clean:vitest": "rm -Rf e2e/vitest/node_modules/ng-mocks",
     "clean:min": "rm -Rf e2e/min/node_modules/ng-mocks",
-    "clean:nx": "rm -Rf e2e/nx/node_modules/ng-mocks && rm -Rf e2e/nx/apps/a-nx/src/test",
+    "clean:nx": "rm -Rf e2e/nx/node_modules/ng-mocks && rm -Rf e2e/nx/src/test",
     "s:files:matrix": "npm run s:files:a5 && npm run s:files:a6 && npm run s:files:a7 && npm run s:files:a8 && npm run s:files:a9 && npm run s:files:a10 && npm run s:files:a11 && npm run s:files:a12 && npm run s:files:a13 && npm run s:files:a14 && npm run s:files:a15 && npm run s:files:a16 && npm run s:files:a17 && npm run s:files:a18 && npm run s:files:a19 && npm run s:files:a20 && npm run s:files:a21 && npm run s:files:a22 && npm run s:files:jasmine && npm run s:files:jest && npm run s:files:vitest && npm run s:files:min && npm run s:files:nx",
     "s:files:a5": "npm run s:files:a5es5 && npm run s:files:a5es2015",
     "s:files:a5es5": "P=e2e/a5es5/src && rm -Rf $P/test $P/app && npm run spread -- test-spread.conf $P/test && npm run spread -- test-spread-app.conf $P/app",

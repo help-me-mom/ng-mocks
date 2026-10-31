@@ -15,7 +15,6 @@
     "types": ["jasmine", "jest", "node"],
     "isolatedModules": true,
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
     "useDefineForClassFields": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -32,5 +31,5 @@
     "strictTemplates": true
   },
   "files": ["src/main.ts", "src/test-setup.ts"],
-  "include": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
+  "include": ["jest.config.cts", "src/**/*.spec.ts", "src/**/*.d.ts"]
 }

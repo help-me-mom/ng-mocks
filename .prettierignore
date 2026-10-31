@@ -16,8 +16,6 @@ docs/.docusaurus
 e2e/*/.angular
 e2e/*/src/app
 e2e/*/src/test
-e2e/nx/apps/*/src/app
-e2e/nx/apps/*/src/test
 node_modules/
 test-reports/
 tests-e2e/.angular

@@ -258,7 +258,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.ts', '**/*.js'],
+    files: ['**/*.ts', '**/*.cts', '**/*.js'],
     extends: [...angularEslint.configs.tsRecommended],
     languageOptions: {
       parser: tsEslintParser,
