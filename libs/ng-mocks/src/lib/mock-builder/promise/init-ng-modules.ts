@@ -14,12 +14,6 @@ import markProviders from '../../mock-module/mark-providers';
 import initModule from './init-module';
 import { BuilderData, NgMeta } from './types';
 
-type InjectableDefinition = {
-  factory?: () => unknown;
-  providedIn?: unknown;
-  token?: unknown;
-};
-
 const skipDef = (def: any): boolean =>
   ngMocksUniverse.touches.has(def) || isNgDef(def) || isNgInjectionToken(def) || typeof def === 'string';
 
@@ -187,6 +181,12 @@ export default ({ configDefault, keepDef, mockDef, replaceDef }: BuilderData, de
     if (typeof def !== 'function' || !keepDef.has(def)) {
       continue;
     }
+
+    type InjectableDefinition = {
+      factory?: () => unknown;
+      providedIn?: unknown;
+      token?: unknown;
+    };
 
     const injectable = def as typeof def & {
       ɵprov?: InjectableDefinition;
