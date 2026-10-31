@@ -2,16 +2,23 @@
   "name": "lib",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "lib",
-  "sourceRoot": "src",
+  "sourceRoot": "src/app",
   "targets": {
     "build": {
       "executor": "@nx/angular:package",
-      "inputs": ["{workspaceRoot}/src/**/*", "{workspaceRoot}/ng-package.json", "{workspaceRoot}/tsconfig.json"],
+      "inputs": [
+        "default",
+        "{workspaceRoot}/src/app/**/*",
+        "!{workspaceRoot}/src/app/**/*.spec.ts",
+        "{workspaceRoot}/ng-package.json",
+        "{workspaceRoot}/tsconfig.base.json",
+        "{workspaceRoot}/package.json",
+        "{workspaceRoot}/package-lock.json"
+      ],
       "outputs": ["{workspaceRoot}/dist/lib"],
       "options": {
         "project": "ng-package.json",
-        "tsConfig": "tsconfig.json"
+        "tsConfig": "lib/tsconfig.lib.json"
       }
     }
   }

@@ -132,7 +132,7 @@
     "clean:jest": "rm -Rf e2e/jest/node_modules/ng-mocks",
     "clean:vitest": "rm -Rf e2e/vitest/node_modules/ng-mocks",
     "clean:min": "rm -Rf e2e/min/node_modules/ng-mocks",
-    "clean:nx": "rm -Rf e2e/nx/node_modules/ng-mocks && rm -Rf e2e/nx/apps/a-nx/src/test",
+    "clean:nx": "rm -Rf e2e/nx/node_modules/ng-mocks && rm -Rf e2e/nx/src/test",
     "s:files:matrix": "npm run s:files:a5 && npm run s:files:a6 && npm run s:files:a7 && npm run s:files:a8 && npm run s:files:a9 && npm run s:files:a10 && npm run s:files:a11 && npm run s:files:a12 && npm run s:files:a13 && npm run s:files:a14 && npm run s:files:a15 && npm run s:files:a16 && npm run s:files:a17 && npm run s:files:a18 && npm run s:files:a19 && npm run s:files:a20 && npm run s:files:a21 && npm run s:files:a22 && npm run s:files:jasmine && npm run s:files:jest && npm run s:files:vitest && npm run s:files:min && npm run s:files:nx",
     "s:files:a5": "npm run s:files:a5es5 && npm run s:files:a5es2015",
     "s:files:a5es5": "P=e2e/a5es5/src && rm -Rf $P/test $P/app && npm run spread -- test-spread.conf $P/test && npm run spread -- test-spread-app.conf $P/app",
@@ -277,7 +277,7 @@
     "@semantic-release/exec": "7.1.0",
     "@semantic-release/git": "11.0.1",
     "@semantic-release/github": "12.0.10",
-    "@semantic-release/npm": "13.1.5",
+    "@semantic-release/npm": "13.2.0",
     "@types/core-js": "2.5.8",
     "@types/jasmine": "7.0.0",
     "@types/jest": "30.0.0",
@@ -286,7 +286,7 @@
     "@types/karma-jasmine": "4.0.5",
     "@types/karma-junit-reporter": "2.0.4",
     "@types/karma-webpack": "4.0.1",
-    "@types/node": "24.19.2",
+    "@types/node": "26.6.6",
     "@typescript-eslint/eslint-plugin": "8.72.1",
     "@typescript-eslint/parser": "8.72.1",
     "angular-eslint": "22.6.0",
@@ -318,7 +318,7 @@
     "karma-sourcemap-loader": "0.4.0",
     "karma-webpack": "5.0.1",
     "lint-staged": "17.6.0",
-    "npm": "12.0.2",
+    "npm": "12.2.1",
     "prettier": "3.9.10",
     "puppeteer": "25.16.0",
     "rxjs": "7.8.2",
@@ -333,7 +333,7 @@
     "zone.js": "0.16.3"
   },
   "engines": {
-    "npm": "12.0.2"
+    "npm": "12.2.1"
   },
   "repository": {
     "type": "git",

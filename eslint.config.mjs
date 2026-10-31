@@ -45,7 +45,8 @@ const projects = [
   './e2e/jest/tsconfig.json',
   './e2e/vitest/tsconfig.json',
   './e2e/min/tsconfig.json',
-  './e2e/nx/tsconfig.json',
+  './e2e/nx/tsconfig.app.json',
+  './e2e/nx/tsconfig.spec.json',
 ];
 
 const prettierRules = prettierRecommended.rules;
@@ -258,7 +259,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.ts', '**/*.js'],
+    files: ['**/*.ts', '**/*.cts', '**/*.js'],
     extends: [...angularEslint.configs.tsRecommended],
     languageOptions: {
       parser: tsEslintParser,

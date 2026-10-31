@@ -4,5 +4,5 @@
   "lib": {
     "entryFile": "src/app/app.module.ts"
   },
-  "allowedNonPeerDependencies": ["@angular/", "@nx/angular", "rxjs", "zone.js"]
+  "allowedNonPeerDependencies": ["@angular/", "rxjs", "zone.js"]
 }

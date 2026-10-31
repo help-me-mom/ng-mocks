@@ -168,6 +168,30 @@ Profile-specific e2e scripts use the same suffix, for example `test:jest:es5:vie
 `tsconfig.<es>.<profile>.spec.json` when the ES target varies, or omit the ES segment when it does not. Configs
 without profile-specific variants retain the tool's conventional default name.
 
+### Nx integration workspace
+
+Keep `e2e/nx` aligned with the installed `@nx/angular` and `@nx/jest` generators
+and the [Nx configuration reference](https://nx.dev/docs/reference/nx-json).
+Use per-target caching and the inferred Jest target, with separate application,
+test and library TypeScript configurations. Jest 30 uses `jest.config.cts` and
+the Angular preset factory. Angular application builds use `@angular/build`.
+
+The workspace retains a root application and a `lib` project that packages the
+generated `src/app/app.module.ts` fixture. Its explicit inputs include those
+shared sources because they live outside the `lib` project directory.
+Keep the spread destinations and `clean:nx` aligned with `src/app` and `src/test`.
+
+Run `sh test.sh nx` to rebuild ng-mocks, spread both corpora and execute the Nx
+tests. Then validate the application and library builds through the existing
+scripts in Docker:
+
+```shell
+docker compose run --rm nx npm run build
+docker compose run --rm ng-mocks npm run lib:nx
+```
+
+Use the same unique `COMPOSE_PROJECT_NAME` for these commands and the wrappers.
+
 ## How to run unit tests locally
 
 ```shell

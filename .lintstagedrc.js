@@ -8,6 +8,6 @@ const command = binary => filenames => {
 };
 
 module.exports = {
-  '*.{cjs,css,html,js,json,jsx,md,mdx,mjs,scss,ts,tsx,yaml,yml}': command('prettier -w'),
-  '*.{cjs,js,jsx,mjs,ts,tsx}': command('eslint --fix'),
+  '*.{cjs,css,cts,html,js,json,jsx,md,mdx,mjs,scss,ts,tsx,yaml,yml}': command('prettier -w'),
+  '*.{cjs,cts,js,jsx,mjs,ts,tsx}': command('eslint --fix'),
 };
