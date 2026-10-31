@@ -45,8 +45,7 @@ const projects = [
   './e2e/jest/tsconfig.json',
   './e2e/vitest/tsconfig.json',
   './e2e/min/tsconfig.json',
-  './e2e/nx/tsconfig.app.json',
-  './e2e/nx/tsconfig.spec.json',
+  './e2e/nx/tsconfig.json',
 ];
 
 const prettierRules = prettierRecommended.rules;

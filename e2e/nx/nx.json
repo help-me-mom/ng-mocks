@@ -25,7 +25,6 @@
     "production": [
       "default",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
-      "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/jest.config.{cjs,mjs,js,cts,mts,ts}",
       "!{projectRoot}/src/test-setup.ts"
     ],
