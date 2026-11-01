@@ -155,6 +155,7 @@ module.exports = {
         'guides/ng-model',
         'guides/reactive-forms',
         'guides/signal-forms',
+        'guides/signal-forms-cva-validation',
         'extra/mock-ng-submit',
         'guides/provider',
         'guides/token',
