@@ -1,3 +1,11 @@
+## [14.18.5](https://github.com/help-me-mom/ng-mocks/compare/v14.18.4...v14.18.5) (2026-11-01)
+
+
+### Bug Fixes
+
+* **core:** recognize Service-decorated injectables [#15434](https://github.com/help-me-mom/ng-mocks/issues/15434) ([#15444](https://github.com/help-me-mom/ng-mocks/issues/15444)) ([67d5d06](https://github.com/help-me-mom/ng-mocks/commit/67d5d06f883249af20279febfe8ae8157e93f1b6))
+* **TestBed:** retain supplied mock classes in mixed configurations [#15395](https://github.com/help-me-mom/ng-mocks/issues/15395) ([#15435](https://github.com/help-me-mom/ng-mocks/issues/15435)) ([3fa81ec](https://github.com/help-me-mom/ng-mocks/commit/3fa81ec73f6693f9a854e6ce5bf469700e6dc570))
+
 ## [14.18.4](https://github.com/help-me-mom/ng-mocks/compare/v14.18.3...v14.18.4) (2026-10-18)
 
 
