@@ -295,6 +295,60 @@ beforeEach(() => {
 });
 ```
 
+Please note, that `.provide` does not create mocks: the provider is added to `TestBed` exactly as it is.
+For example, `.provide({ provide: MyService, useValue: { getName: () => 'fake' } })` injects this object,
+therefore, `MyService` has `getName` only, and its other methods do not exist.
+
+If we need a mock of a service with some overrides, we should pass [`MockProvider`](MockProvider.md) to `.provide`,
+or use [`.mock`](#mock) instead.
+Both of them create a mock where other methods are empty dummies.
+
+```ts
+beforeEach(() => {
+  return (
+    MockBuilder(MyComponent)
+      // MyService is a mock: getName() returns 'fake',
+      // other methods return undefined.
+      .provide(MockProvider(MyService, { getName: () => 'fake' }))
+  );
+});
+
+// The same as
+beforeEach(() => {
+  return MockBuilder(MyComponent).mock(MyService, {
+    getName: () => 'fake',
+  });
+});
+```
+
+Providers which are added via `.provide` do not replace providers of a kept component.
+If the tested component has `providers: [MyService]`, it does not get `MyService` from `.provide`,
+because providers of a component have priority over providers of `TestBed`.
+If the component is standalone, `MockBuilder` mocks its providers, but without the overrides from `.provide`.
+To replace such a provider with a customized mock, we should use [`.mock`](#mock):
+
+```ts
+@Component({
+  providers: [MyService],
+  selector: 'my-component',
+  template: '{{ service.getName() }}',
+})
+class MyComponent {
+  public readonly service = inject(MyService);
+}
+
+beforeEach(() => {
+  return (
+    MockBuilder(MyComponent)
+      // Replaces MyService in providers of MyComponent too.
+      .mock(MyService, { getName: () => 'fake' })
+  );
+});
+```
+
+- [Try it on CodeSandbox](https://codesandbox.io/p/sandbox/github/help-me-mom/ng-mocks-sandbox/tree/tests/?file=/src/examples/MockBuilder/test.provide.spec.ts&initialpath=%3Fspec%3DMockBuilder%3Aprovide)
+- [Try it on StackBlitz](https://stackblitz.com/github/help-me-mom/ng-mocks-sandbox/tree/tests?file=src/examples/MockBuilder/test.provide.spec.ts&initialpath=%3Fspec%3DMockBuilder%3Aprovide)
+
 ## Config
 
 You can customize default behavior of mock things.
