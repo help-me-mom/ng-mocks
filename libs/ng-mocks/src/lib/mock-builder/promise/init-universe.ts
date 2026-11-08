@@ -150,7 +150,7 @@ export default ({
   // of the initial explicit replace set.
   // eslint-disable-next-line unicorn/no-useless-spread -- addDependencies expands this set during the pass.
   for (const dependency of [...dependencies]) {
-    if (ngMocksUniverse.getResolution(dependency) === 'replace') {
+    if (!configDef.has(dependency) && ngMocksUniverse.getResolution(dependency) === 'replace') {
       addDependencies(
         dependencies,
         [dependency, ngMocksUniverse.getBuildDeclaration(dependency)],
