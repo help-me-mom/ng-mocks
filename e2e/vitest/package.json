@@ -31,11 +31,11 @@
     "@angular/compiler-cli": "22.2.5",
     "jsdom": "31.0.0",
     "ng-packagr": "22.2.6",
-    "npm": "12.2.1",
+    "npm": "12.2.2",
     "typescript": "6.0.3",
     "vitest": "5.1.0"
   },
   "engines": {
-    "npm": "12.2.1"
+    "npm": "12.2.2"
   }
 }
