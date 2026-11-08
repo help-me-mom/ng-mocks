@@ -11,15 +11,7 @@
     "paths": {
       "ng-mocks": ["./libs/ng-mocks/src/index.ts"]
     },
-    "types": [
-      "jasmine",
-      "jest",
-      "karma-coverage-istanbul-reporter",
-      "karma-jasmine",
-      "karma-junit-reporter",
-      "karma-webpack",
-      "node"
-    ]
+    "types": ["jasmine", "jest", "karma-coverage", "karma-jasmine", "karma-junit-reporter", "karma-webpack", "node"]
   },
   "files": [
     "libs/ng-mocks/src/index.ts",

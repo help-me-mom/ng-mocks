@@ -47,10 +47,12 @@ export default async (config: Config) => {
       },
     },
     colors: true,
-    coverageIstanbulReporter: {
+    coverageReporter: {
       dir: './test-reports/coverage',
-      fixWebpackSourcePaths: true,
-      reports: ['lcovonly', 'html'],
+      reporters: [
+        { type: 'lcovonly', subdir: '.', file: 'lcov.info' },
+        { type: 'html', subdir: '.' },
+      ],
     },
     customLaunchers: {
       ChromeCi: {
@@ -101,7 +103,7 @@ export default async (config: Config) => {
     preprocessors: {
       '**/*.ts': ['webpack', 'sourcemap'],
     },
-    reporters: ['dots', ...(process.env.WITH_COVERAGE === undefined ? [] : ['junit', 'coverage-istanbul'])],
+    reporters: ['dots', ...(process.env.WITH_COVERAGE === undefined ? [] : ['junit', 'coverage'])],
     singleRun: true,
     webpack: {
       devtool: 'eval-source-map',
@@ -115,7 +117,7 @@ export default async (config: Config) => {
                   include: /\/libs\/ng-mocks\/src\//,
                   test: /\.tsx?$/,
                   use: {
-                    loader: 'coverage-istanbul-loader',
+                    loader: '@jsdevtools/coverage-istanbul-loader',
                   },
                 },
               ]),
