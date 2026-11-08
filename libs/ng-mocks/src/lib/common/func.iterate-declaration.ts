@@ -12,11 +12,13 @@ const iterator = <T = any>(
 ): void => {
   const meta = collectDeclarations(source);
   for (const decorator of meta.decorators) {
+    // A Service is categorized as Injectable, but its metadata is stored under Service.
+    const decoratorMeta = decorator === 'Injectable' ? (meta.Injectable ?? meta.Service) : meta[decorator];
     for (const key of coreConfig.dependencies) {
-      if (!meta[decorator][key]) {
+      if (!decoratorMeta[key]) {
         continue;
       }
-      for (const def of flatten(meta[decorator][key])) {
+      for (const def of flatten(decoratorMeta[key])) {
         const declaration = funcGetType(def);
         if (!declaration || scanned.has(declaration)) {
           continue;
