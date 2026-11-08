@@ -162,6 +162,11 @@
 - For cache fixes, test both invalidation and safe reuse, including current keep/exclude choices after an earlier
   mock was cached. Include behavior flags and provider tokens, recipes, dependencies, multi flags, and falsy values
   when they contribute to the cached result.
+- For provider-policy fixes, assert original recipes independently from cached declaration classes. Keep
+  decisions and class sentinels must preserve module recipes unless a concrete provider override applies;
+  retain the normal declaration-reference remapping inside kept value recipes.
+  See the [provider recipes](tests/ng-mocks-global-keep/provider-recipes.spec.ts) and
+  [injectable declaration cases](tests/ng-mocks-global-keep/injectable-declaration.spec.ts).
 
 ## Spec and Documentation Examples
 
