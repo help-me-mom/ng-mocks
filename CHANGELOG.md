@@ -1,3 +1,10 @@
+## [14.18.6](https://github.com/help-me-mom/ng-mocks/compare/v14.18.5...v14.18.6) (2026-11-08)
+
+
+### Bug Fixes
+
+* **ngMocks:** preserve recursive Service policies and provider recipes [#15478](https://github.com/help-me-mom/ng-mocks/issues/15478) ([#15479](https://github.com/help-me-mom/ng-mocks/issues/15479)) ([dc393a9](https://github.com/help-me-mom/ng-mocks/commit/dc393a9cbc1401f3bb7ad313041b7c3785001fb9))
+
 ## [14.18.5](https://github.com/help-me-mom/ng-mocks/compare/v14.18.4...v14.18.5) (2026-11-01)
 
 
