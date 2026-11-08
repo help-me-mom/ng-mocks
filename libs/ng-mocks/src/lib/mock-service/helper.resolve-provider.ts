@@ -113,9 +113,13 @@ const createPredefinedMockProvider = (provider: any, provide: any): any => {
 
 const createMockProvider = (provider: any, provide: any, change: () => void) => {
   let mockDef = createPredefinedMockProvider(provider, provide);
+  const resolution = ngMocksUniverse.getResolution(provide);
+  const skipMock = ngMocksUniverse.flags.has('skipMock');
 
-  if (!mockDef && ngMocksUniverse.flags.has('skipMock') && ngMocksUniverse.getResolution(provide) !== 'mock') {
-    ngMocksUniverse.config.get('ngMocksDepsSkip')?.add(provide);
+  if (!mockDef && (resolution === 'keep' || (skipMock && resolution !== 'mock'))) {
+    if (skipMock) {
+      ngMocksUniverse.config.get('ngMocksDepsSkip')?.add(provide);
+    }
     mockDef = provider;
   }
   if (!mockDef) {
@@ -197,9 +201,11 @@ export default (provider: any, resolutions: CoreDefStack<any, any>, changed?: ()
 
     return provider;
   }
-  const mockDef = resolutions.has(provide)
-    ? createFromResolution(provide, resolutions.get(provide))
-    : createMockProvider(provider, provide, change);
+  // A cached declaration class must not replace a kept provider's recipe and value remapping.
+  const mockDef =
+    resolutions.has(provide) && ngMocksUniverse.getResolution(provide) !== 'keep'
+      ? createFromResolution(provide, resolutions.get(provide))
+      : createMockProvider(provider, provide, change);
 
   return multi && mockDef && typeof mockDef === 'object' ? { ...mockDef, multi } : mockDef;
 };

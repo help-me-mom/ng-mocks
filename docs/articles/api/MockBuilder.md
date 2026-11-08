@@ -283,7 +283,7 @@ beforeEach(() => {
 
 ### .provide()
 
-If we want to add or replace providers / services, we should use `.provide`. It has the same interface as a regular provider.
+Use `.provide()` to register regular Angular providers in `TestBed`.
 
 ```ts
 beforeEach(() => {
@@ -294,6 +294,16 @@ beforeEach(() => {
     .provide({ provide: SOME_TOKEN, useFactory: () => anything2 });
 });
 ```
+
+:::warning Component-level providers
+
+`.provide()` registers providers in `TestBed` as supplied; it does not create mocks.
+To create a mock, pass [`MockProvider(Service, overrides)`](MockProvider.md) to `.provide()`.
+
+A kept component's or directive's own `providers` or `viewProviders` take precedence over `TestBed` providers, including in standalone components.
+Use [`.mock(Service, overrides)`](#mock) instead of `.provide()` to customize those local providers.
+
+:::
 
 ## Config
 
