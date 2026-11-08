@@ -5,7 +5,7 @@ import {
   TranslocoModule,
   provideTranslocoScope,
   TranslocoTestingModule,
-} from '@ngneat/transloco';
+} from '@jsverse/transloco';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 @Component({
