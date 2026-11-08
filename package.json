@@ -262,13 +262,13 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@angular/animations": "22.2.4",
-    "@angular/common": "22.2.4",
-    "@angular/core": "22.2.4",
-    "@angular/forms": "22.2.4",
-    "@angular/platform-browser": "22.2.4",
-    "@angular/platform-browser-dynamic": "22.2.4",
-    "@angular/router": "22.2.4",
+    "@angular/animations": "22.2.5",
+    "@angular/common": "22.2.5",
+    "@angular/core": "22.2.5",
+    "@angular/forms": "22.2.5",
+    "@angular/platform-browser": "22.2.5",
+    "@angular/platform-browser-dynamic": "22.2.5",
+    "@angular/router": "22.2.5",
     "@commitlint/cli": "21.2.4",
     "@commitlint/config-conventional": "21.2.4",
     "@eslint/js": "10.0.1",
@@ -298,13 +298,13 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "4.4.5",
     "eslint-plugin-es-x": "10.1.0",
-    "eslint-plugin-import-x": "4.17.1",
+    "eslint-plugin-import-x": "4.18.0",
     "eslint-plugin-mdx": "3.9.1",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-prettier": "5.5.7",
     "eslint-plugin-unicorn": "79.0.0",
     "eslint-plugin-unused-imports": "4.4.1",
-    "eslint-plugin-yml": "3.9.0",
+    "eslint-plugin-yml": "3.10.0",
     "globals": "17.14.0",
     "husky": "9.1.7",
     "jasmine-core": "6.3.0",
@@ -318,7 +318,7 @@
     "karma-sourcemap-loader": "0.4.0",
     "karma-webpack": "5.0.1",
     "lint-staged": "17.6.0",
-    "npm": "12.2.1",
+    "npm": "12.2.2",
     "prettier": "3.9.10",
     "puppeteer": "25.16.0",
     "rxjs": "7.8.2",
@@ -333,7 +333,7 @@
     "zone.js": "0.16.3"
   },
   "engines": {
-    "npm": "12.2.1"
+    "npm": "12.2.2"
   },
   "repository": {
     "type": "git",
