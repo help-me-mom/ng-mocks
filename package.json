@@ -298,7 +298,7 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "4.4.5",
     "eslint-plugin-es-x": "10.1.0",
-    "eslint-plugin-import-x": "4.18.0",
+    "eslint-plugin-import-x": "4.18.1",
     "eslint-plugin-mdx": "3.9.3",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-prettier": "5.5.7",
