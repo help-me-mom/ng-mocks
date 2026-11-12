@@ -10,14 +10,14 @@
     "test": "nx test-unit"
   },
   "dependencies": {
-    "@angular/animations": "22.2.5",
-    "@angular/common": "22.2.5",
-    "@angular/compiler": "22.2.5",
-    "@angular/core": "22.2.5",
-    "@angular/forms": "22.2.5",
-    "@angular/platform-browser": "22.2.5",
-    "@angular/platform-browser-dynamic": "22.2.5",
-    "@angular/router": "22.2.5",
+    "@angular/animations": "22.2.6",
+    "@angular/common": "22.2.6",
+    "@angular/compiler": "22.2.6",
+    "@angular/core": "22.2.6",
+    "@angular/forms": "22.2.6",
+    "@angular/platform-browser": "22.2.6",
+    "@angular/platform-browser-dynamic": "22.2.6",
+    "@angular/router": "22.2.6",
     "rxjs": "7.8.2",
     "tslib": "2.9.1",
     "zone.js": "0.16.3"
@@ -25,8 +25,8 @@
   "devDependencies": {
     "@angular/build": "22.2.6",
     "@angular/cli": "22.2.6",
-    "@angular/compiler-cli": "22.2.5",
-    "@angular/language-service": "22.2.5",
+    "@angular/compiler-cli": "22.2.6",
+    "@angular/language-service": "22.2.6",
     "@nx/angular": "24.0.5",
     "@nx/jest": "24.0.5",
     "@nx/workspace": "24.0.5",
