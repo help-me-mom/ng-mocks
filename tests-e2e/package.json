@@ -34,7 +34,7 @@
     "ag-grid-angular": "36.3.0",
     "ag-grid-community": "36.3.0",
     "ngx-file-drop": "16.0.0",
-    "primeng": "22.1.4",
+    "primeng": "22.1.5",
     "rxjs": "7.8.2",
     "tslib": "2.9.1",
     "zone.js": "0.16.3"
