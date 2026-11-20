@@ -322,7 +322,7 @@
     "prettier": "3.10.1",
     "puppeteer": "25.18.1",
     "rxjs": "7.8.2",
-    "semantic-release": "25.0.9",
+    "semantic-release": "26.0.1",
     "ts-loader": "9.6.2",
     "ts-node": "10.9.2",
     "tsconfig-paths-webpack-plugin": "4.2.0",
