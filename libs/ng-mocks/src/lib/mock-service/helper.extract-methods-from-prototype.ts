@@ -1,4 +1,5 @@
-import funcGetName from '../common/func.get-name';
+import { Sanitizer } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import checkIsObjectPrototype from './check.is-object-prototype';
 
@@ -11,14 +12,14 @@ const sanitizerMethods = [
   'bypassSecurityTrustResourceUrl',
 ];
 
-const extraMethods: Record<string, undefined | string[]> = {
-  DomSanitizer: sanitizerMethods,
-  Sanitizer: sanitizerMethods,
-};
+const extraMethods = new Map<object, string[]>([
+  [DomSanitizer.prototype, sanitizerMethods],
+  [Sanitizer.prototype, sanitizerMethods],
+]);
 
 const getOwnKeys = (prototype: object): Array<string | symbol> => {
   const result = [...Object.getOwnPropertyNames(prototype), ...Object.getOwnPropertySymbols(prototype)];
-  for (const method of extraMethods[funcGetName(prototype)] ?? []) {
+  for (const method of extraMethods.get(prototype) ?? []) {
     result.push(method);
   }
 
