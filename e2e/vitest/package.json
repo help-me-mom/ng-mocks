@@ -33,7 +33,7 @@
     "ng-packagr": "22.3.0",
     "npm": "12.2.2",
     "typescript": "6.0.3",
-    "vitest": "5.1.1"
+    "vitest": "5.1.2"
   },
   "engines": {
     "npm": "12.2.2"
